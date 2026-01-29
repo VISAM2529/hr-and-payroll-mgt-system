@@ -11,6 +11,7 @@ import {
   BarChart3,
   Menu,
   X,
+  Award,
   ChevronDown,
   Home,
   Bell,
@@ -34,11 +35,15 @@ import {
   CalculatorIcon,
   File,
   Building2,
+  ShieldCheck,
   Contact,
   CalendarRange,
   Receipt,
   Clock,
   Lock,
+  GitGraph,
+  Settings2,
+  Briefcase,
 } from "lucide-react";
 import "../globals.css";
 import { useSession } from "@/context/SessionContext";
@@ -96,9 +101,44 @@ export default function DashboardLayout({ children }) {
           icon: FileText,
         },
         {
+          name: "Payroll Run",
+          href: "/payroll/run",
+          icon: Banknote,
+        },
+        {
+          name: "Salary Components",
+          href: "/payroll/components",
+          icon: CalculatorIcon,
+        },
+        {
+          name: "Compliance Settings",
+          href: "/payroll/settings",
+          icon: Shield,
+        },
+        {
           name: "Leave Management",
           href: "/payroll/leaves",
           icon: CalendarRange,
+        },
+        {
+          name: "Leave Approvals",
+          href: "/payroll/leave-approvals",
+          icon: CheckSquare,
+        },
+        {
+          name: "Investment Reviews",
+          href: "/payroll/investments",
+          icon: ShieldCheck,
+        },
+        {
+          name: "My Portal (ESS)",
+          href: "/ess",
+          icon: Eye,
+        },
+        {
+          name: "Talent Management",
+          href: "/talent",
+          icon: Award,
         },
       ],
     },
@@ -115,8 +155,30 @@ export default function DashboardLayout({ children }) {
           href: "/crm/attendance-thresholds",
           icon: Target,
         },
+        { name: "Org Chart", href: "/crm/org-chart", icon: GitGraph },
+        { name: "Org Settings", href: "/crm/org-settings", icon: Settings2 },
         // { name: "Permissions", href: "/crm/permissions", icon: Shield },
         // { name: 'Payslip Structure', href: '/crm/payslip-structure', icon: FileText },
+      ],
+    },
+    {
+      name: "Recruitment",
+      href: "/recruitment",
+      icon: Briefcase,
+      children: [
+        { name: "Recruitment Hub", href: "/recruitment", icon: GitGraph },
+        { name: "Onboarding Tracker", href: "/recruitment/onboarding", icon: UserCheck },
+      ],
+    },
+    {
+      name: "Finance & Accounting",
+      href: "/finance",
+      icon: CreditCard,
+      children: [
+        { name: "Finance Hub", href: "/finance", icon: GitGraph },
+        { name: "Expense Claims", href: "/finance/expenses", icon: Receipt },
+        { name: "General Ledger", href: "/finance/ledger", icon: History },
+        { name: "Vendor Management", href: "/finance/vendors", icon: Users },
       ],
     },
     {
@@ -146,11 +208,13 @@ export default function DashboardLayout({ children }) {
       icon: UserCheck,
     },
     { name: "My Payslip", href: "/payroll/my-payslip", icon: Receipt },
+    { name: "My Portal (ESS)", href: "/ess", icon: Eye },
   ];
 
   // Employee navigation with only Dashboard and My Payslip
   let employeeNavigation = [
     // { name: "Dashboard", href: "/", icon: Home },
+    { name: "My Portal (ESS)", href: "/ess", icon: Eye },
     { name: "My Payslip", href: "/payroll/my-payslip", icon: Receipt },
     { name: "My Attendance", href: "/attendance", icon: UserCheck },
     { name: "Change Password", href: "/change-password", icon: Lock },
@@ -227,21 +291,16 @@ export default function DashboardLayout({ children }) {
     <div className="min-h-screen bg-slate-50">
       <div
         className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl border-r border-slate-200 transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col h-screen`}
+          } fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl border-r border-indigo-100 transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col h-screen`}
       >
-        <div className="flex-shrink-0 p-6 border-b border-slate-200 bg-gradient-to-r from-yellow-500 to-amber-500">
-          <div className="flex items-center space-x-3">
-            <Image
-              src="/logo.png"
-              alt="Company Logo"
-              width={1920}
-              height={1080}
-              className="w-24 h-14 m-auto object-cover"
-              priority
-            />
-            {/* <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg">
-              <BarChart3 className="w-6 h-6 text-yellow-500" />
-            </div> */}
+        <div className="flex-shrink-0 p-6 border-b border-indigo-50 bg-white">
+          <div className="flex items-center space-x-3 justify-center">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+              </div>
+              <span className="text-xl font-bold text-slate-900 tracking-tight">HRPayroll</span>
+            </div>
           </div>
         </div>
 
@@ -253,15 +312,15 @@ export default function DashboardLayout({ children }) {
                   <button
                     onClick={() => toggleMenu(item.name)}
                     className={`flex items-center w-full p-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${pathname?.startsWith(item.href)
-                      ? "bg-yellow-50 text-yellow-700 shadow-sm border border-yellow-200"
-                      : "text-slate-700 hover:bg-slate-100 hover:text-yellow-600"
+                      ? "bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-200"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
                       }`}
                     aria-expanded={openMenu === item.name}
                   >
                     <div
                       className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-colors ${pathname?.startsWith(item.href)
-                        ? "bg-yellow-100 text-yellow-600"
-                        : "bg-slate-100 text-slate-500 group-hover:bg-yellow-50 group-hover:text-yellow-600"
+                        ? "bg-indigo-100 text-indigo-600"
+                        : "bg-slate-100/50 text-slate-500 group-hover:bg-indigo-50 group-hover:text-indigo-600"
                         }`}
                     >
                       <item.icon className="h-4 w-4" />
@@ -271,26 +330,26 @@ export default function DashboardLayout({ children }) {
                       className={`transition-transform duration-200 ${openMenu === item.name ? "rotate-180" : ""
                         }`}
                     >
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className="h-4 w-4 text-slate-400" />
                     </div>
                   </button>
 
                   {openMenu === item.name && (
-                    <div className="ml-11 mt-2 space-y-1">
+                    <div className="ml-4 pl-4 mt-2 space-y-1 border-l-2 border-slate-100">
                       {item.children.map((child) => (
                         <Link
                           key={child.name}
                           href={child.href}
                           className={`flex items-center p-2.5 rounded-lg text-sm font-medium transition-all duration-200 group ${isActive(child.href)
-                            ? "bg-yellow-50 text-yellow-700 shadow-sm border border-yellow-100"
-                            : "text-slate-600 hover:bg-slate-50 hover:text-yellow-600"
+                            ? "bg-indigo-50 text-indigo-700"
+                            : "text-slate-500 hover:bg-slate-50 hover:text-indigo-600"
                             }`}
                         >
                           {child.icon && (
                             <child.icon
                               className={`h-4 w-4 mr-3 ${isActive(child.href)
-                                ? "text-yellow-600"
-                                : "text-slate-400 group-hover:text-yellow-500"
+                                ? "text-indigo-600"
+                                : "text-slate-400 group-hover:text-indigo-500"
                                 }`}
                             />
                           )}
@@ -304,14 +363,14 @@ export default function DashboardLayout({ children }) {
                 <Link
                   href={item.href}
                   className={`flex items-center p-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${isActive(item.href)
-                    ? "bg-yellow-50 text-yellow-700 shadow-sm border border-yellow-200"
-                    : "text-slate-700 hover:bg-slate-100 hover:text-yellow-600"
+                    ? "bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-200"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
                     }`}
                 >
                   <div
                     className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-colors ${isActive(item.href)
-                      ? "bg-yellow-100 text-yellow-600"
-                      : "bg-slate-100 text-slate-500 group-hover:bg-yellow-50 group-hover:text-yellow-600"
+                      ? "bg-indigo-100 text-indigo-600"
+                      : "bg-slate-100/50 text-slate-500 group-hover:bg-indigo-50 group-hover:text-indigo-600"
                       }`}
                   >
                     <item.icon className="h-4 w-4" />
@@ -323,22 +382,22 @@ export default function DashboardLayout({ children }) {
           ))}
         </nav>
 
-        <div className="flex-shrink-0 p-4 border-t border-slate-200 bg-slate-50">
+        <div className="flex-shrink-0 p-4 border-t border-slate-200 bg-slate-50/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-white" />
+              <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-md shadow-indigo-200">
+                <User className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-sm font-bold text-slate-900">
                   {user?.personalDetails?.firstName ||
                     (role === "admin" ? "Admin User" : "Employee User")}
                 </p>
-                <p className="text-xs text-slate-500 capitalize">{role}</p>
+                <p className="text-xs text-indigo-600 font-medium capitalize bg-indigo-50 px-2 py-0.5 rounded-full w-fit mt-0.5">{role}</p>
               </div>
             </div>
             <button
-              className="p-2 text-slate-400 hover:text-slate-600 hover:bg-white rounded-lg transition-colors"
+              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
               onClick={() => {
                 logout();
                 router.push("/auth/login");
@@ -346,20 +405,20 @@ export default function DashboardLayout({ children }) {
               title="Sign out"
               aria-label="Sign out"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-5 h-5" />
             </button>
           </div>
         </div>
       </div>
 
       <div className="lg:ml-80">
-        <header className="sticky top-0 z-40 bg-white shadow-sm border-b border-slate-200">
+        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md shadow-sm border-b border-indigo-100">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors duration-200"
+                  className="lg:hidden p-2.5 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200"
                   aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
                 >
                   {sidebarOpen ? (
@@ -370,20 +429,20 @@ export default function DashboardLayout({ children }) {
                 </button>
 
                 <div className="hidden md:block">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <div className="relative group">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                     <input
                       type="text"
                       placeholder="Search employees, reports, tasks..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-80 pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                      className="w-80 pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
                       aria-label="Search employees, reports, or tasks"
                     />
                   </div>
                 </div>
                 <button
-                  className="md:hidden p-2.5 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                  className="md:hidden p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                   aria-label="Open search"
                   onClick={() => {
                     /* Implement mobile search modal */
@@ -395,13 +454,11 @@ export default function DashboardLayout({ children }) {
 
               <div className="flex items-center space-x-4">
                 <button
-                  className="relative p-2.5 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                  className="relative p-2.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
                   aria-label="Notifications"
                 >
                   <Bell className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    3
-                  </span>
+                  <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
                 </button>
 
                 <div className="flex items-center space-x-3 pl-4 border-l border-slate-200">
@@ -413,8 +470,8 @@ export default function DashboardLayout({ children }) {
                     </p>
                     <p className="text-xs text-slate-500 capitalize">{role}</p>
                   </div>
-                  <div className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full flex items-center justify-center shadow-sm">
-                    <span className="text-white font-semibold text-sm">
+                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-md shadow-indigo-200 ring-2 ring-white">
+                    <span className="text-white font-bold text-sm">
                       {user?.personalDetails?.firstName
                         ?.charAt(0)
                         ?.toUpperCase() || role?.charAt(0)?.toUpperCase()}
@@ -426,12 +483,12 @@ export default function DashboardLayout({ children }) {
           </div>
         </header>
 
-        <main className="bg-slate-50">{children}</main>
+        <main className="bg-slate-50 min-h-[calc(100vh-80px)]">{children}</main>
       </div>
 
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
           onClick={() => setSidebarOpen(false)}
         />
       )}

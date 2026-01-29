@@ -38,9 +38,12 @@ import {
   Download,
   MapPin,
   Home,
+  ChevronRight,
+  Check,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 // ==================== CLOUDINARY CONFIGURATION ====================
 const CLOUDINARY_CONFIG = {
@@ -120,7 +123,7 @@ function SimpleSelect({
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white ${error
+        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white ${error
           ? "border-red-300 focus:ring-red-500 focus:border-red-500"
           : "border-slate-300"
           } ${disabled ? "bg-slate-100 cursor-not-allowed" : ""} ${className}`}
@@ -284,15 +287,15 @@ function DocumentUploadSection({
               palette: {
                 window: "#FFFFFF",
                 windowBorder: "#90A0B3",
-                tabIcon: "#F59E0B",
+                tabIcon: "#4F46E5",
                 menuIcons: "#5A616A",
                 textDark: "#000000",
                 textLight: "#FFFFFF",
-                link: "#F59E0B",
-                action: "#F59E0B",
+                link: "#4F46E5",
+                action: "#4F46E5",
                 inactiveTabIcon: "#0E2F5A",
                 error: "#F44235",
-                inProgress: "#F59E0B",
+                inProgress: "#4F46E5",
                 complete: "#20B832",
                 sourceBg: "#E4EBF1",
               },
@@ -416,18 +419,18 @@ function DocumentUploadSection({
       <div
         key={category.id}
         className={`border-2 rounded-xl p-4 transition-all ${category.required
-          ? "border-blue-200 bg-blue-50 hover:border-blue-300"
-          : "border-purple-200 bg-purple-50 hover:border-purple-300"
+          ? "border-indigo-200 bg-indigo-50 hover:border-indigo-300"
+          : "border-slate-200 bg-slate-50 hover:border-slate-300"
           }`}
       >
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center space-x-3">
             <div
-              className={`w-10 h-10 rounded-lg flex items-center justify-center ${category.required ? "bg-blue-100" : "bg-purple-100"
+              className={`w-10 h-10 rounded-lg flex items-center justify-center ${category.required ? "bg-indigo-100" : "bg-slate-100"
                 }`}
             >
               <IconComponent
-                className={`w-5 h-5 ${category.required ? "text-blue-600" : "text-purple-600"
+                className={`w-5 h-5 ${category.required ? "text-indigo-600" : "text-slate-600"
                   }`}
               />
             </div>
@@ -441,7 +444,7 @@ function DocumentUploadSection({
               <p className="text-xs text-slate-500 mt-1">
                 {status.uploaded}/{category.maxFiles} files
                 {category.required && (
-                  <span className="text-blue-600 ml-2">Required</span>
+                  <span className="text-indigo-600 ml-2">Required</span>
                 )}
               </p>
             </div>
@@ -465,8 +468,8 @@ function DocumentUploadSection({
               !cloudinaryReady
               ? "bg-slate-200 text-slate-400 cursor-not-allowed"
               : category.required
-                ? "bg-blue-100 hover:bg-blue-200 text-blue-700"
-                : "bg-purple-100 hover:bg-purple-200 text-purple-700"
+                ? "bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
+                : "bg-slate-100 hover:bg-slate-200 text-slate-700"
               }`}
           >
             <Upload className="w-3 h-3 inline mr-1" />
@@ -524,23 +527,23 @@ function DocumentUploadSection({
   return (
     <div className="space-y-8">
       {!cloudinaryReady && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-2 border-yellow-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-sm text-yellow-800">Loading upload system...</p>
+            <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm text-indigo-800">Loading upload system...</p>
           </div>
         </div>
       )}
       {employeeCategory && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
           <div className="flex items-center gap-3">
-            <Info className="w-5 h-5 text-blue-600" />
+            <Info className="w-5 h-5 text-indigo-600" />
             <div>
-              <p className="text-sm font-medium text-blue-800">
+              <p className="text-sm font-medium text-indigo-800">
                 Document requirements for:
                 <span className="font-bold ml-1">{employeeCategory}</span>
               </p>
-              <p className="text-xs text-blue-600 mt-1">
+              <p className="text-xs text-indigo-600 mt-1">
                 {loadingDocuments
                   ? "Loading document requirements..."
                   : documentCategories.length > 0
@@ -589,14 +592,14 @@ function DocumentUploadSection({
         </div>
       )}
       {!loadingDocuments && categoryId && documentCategories.length === 0 && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
           <div className="flex items-center gap-3">
-            <FileWarning className="w-5 h-5 text-yellow-600" />
+            <FileWarning className="w-5 h-5 text-slate-600" />
             <div>
-              <p className="text-sm font-medium text-yellow-800">
+              <p className="text-sm font-medium text-slate-800">
                 No additional documents required
               </p>
-              <p className="text-xs text-yellow-600 mt-1">
+              <p className="text-xs text-slate-600 mt-1">
                 Only basic verification documents (Aadhar, PAN, Bank) are
                 required for this role.
               </p>
@@ -1302,7 +1305,7 @@ function PayslipStructureSection({
               Salary Type <span className="text-red-500">*</span>
             </label>
             <div className="flex gap-4">
-              <label className="flex items-center gap-2 cursor-pointer px-4 py-3 border-2 rounded-lg transition-all hover:border-yellow-400 hover:bg-yellow-50 flex-1">
+              <label className="flex items-center gap-2 cursor-pointer px-4 py-3 border-2 rounded-lg transition-all hover:border-indigo-400 hover:bg-indigo-50 flex-1">
                 <input
                   type="radio"
                   name="salaryType"
@@ -1323,7 +1326,7 @@ function PayslipStructureSection({
                   <p className="text-xs text-slate-500">Fixed monthly amount</p>
                 </div>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer px-4 py-3 border-2 rounded-lg transition-all hover:border-yellow-400 hover:bg-yellow-50 flex-1">
+              <label className="flex items-center gap-2 cursor-pointer px-4 py-3 border-2 rounded-lg transition-all hover:border-indigo-400 hover:bg-indigo-50 flex-1">
                 <input
                   type="radio"
                   name="salaryType"
@@ -1369,7 +1372,7 @@ function PayslipStructureSection({
                   payslipStructure.salaryType === "monthly" ? "50000" : "2000"
                 }
                 step="any"
-                className={`w-full pl-8 pr-3 py-2.5 border-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["payslipStructure.basicSalary"]
+                className={`w-full pl-8 pr-3 py-2.5 border-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["payslipStructure.basicSalary"]
                   ? "border-red-300 focus:ring-red-500 focus:border-red-500"
                   : "border-slate-300"
                   }`}
@@ -1403,7 +1406,7 @@ function PayslipStructureSection({
                 payslipStructure.salaryType === "monthly" ? "60000" : "3000"
               }
               step="any"
-              className={`w-full pl-8 pr-3 py-2.5 border-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors["payslipStructure.grossSalary"]
+              className={`w-full pl-8 pr-3 py-2.5 border-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["payslipStructure.grossSalary"]
                 ? "border-red-300 focus:ring-red-500 focus:border-red-500"
                 : "border-slate-300"
                 }`}
@@ -1420,7 +1423,7 @@ function PayslipStructureSection({
       <div className="bg-white border-2 border-slate-200 rounded-xl p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-            <BadgeDollarSign className="w-5 h-5 text-blue-600" />
+            <BadgeDollarSign className="w-5 h-5 text-indigo-600" />
             Earnings Components
             <span className="text-xs font-normal text-slate-500 ml-2">
               ({payslipStructure.earnings.filter((e) => e.enabled).length}{" "}
@@ -1430,7 +1433,7 @@ function PayslipStructureSection({
           <button
             type="button"
             onClick={addEarning}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm hover:shadow-md"
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm hover:shadow-md"
           >
             <Plus className="w-4 h-4" />
             Add Earning
@@ -1452,7 +1455,7 @@ function PayslipStructureSection({
               <div
                 key={index}
                 className={`p-4 rounded-xl border-2 transition-all ${earning.enabled
-                  ? "bg-blue-50 border-blue-200 shadow-sm"
+                  ? "bg-indigo-50 border-indigo-200 shadow-sm"
                   : "bg-slate-50 border-slate-200 opacity-60"
                   }`}
               >
@@ -1464,7 +1467,7 @@ function PayslipStructureSection({
                       onChange={(e) =>
                         updateEarning(index, "enabled", e.target.checked)
                       }
-                      className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer"
+                      className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer"
                     />
                   </div>
                   <div className="md:col-span-3">
@@ -1475,7 +1478,7 @@ function PayslipStructureSection({
                         updateEarning(index, "name", e.target.value)
                       }
                       placeholder="Earning name"
-                      className="w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -1484,7 +1487,7 @@ function PayslipStructureSection({
                       onChange={(e) =>
                         updateEarning(index, "calculationType", e.target.value)
                       }
-                      className="w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
                       <option value="percentage">Percentage (%)</option>
                       <option value="fixed">Fixed Amount (₹)</option>
@@ -1507,7 +1510,7 @@ function PayslipStructureSection({
                           step="any"
                           min="0"
                           max="100"
-                          className="w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border-2 border-slate-300 rounded-lg text-sm pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         />
                         <Percent className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                       </div>
@@ -1529,7 +1532,7 @@ function PayslipStructureSection({
                           placeholder="0"
                           step="any"
                           min="0"
-                          className="w-full pl-8 pr-3 py-2 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full pl-8 pr-3 py-2 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         />
                       </div>
                     )}
@@ -1746,10 +1749,10 @@ function PayslipStructureSection({
       </div>
 
       {/* Salary Breakdown Preview */}
-      <div className="bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 border-2 border-green-300 rounded-xl p-6 shadow-lg">
+      <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-slate-50 border-2 border-indigo-300 rounded-xl p-6 shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-            <Calculator className="w-5 h-5 text-green-600" />
+            <Calculator className="w-5 h-5 text-indigo-600" />
             Salary Breakdown & Calculation Preview
           </h3>
           <button
@@ -1762,14 +1765,14 @@ function PayslipStructureSection({
         </div>
 
         {/* Gross Salary Section */}
-        <div className="bg-white rounded-xl p-5 border-2 border-green-200 shadow-md mb-6">
+        <div className="bg-white rounded-xl p-5 border-2 border-indigo-200 shadow-md mb-6">
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm font-medium text-slate-600">
               Gross Salary (Total Earnings)
             </p>
-            <TrendingUp className="w-5 h-5 text-green-600" />
+            <TrendingUp className="w-5 h-5 text-indigo-600" />
           </div>
-          <p className="text-3xl font-bold text-green-600 mb-2">
+          <p className="text-3xl font-bold text-indigo-600 mb-2">
             ₹
             {calculateTotalEarnings().toLocaleString("en-IN", {
               maximumFractionDigits: 2,
@@ -1962,7 +1965,7 @@ function PayslipStructureSection({
           )}
 
         {/* Net Salary Summary */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl p-6 text-white shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <p className="text-sm font-medium text-blue-100">
@@ -2006,7 +2009,7 @@ function PayslipStructureSection({
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium text-blue-100">
+              <p className="text-sm font-medium text-indigo-100">
                 Net Payable Salary
               </p>
               <p className="text-3xl font-bold mt-1">
@@ -2015,13 +2018,13 @@ function PayslipStructureSection({
                   maximumFractionDigits: 2,
                 })}
               </p>
-              <p className="text-xs text-blue-200 mt-1">
+              <p className="text-xs text-indigo-200 mt-1">
                 Take home amount
                 {payslipStructure.salaryType === "perday" && " (per day)"}
               </p>
             </div>
           </div>
-          <div className="mt-4 pt-4 border-t border-blue-400">
+          <div className="mt-4 pt-4 border-t border-indigo-400">
             <div className="flex items-center gap-2 text-sm">
               <div
                 className={`w-3 h-3 rounded-full ${calculateNetSalary() > 0 ? "bg-green-400" : "bg-red-400"
@@ -2038,14 +2041,14 @@ function PayslipStructureSection({
 
         {/* Per Day Salary Note */}
         {payslipStructure.salaryType === "perday" && (
-          <div className="mt-6 bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
+          <div className="mt-6 bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+              <Info className="w-5 h-5 text-indigo-600 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium text-yellow-800">
+                <p className="text-sm font-medium text-indigo-800">
                   Per Day Salary Configuration
                 </p>
-                <p className="text-xs text-yellow-700 mt-1">
+                <p className="text-xs text-indigo-700 mt-1">
                   The amounts shown above are for one working day. Actual
                   monthly salary will be calculated by multiplying these amounts
                   with the number of working days in the month.
@@ -2054,12 +2057,12 @@ function PayslipStructureSection({
                   {[22, 24, 26, 30].map((days) => (
                     <div
                       key={days}
-                      className="bg-white p-3 rounded-lg border border-yellow-200"
+                      className="bg-white p-3 rounded-lg border border-indigo-200"
                     >
-                      <p className="text-xs text-yellow-800">
+                      <p className="text-xs text-indigo-800">
                         For {days} days:
                       </p>
-                      <p className="text-sm font-bold text-yellow-700">
+                      <p className="text-sm font-bold text-indigo-700">
                         ₹
                         {(calculateNetSalary() * days).toLocaleString("en-IN", {
                           maximumFractionDigits: 2,
@@ -2106,13 +2109,69 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
 
   // State for dynamic dropdowns
   const [organizations, setOrganizations] = useState([]);
+  const [businessUnits, setBusinessUnits] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [costCenters, setCostCenters] = useState([]);
   const [employeeTypes, setEmployeeTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [teamLeads, setTeamLeads] = useState([]);
   const [availableSupervisors, setAvailableSupervisors] = useState([]);
   const [loadingSupervisors, setLoadingSupervisors] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+
+  // Wizard State
+  const [currentStep, setCurrentStep] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const steps = [
+    { id: 0, title: "Role & Organization", description: "Employee role and department", icon: Building },
+    { id: 1, title: "Personal Details", description: "Identity and contact info", icon: User },
+    { id: 2, title: "Financial & Compliance", description: "Bank and statutory details", icon: Shield },
+    { id: 3, title: "Compensation", description: "Salary structure and breakdown", icon: BadgeDollarSign },
+    { id: 4, title: "Approvals & Documents", description: "Shift, supervisors and files", icon: FileText },
+  ];
+
+  const variants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+  };
+
+  const validateStep = (step) => {
+    // For now, we reuse the robust submit validation only on final submit, 
+    // but we could add lightweight checks here if needed.
+    // Allow navigation for better UX, validation alerts will show on fields if touched or on final submit.
+    return true;
+  };
+
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setDirection(1);
+      setCurrentStep(prev => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setDirection(-1);
+      setCurrentStep(prev => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
 
   const [formData, setFormData] = useState({
     personalDetails: {
@@ -2157,15 +2216,23 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
     isTDSApplicable: false,
 
     jobDetails: {
-      department: "",
-      departmentId: "",
       organization: "",
       organizationId: "",
+      businessUnit: "",
+      businessUnitId: "",
+      department: "",
+      departmentId: "",
+      team: "",
+      teamId: "",
+      costCenter: "",
+      costCenterId: "",
       employeeType: "",
       employeeTypeId: "",
       category: "",
       categoryId: "",
       teamLead: "",
+      designation: "",
+      workLocation: "",
     },
     salaryDetails: {
       // Basic salary removed from here - now managed in payslipStructure
@@ -2274,16 +2341,58 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
     }
   };
 
-  const fetchDepartments = async (organizationId) => {
+  const fetchBusinessUnits = async (organizationId) => {
     try {
       if (!organizationId) {
+        setBusinessUnits([]);
+        return;
+      }
+      const response = await fetch(`/api/crm/business-units?organizationId=${organizationId}&limit=1000`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to fetch business units");
+      setBusinessUnits(data.data.map(bu => ({ value: bu._id, label: bu.name })));
+    } catch (error) {
+      console.error("Error fetching business units:", error);
+      setBusinessUnits([]);
+    }
+  };
+
+  const fetchCostCenters = async () => {
+    try {
+      const response = await fetch("/api/finance/cost-centers?limit=1000");
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to fetch cost centers");
+      setCostCenters(data.data.map(cc => ({ value: cc._id, label: `${cc.name} (${cc.code})` })));
+    } catch (error) {
+      console.error("Error fetching cost centers:", error);
+      setCostCenters([]);
+    }
+  };
+
+  const fetchTeams = async (departmentId) => {
+    try {
+      if (!departmentId) {
+        setTeams([]);
+        return;
+      }
+      const response = await fetch(`/api/crm/teams?departmentId=${departmentId}&limit=1000`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to fetch teams");
+      setTeams(data.data.map(team => ({ value: team._id, label: team.name })));
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+      setTeams([]);
+    }
+  };
+
+  const fetchDepartments = async (businessUnitId) => {
+    try {
+      if (!businessUnitId) {
         setDepartments([]);
-        setEmployeeTypes([]);
-        setCategories([]);
         return;
       }
       const response = await fetch(
-        `/api/crm/departments?organizationId=${organizationId}&limit=1000`
+        `/api/crm/departments?businessUnitId=${businessUnitId}&limit=1000`
       );
       const data = await response.json();
 
@@ -2299,17 +2408,6 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
         }));
 
       setDepartments(departmentOptions);
-
-      setFormData((prev) => ({
-        ...prev,
-        jobDetails: {
-          ...prev.jobDetails,
-          department: "",
-          departmentId: "",
-        },
-        employeeType: "",
-        category: "",
-      }));
     } catch (error) {
       console.error("Error fetching departments:", error);
       setDepartments([]);
@@ -2433,15 +2531,18 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
   // Fetch organizations on mount
   useEffect(() => {
     fetchOrganizations();
+    fetchCostCenters();
   }, []);
 
   // Cascade fetches
   useEffect(() => {
     if (formData.jobDetails.organizationId) {
-      fetchDepartments(formData.jobDetails.organizationId);
+      fetchBusinessUnits(formData.jobDetails.organizationId);
       fetchSupervisors(formData.jobDetails.organizationId);
     } else {
+      setBusinessUnits([]);
       setDepartments([]);
+      setTeams([]);
       setEmployeeTypes([]);
       setCategories([]);
       setTeamLeads([]);
@@ -2449,6 +2550,29 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
     }
   }, [formData.jobDetails.organizationId]);
 
+  useEffect(() => {
+    if (formData.jobDetails.businessUnitId) {
+      fetchDepartments(formData.jobDetails.businessUnitId);
+    } else {
+      setDepartments([]);
+      setTeams([]);
+    }
+  }, [formData.jobDetails.businessUnitId]);
+
+  useEffect(() => {
+    if (formData.jobDetails.departmentId) {
+      fetchTeams(formData.jobDetails.departmentId);
+      if (formData.jobDetails.organizationId) {
+        fetchEmployeeTypes(formData.jobDetails.organizationId, formData.jobDetails.departmentId);
+      }
+    } else {
+      setTeams([]);
+      setEmployeeTypes([]);
+    }
+  }, [formData.jobDetails.departmentId, formData.jobDetails.organizationId]);
+
+  // Handled by merged effect above
+  /*
   useEffect(() => {
     if (
       formData.jobDetails.organizationId &&
@@ -2463,6 +2587,7 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
       setCategories([]);
     }
   }, [formData.jobDetails.organizationId, formData.jobDetails.departmentId]);
+  */
 
   useEffect(() => {
     if (
@@ -2648,18 +2773,54 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
       } else if (fields.length === 3) {
         newData[fields[0]][fields[1]][fields[2]] = value;
       }
-      if (field === "jobDetails.departmentId") {
-        const selectedDept = departments.find((dept) => dept.value === value);
-        if (selectedDept) {
-          newData.jobDetails.department = selectedDept.name;
-          newData.jobDetails.departmentId = value;
-        }
-      }
       if (field === "jobDetails.organizationId") {
         const selectedOrg = organizations.find((org) => org.value === value);
         if (selectedOrg) {
           newData.jobDetails.organization = selectedOrg.label;
           newData.jobDetails.organizationId = value;
+          // Reset children
+          newData.jobDetails.businessUnitId = "";
+          newData.jobDetails.businessUnit = "";
+          newData.jobDetails.departmentId = "";
+          newData.jobDetails.department = "";
+          newData.jobDetails.teamId = "";
+          newData.jobDetails.team = "";
+        }
+      }
+      if (field === "jobDetails.businessUnitId") {
+        const selectedBU = businessUnits.find((bu) => bu.value === value);
+        if (selectedBU) {
+          newData.jobDetails.businessUnit = selectedBU.label;
+          newData.jobDetails.businessUnitId = value;
+          // Reset children
+          newData.jobDetails.departmentId = "";
+          newData.jobDetails.department = "";
+          newData.jobDetails.teamId = "";
+          newData.jobDetails.team = "";
+        }
+      }
+      if (field === "jobDetails.departmentId") {
+        const selectedDept = departments.find((dept) => dept.value === value);
+        if (selectedDept) {
+          newData.jobDetails.department = selectedDept.name;
+          newData.jobDetails.departmentId = value;
+          // Reset children
+          newData.jobDetails.teamId = "";
+          newData.jobDetails.team = "";
+        }
+      }
+      if (field === "jobDetails.teamId") {
+        const selectedTeam = teams.find((team) => team.value === value);
+        if (selectedTeam) {
+          newData.jobDetails.teamLabels = selectedTeam.label;
+          newData.jobDetails.teamId = value;
+        }
+      }
+      if (field === "jobDetails.costCenterId") {
+        const selectedCC = costCenters.find((cc) => cc.value === value);
+        if (selectedCC) {
+          newData.jobDetails.costCenter = selectedCC.label;
+          newData.jobDetails.costCenterId = value;
         }
       }
       if (field === "jobDetails.employeeTypeId") {
@@ -3195,7 +3356,7 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
-              <div className="w-11 h-11 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                 <User className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -3223,1491 +3384,1569 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Progress Indicator */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-slate-900">
-              Form Completion
-            </h3>
-            <span className="text-sm font-medium text-slate-600">
-              {progress}% Complete
-            </span>
-          </div>
-          <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+        {/* Wizard Stepper */}
+        <div className="mb-10 mt-4">
+          <div className="flex items-center justify-between relative max-w-4xl mx-auto">
+            <div className="absolute left-0 top-5 transform -translate-y-1/2 w-full h-1 bg-slate-200 -z-10" />
             <div
-              className="bg-gradient-to-r from-yellow-500 to-orange-500 h-3 rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 text-sm">
-            <div
-              className={`flex items-center space-x-2 ${formData.personalDetails.firstName &&
-                validators.name(formData.personalDetails.firstName)
-                ? "text-green-700"
-                : "text-slate-500"
-                }`}
-            >
-              {formData.personalDetails.firstName &&
-                validators.name(formData.personalDetails.firstName) ? (
-                <CheckCircle className="w-4 h-4" />
-              ) : (
-                <div className="w-4 h-4 border-2 border-slate-300 rounded-full"></div>
-              )}
-              <span>Personal Information</span>
-            </div>
-            <div
-              className={`flex items-center space-x-2 ${formData.jobDetails.organizationId &&
-                formData.jobDetails.departmentId &&
-                formData.jobDetails.employeeTypeId &&
-                formData.jobDetails.categoryId
-                ? "text-green-700"
-                : "text-slate-500"
-                }`}
-            >
-              {formData.jobDetails.organizationId &&
-                formData.jobDetails.departmentId &&
-                formData.jobDetails.employeeTypeId &&
-                formData.jobDetails.categoryId ? (
-                <CheckCircle className="w-4 h-4" />
-              ) : (
-                <div className="w-4 h-4 border-2 border-slate-300 rounded-full"></div>
-              )}
-              <span>Organization Details</span>
-            </div>
-            <div
-              className={`flex items-center space-x-2 ${formData.probation &&
-                formData.isAttending &&
-                formData.workingHr
-                ? "text-green-700"
-                : "text-slate-500"
-                }`}
-            >
-              {formData.probation &&
-                formData.isAttending &&
-                formData.workingHr ? (
-                <CheckCircle className="w-4 h-4" />
-              ) : (
-                <div className="w-4 h-4 border-2 border-slate-300 rounded-full"></div>
-              )}
-              <span>Financial Information</span>
-            </div>
-            <div
-              className={`flex items-center space-x-2 ${formData.payslipStructure.basicSalary > 0 &&
-                formData.payslipStructure.earnings.length > 0
-                ? "text-green-700"
-                : "text-slate-500"
-                }`}
-            >
-              {formData.payslipStructure.basicSalary > 0 &&
-                formData.payslipStructure.earnings.length > 0 ? (
-                <CheckCircle className="w-4 h-4" />
-              ) : (
-                <div className="w-4 h-4 border-2 border-slate-300 rounded-full"></div>
-              )}
-              <span>Salary Structure</span>
-            </div>
+              className="absolute left-0 top-5 transform -translate-y-1/2 h-1 bg-indigo-600 -z-10 transition-all duration-500"
+              style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
+            />
+
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isActive = index === currentStep;
+              const isCompleted = index < currentStep;
+
+              return (
+                <div key={step.id} className="flex flex-col items-center gap-3 bg-slate-50 px-2 cursor-pointer" onClick={() => {
+                  if (index < currentStep) {
+                    setDirection(-1);
+                    setCurrentStep(index);
+                  }
+                }}>
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isActive
+                      ? "bg-indigo-600 border-indigo-600 text-white shadow-lg scale-110"
+                      : isCompleted
+                        ? "bg-indigo-100 border-indigo-600 text-indigo-600"
+                        : "bg-white border-slate-300 text-slate-400"
+                      }`}
+                  >
+                    {isCompleted ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+                  </div>
+                  <div className="text-center w-28 md:w-auto">
+                    <span className={`block text-xs font-bold ${isActive ? "text-indigo-700" : isCompleted ? "text-indigo-600" : "text-slate-500"}`}>
+                      {step.title}
+                    </span>
+                    <span className="hidden md:block text-[10px] text-slate-400 font-medium">
+                      {step.description}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          {/* Account Credentials Card */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
-            <div className="p-6 border-b border-slate-200">
-              <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center border border-purple-100">
-                  <Shield className="w-4 h-4 text-purple-600" />
-                </div>
-                Account Credentials
-              </h2>
-              <p className="text-slate-600 text-sm mt-1">
-                Set up login credentials and access role for the employee
-              </p>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700">
-                    Employee ID <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <IdCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input
-                      name="employeeId"
-                      value={formData.employeeId || ""}
-                      onChange={handleChange}
-                      placeholder="EMP-001"
-                      className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors ${errors.employeeId
-                        ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                        : "border-slate-300"
-                        }`}
-                    />
+        <form onSubmit={handleSubmit} className="min-h-[500px] flex flex-col">
+          <AnimatePresence mode="wait" custom={direction}>
+            {currentStep === 0 && (
+              <motion.div
+                key="step0"
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                custom={direction}
+                transition={{ duration: 0.3, type: "tween" }}
+                className="space-y-6"
+              >
+                {/* Account Credentials Card */}
+                <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
+                  <div className="p-6 border-b border-slate-200">
+                    <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
+                      <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                        <Shield className="w-4 h-4 text-indigo-600" />
+                      </div>
+                      Account Credentials
+                    </h2>
+                    <p className="text-slate-600 text-sm mt-1">
+                      Set up login credentials and access role for the employee
+                    </p>
                   </div>
-                  {errors.employeeId && (
-                    <div className="flex items-center space-x-1 text-red-600 text-xs">
-                      <AlertCircle className="w-3 h-3" />
-                      <span>{errors.employeeId}</span>
+                  <div className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Employee ID <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative">
+                          <IdCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            name="employeeId"
+                            value={formData.employeeId || ""}
+                            onChange={handleChange}
+                            placeholder="EMP-001"
+                            className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors.employeeId
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-slate-300"
+                              }`}
+                          />
+                        </div>
+                        {errors.employeeId && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>{errors.employeeId}</span>
+                          </div>
+                        )}
+                      </div>
+                      {!isEdit && (
+                        <>
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Password <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="password"
+                              name="password"
+                              value={formData.password}
+                              onChange={handleChange}
+                              placeholder="********"
+                              className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors.password
+                                ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                                : "border-slate-300"
+                                }`}
+                            />
+                            {errors.password && (
+                              <div className="flex items-center space-x-1 text-red-600 text-xs">
+                                <AlertCircle className="w-3 h-3" />
+                                <span>{errors.password}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Confirm Password <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              name="confirmPassword"
+                              type="password"
+                              value={formData.confirmPassword}
+                              onChange={handleChange}
+                              placeholder="********"
+                              className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors.confirmPassword
+                                ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                                : "border-slate-300"
+                                }`}
+                            />
+                            {errors.confirmPassword && (
+                              <div className="flex items-center space-x-1 text-red-600 text-xs">
+                                <AlertCircle className="w-3 h-3" />
+                                <span>{errors.confirmPassword}</span>
+                              </div>
+                            )}
+                          </div>
+                        </>
+                      )}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Role <span className="text-red-500">*</span>
+                        </label>
+                        <SimpleSelect
+                          value={formData.role}
+                          onChange={(e) => handleSelectChange("role", e.target.value)}
+                          options={[
+                            { value: "employee", label: "Employee" },
+                            { value: "attendance_only", label: "Attendance Only" },
+                            { value: "admin", label: "Admin" },
+                          ]}
+                          placeholder="Select Role"
+                        />
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-                {!isEdit && (
+
+                {/* Attendance-Only Info Message */}
+                {formData.role === "attendance_only" && (
+                  <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-8">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center shrink-0">
+                        <Info className="w-5 h-5 text-indigo-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-indigo-900">Attendance-Only User</h3>
+                        <p className="text-indigo-700 text-sm mt-1">
+                          This user will only have access to Attendance Management features.
+                          No personal details, salary structure, or other employee information is required.
+                        </p>
+                        <p className="text-indigo-600 text-xs mt-2">
+                          After creation, this user can login with Employee ID and Password to access the Attendance Directory.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Show remaining form sections only for non-attendance-only roles */}
+                {formData.role !== "attendance_only" && (
                   <>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Password <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="********"
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors ${errors.password
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors.password && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors.password}</span>
+                    {/* Organization Details Card */}
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
+                      <div className="p-6 border-b border-slate-200">
+                        <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
+                          <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                            <Building className="w-4 h-4 text-indigo-600" />
+                          </div>
+                          Organization Details
+                        </h2>
+                        <p className="text-slate-600 text-sm mt-1">
+                          Define employee's place in the organizational hierarchy
+                        </p>
+                      </div>
+                      <div className="p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                          {/* 1. Organization Dropdown */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Organization <span className="text-red-500">*</span>
+                            </label>
+                            {fetchLoading ? (
+                              <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
+                                Loading...
+                              </div>
+                            ) : (
+                              <SimpleSelect
+                                value={formData.jobDetails.organizationId}
+                                onChange={(e) =>
+                                  handleSelectChange(
+                                    "jobDetails.organizationId",
+                                    e.target.value
+                                  )
+                                }
+                                options={organizations}
+                                placeholder="Select organization"
+                                error={errors["jobDetails.organizationId"]}
+                              />
+                            )}
+                          </div>
+
+                          {/* 2. Business Unit Dropdown */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Business Unit <span className="text-red-500">*</span>
+                            </label>
+                            <SimpleSelect
+                              value={formData.jobDetails.businessUnitId}
+                              onChange={(e) =>
+                                handleSelectChange(
+                                  "jobDetails.businessUnitId",
+                                  e.target.value
+                                )
+                              }
+                              options={businessUnits}
+                              placeholder={
+                                formData.jobDetails.organizationId
+                                  ? "Select business unit"
+                                  : "Select organization first"
+                              }
+                              error={errors["jobDetails.businessUnitId"]}
+                              disabled={!formData.jobDetails.organizationId}
+                            />
+                          </div>
+
+                          {/* 3. Department Dropdown */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Department <span className="text-red-500">*</span>
+                            </label>
+                            <SimpleSelect
+                              value={formData.jobDetails.departmentId}
+                              onChange={(e) =>
+                                handleSelectChange(
+                                  "jobDetails.departmentId",
+                                  e.target.value
+                                )
+                              }
+                              options={departments}
+                              placeholder={
+                                formData.jobDetails.businessUnitId
+                                  ? "Select department"
+                                  : "Select business unit first"
+                              }
+                              error={errors["jobDetails.departmentId"]}
+                              disabled={!formData.jobDetails.businessUnitId}
+                            />
+                          </div>
+
+                          {/* 4. Team Dropdown */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Team
+                            </label>
+                            <SimpleSelect
+                              value={formData.jobDetails.teamId}
+                              onChange={(e) =>
+                                handleSelectChange(
+                                  "jobDetails.teamId",
+                                  e.target.value
+                                )
+                              }
+                              options={teams}
+                              placeholder={
+                                formData.jobDetails.departmentId
+                                  ? "Select team"
+                                  : "Select department first"
+                              }
+                              error={errors["jobDetails.teamId"]}
+                              disabled={!formData.jobDetails.departmentId}
+                            />
+                          </div>
+
+                          {/* 5. Employee Type Dropdown */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Employee Type <span className="text-red-500">*</span>
+                            </label>
+                            <SimpleSelect
+                              value={formData.jobDetails.employeeTypeId}
+                              onChange={(e) =>
+                                handleSelectChange("jobDetails.employeeTypeId", e.target.value)
+                              }
+                              options={employeeTypes}
+                              placeholder={
+                                formData.jobDetails.departmentId
+                                  ? "Select employee type"
+                                  : "Select department first"
+                              }
+                              error={errors["jobDetails.employeeTypeId"]}
+                              disabled={!formData.jobDetails.departmentId}
+                            />
+                          </div>
+
+                          {/* 6. Category Dropdown */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Category <span className="text-red-500">*</span>
+                            </label>
+                            <SimpleSelect
+                              value={formData.jobDetails.categoryId}
+                              onChange={(e) =>
+                                handleSelectChange("jobDetails.categoryId", e.target.value)
+                              }
+                              options={categories}
+                              placeholder={
+                                formData.jobDetails.employeeTypeId
+                                  ? "Select category"
+                                  : "Select employee type first"
+                              }
+                              error={errors["jobDetails.categoryId"]}
+                              disabled={!formData.jobDetails.employeeTypeId}
+                            />
+                          </div>
+
+                          {/* 7. Team Lead Dropdown */}
+                          {formData.jobDetails.categoryId &&
+                            formData.jobDetails.category?.toLowerCase() !== "team lead" && (
+                              <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-slate-700">
+                                  Reporting Manager / Team Lead
+                                </label>
+                                <SimpleSelect
+                                  value={formData.jobDetails.teamLead || ""}
+                                  onChange={(e) =>
+                                    handleSelectChange("jobDetails.teamLead", e.target.value)
+                                  }
+                                  options={teamLeads}
+                                  placeholder={
+                                    formData.jobDetails.departmentId
+                                      ? "Select reporter"
+                                      : "Select department first"
+                                  }
+                                  disabled={!formData.jobDetails.departmentId}
+                                />
+                              </div>
+                            )}
+
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Designation
+                            </label>
+                            <input
+                              name="jobDetails.designation"
+                              value={formData.jobDetails.designation || ""}
+                              onChange={handleChange}
+                              placeholder="Software Engineer"
+                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Work Location
+                            </label>
+                            <input
+                              name="jobDetails.workLocation"
+                              value={formData.jobDetails.workLocation || ""}
+                              onChange={handleChange}
+                              placeholder="Bangalore"
+                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                            />
+                          </div>
+
+                          {/* 10. Cost Center Dropdown */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-slate-700">
+                              Cost Center
+                            </label>
+                            <SimpleSelect
+                              value={formData.jobDetails.costCenterId}
+                              onChange={(e) =>
+                                handleSelectChange(
+                                  "jobDetails.costCenterId",
+                                  e.target.value
+                                )
+                              }
+                              options={costCenters}
+                              placeholder="Select cost center"
+                              error={errors["jobDetails.costCenterId"]}
+                            />
+                          </div>
                         </div>
-                      )}
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Confirm Password <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="confirmPassword"
-                        type="password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        placeholder="********"
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors ${errors.confirmPassword
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors.confirmPassword && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors.confirmPassword}</span>
-                        </div>
-                      )}
-                    </div>
+
+                    {/* Personal Details Card */}
                   </>
                 )}
-                <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700">
-                    Role <span className="text-red-500">*</span>
-                  </label>
-                  <SimpleSelect
-                    value={formData.role}
-                    onChange={(e) => handleSelectChange("role", e.target.value)}
-                    options={[
-                      { value: "employee", label: "Employee" },
-                      { value: "attendance_only", label: "Attendance Only" },
-                      { value: "admin", label: "Admin" },
-                    ]}
-                    placeholder="Select Role"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Attendance-Only Info Message */}
-          {formData.role === "attendance_only" && (
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
-                  <Info className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-blue-900">Attendance-Only User</h3>
-                  <p className="text-blue-700 text-sm mt-1">
-                    This user will only have access to Attendance Management features.
-                    No personal details, salary structure, or other employee information is required.
-                  </p>
-                  <p className="text-blue-600 text-xs mt-2">
-                    After creation, this user can login with Employee ID and Password to access the Attendance Directory.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Show remaining form sections only for non-attendance-only roles */}
-          {formData.role !== "attendance_only" && (
-            <>
-              {/* Organization Details Card */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
-                <div className="p-6 border-b border-slate-200">
-                  <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
-                      <Building className="w-4 h-4 text-blue-600" />
-                    </div>
-                    Organization Details
-                  </h2>
-                  <p className="text-slate-600 text-sm mt-1">
-                    Select organization, department, employee type, category, and in order
-                  </p>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {/* 1. Organization Dropdown */}
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Organization <span className="text-red-500">*</span>
-                      </label>
-                      {fetchLoading ? (
-                        <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
-                          Loading...
-                        </div>
-                      ) : (
-                        <SimpleSelect
-                          value={formData.jobDetails.organizationId}
-                          onChange={(e) =>
-                            handleSelectChange(
-                              "jobDetails.organizationId",
-                              e.target.value
-                            )
-                          }
-                          options={organizations}
-                          placeholder="Select organization"
-                          error={errors["jobDetails.organizationId"]}
-                        />
-                      )}
-                    </div>
-                    {/* 2. Department Dropdown */}
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Department <span className="text-red-500">*</span>
-                      </label>
-                      {fetchLoading ? (
-                        <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
-                          Loading...
-                        </div>
-                      ) : (
-                        <SimpleSelect
-                          value={formData.jobDetails.departmentId || formData.jobDetails.department}
-                          onChange={(e) =>
-                            handleSelectChange(
-                              "jobDetails.departmentId",
-                              e.target.value
-                            )
-                          }
-                          options={departments}
-                          placeholder={
-                            formData.jobDetails.organizationId
-                              ? "Select department"
-                              : "Select organization first"
-                          }
-                          error={errors["jobDetails.departmentId"]}
-                          disabled={!formData.jobDetails.organizationId}
-                        />
-                      )}
-                    </div>
-                    {/* 3. Employee Type Dropdown */}
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Employee Type <span className="text-red-500">*</span>
-                      </label>
-                      {fetchLoading ? (
-                        <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
-                          Loading...
-                        </div>
-                      ) : (
-                        <SimpleSelect
-                          value={formData.jobDetails.employeeTypeId}
-                          onChange={(e) =>
-                            handleSelectChange("jobDetails.employeeTypeId", e.target.value)
-                          }
-                          options={employeeTypes}
-                          placeholder={
-                            formData.jobDetails.organizationId &&
-                              formData.jobDetails.departmentId
-                              ? "Select employee type"
-                              : formData.jobDetails.organizationId
-                                ? "Select department first"
-                                : "Select organization first"
-                          }
-                          error={errors["jobDetails.employeeTypeId"]}
-                          disabled={
-                            !formData.jobDetails.organizationId ||
-                            !formData.jobDetails.departmentId
-                          }
-                        />
-                      )}
-                    </div>
-                    {/* 4. Category Dropdown */}
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Category <span className="text-red-500">*</span>
-                      </label>
-                      {fetchLoading ? (
-                        <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
-                          Loading...
-                        </div>
-                      ) : (
-                        <SimpleSelect
-                          value={formData.jobDetails.categoryId}
-                          onChange={(e) =>
-                            handleSelectChange("jobDetails.categoryId", e.target.value)
-                          }
-                          options={categories}
-                          placeholder={
-                            formData.jobDetails.organizationId &&
-                              formData.jobDetails.departmentId &&
-                              formData.jobDetails.employeeTypeId
-                              ? "Select category"
-                              : "Complete previous fields first"
-                          }
-                          error={errors["jobDetails.categoryId"]}
-                          disabled={
-                            !formData.jobDetails.organizationId ||
-                            !formData.jobDetails.departmentId ||
-                            !formData.jobDetails.employeeTypeId
-                          }
-                        />
-                      )}
-                    </div>
-
-                    {/* 5. Team Lead Dropdown - Only show if category is NOT "Team Lead" */}
-                    {formData.jobDetails.categoryId &&
-                      formData.jobDetails.category?.toLowerCase() !== "team lead" && (
-                        <div className="space-y-2">
-                          <label className="block text-sm font-semibold text-slate-700">
-                            Team Lead
-                          </label>
-                          {fetchLoading ? (
-                            <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
-                              Loading...
-                            </div>
-                          ) : (
-                            <SimpleSelect
-                              value={formData.jobDetails.teamLead || ""}
-                              onChange={(e) =>
-                                handleSelectChange("jobDetails.teamLead", e.target.value)
-                              }
-                              options={teamLeads}
-                              placeholder={
-                                formData.jobDetails.organizationId &&
-                                  formData.jobDetails.departmentId
-                                  ? "Select team lead"
-                                  : "Select organization and department first"
-                              }
-                              disabled={
-                                !formData.jobDetails.organizationId ||
-                                !formData.jobDetails.departmentId
-                              }
-                            />
-                          )}
-                          <p className="text-xs text-slate-500 mt-1">
-                            Select a team lead from the same department
-                          </p>
-                        </div>
-                      )}
-
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Designation
-                      </label>
-                      <input
-                        name="jobDetails.designation"
-                        value={formData.jobDetails.designation || ""}
-                        onChange={handleChange}
-                        placeholder="Software Engineer"
-                        className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Work Location
-                      </label>
-                      <input
-                        name="jobDetails.workLocation"
-                        value={formData.jobDetails.workLocation || ""}
-                        onChange={handleChange}
-                        placeholder="Bangalore"
-                        className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                      />
-                    </div>
+              </motion.div>
+            )}
+            {currentStep === 1 && (
+              <motion.div
+                key="step1"
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                custom={direction}
+                transition={{ duration: 0.3, type: "tween" }}
+                className="space-y-6"
+              >
+                <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
+                  <div className="p-6 border-b border-slate-200">
+                    <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
+                      <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                        <User className="w-4 h-4 text-indigo-600" />
+                      </div>
+                      Personal Information
+                    </h2>
+                    <p className="text-slate-600 text-sm mt-1">
+                      Basic employee details and contact information
+                    </p>
                   </div>
-
-
-                </div>
-              </div>
-
-              {/* Personal Details Card */}
-
-
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
-                <div className="p-6 border-b border-slate-200">
-                  <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center border border-yellow-100">
-                      <User className="w-4 h-4 text-yellow-600" />
-                    </div>
-                    Personal Information
-                  </h2>
-                  <p className="text-slate-600 text-sm mt-1">
-                    Basic employee details and contact information
-                  </p>
-                </div>
-                <div className="p-6 space-y-6">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        First Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="personalDetails.firstName"
-                        value={formData.personalDetails.firstName}
-                        onChange={handleChange}
-                        maxLength={40}
-                        placeholder="Sameer"
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["personalDetails.firstName"]
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors["personalDetails.firstName"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors["personalDetails.firstName"]}</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Last Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="personalDetails.lastName"
-                        value={formData.personalDetails.lastName}
-                        onChange={handleChange}
-                        maxLength={40}
-                        placeholder="Gaikwad"
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["personalDetails.lastName"]
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors["personalDetails.lastName"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors["personalDetails.lastName"]}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Email Address <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <div className="p-6 space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          First Name <span className="text-red-500">*</span>
+                        </label>
                         <input
-                          name="personalDetails.email"
-                          type="email"
-                          value={formData.personalDetails.email}
+                          name="personalDetails.firstName"
+                          value={formData.personalDetails.firstName}
                           onChange={handleChange}
                           maxLength={40}
-                          placeholder="sameer.gaikwad@company.com"
-                          className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["personalDetails.email"]
+                          placeholder="Sameer"
+                          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["personalDetails.firstName"]
                             ? "border-red-300 focus:ring-red-500 focus:border-red-500"
                             : "border-slate-300"
                             }`}
                         />
+                        {errors["personalDetails.firstName"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>{errors["personalDetails.firstName"]}</span>
+                          </div>
+                        )}
                       </div>
-                      {errors["personalDetails.email"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors["personalDetails.email"]}</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Phone Number <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Last Name <span className="text-red-500">*</span>
+                        </label>
                         <input
-                          name="personalDetails.phone"
-                          type="tel"
-                          value={formData.personalDetails.phone}
+                          name="personalDetails.lastName"
+                          value={formData.personalDetails.lastName}
                           onChange={handleChange}
-                          placeholder="9876543210"
-                          className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["personalDetails.phone"]
+                          maxLength={40}
+                          placeholder="Gaikwad"
+                          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["personalDetails.lastName"]
                             ? "border-red-300 focus:ring-red-500 focus:border-red-500"
                             : "border-slate-300"
                             }`}
                         />
+                        {errors["personalDetails.lastName"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>{errors["personalDetails.lastName"]}</span>
+                          </div>
+                        )}
                       </div>
-                      {errors["personalDetails.phone"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors["personalDetails.phone"]}</span>
-                        </div>
-                      )}
                     </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Date of Birth
-                      </label>
-                      <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <input
-                          name="personalDetails.dateOfBirth"
-                          type="date"
-                          value={formData.personalDetails.dateOfBirth}
-                          onChange={handleChange}
-                          className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Email Address <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            name="personalDetails.email"
+                            type="email"
+                            value={formData.personalDetails.email}
+                            onChange={handleChange}
+                            maxLength={40}
+                            placeholder="sameer.gaikwad@company.com"
+                            className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["personalDetails.email"]
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-slate-300"
+                              }`}
+                          />
+                        </div>
+                        {errors["personalDetails.email"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>{errors["personalDetails.email"]}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Phone Number <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            name="personalDetails.phone"
+                            type="tel"
+                            value={formData.personalDetails.phone}
+                            onChange={handleChange}
+                            placeholder="9876543210"
+                            className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["personalDetails.phone"]
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-slate-300"
+                              }`}
+                          />
+                        </div>
+                        {errors["personalDetails.phone"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>{errors["personalDetails.phone"]}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Date of Birth
+                        </label>
+                        <div className="relative">
+                          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            name="personalDetails.dateOfBirth"
+                            type="date"
+                            value={formData.personalDetails.dateOfBirth}
+                            onChange={handleChange}
+                            className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Gender
+                        </label>
+                        <SimpleSelect
+                          value={formData.personalDetails.gender}
+                          onChange={(e) =>
+                            handleSelectChange(
+                              "personalDetails.gender",
+                              e.target.value
+                            )
+                          }
+                          options={genderOptions}
+                          placeholder="Select gender"
                         />
                       </div>
                     </div>
+                    {/* Blood Group */}
                     <div className="space-y-2">
                       <label className="block text-sm font-semibold text-slate-700">
-                        Gender
+                        Blood Group
                       </label>
                       <SimpleSelect
-                        value={formData.personalDetails.gender}
+                        value={formData.personalDetails.bloodGroup}
                         onChange={(e) =>
                           handleSelectChange(
-                            "personalDetails.gender",
+                            "personalDetails.bloodGroup",
                             e.target.value
                           )
                         }
-                        options={genderOptions}
-                        placeholder="Select gender"
+                        options={[
+                          { value: "A+", label: "A+" },
+                          { value: "A-", label: "A-" },
+                          { value: "B+", label: "B+" },
+                          { value: "B-", label: "B-" },
+                          { value: "AB+", label: "AB+" },
+                          { value: "AB-", label: "AB-" },
+                          { value: "O+", label: "O+" },
+                          { value: "O-", label: "O-" },
+                        ]}
+                        placeholder="Select Blood Group"
                       />
                     </div>
-                  </div>
-                  {/* Blood Group */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-semibold text-slate-700">
-                      Blood Group
-                    </label>
-                    <SimpleSelect
-                      value={formData.personalDetails.bloodGroup}
-                      onChange={(e) =>
-                        handleSelectChange(
-                          "personalDetails.bloodGroup",
-                          e.target.value
-                        )
-                      }
-                      options={[
-                        { value: "A+", label: "A+" },
-                        { value: "A-", label: "A-" },
-                        { value: "B+", label: "B+" },
-                        { value: "B-", label: "B-" },
-                        { value: "AB+", label: "AB+" },
-                        { value: "AB-", label: "AB-" },
-                        { value: "O+", label: "O+" },
-                        { value: "O-", label: "O-" },
-                      ]}
-                      placeholder="Select Blood Group"
-                    />
-                  </div>
 
-                  {/* Address Fields */}
-                  <div className="space-y-6 pt-4 border-t border-slate-100 mt-4">
-                    {/* Current Address */}
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-slate-500" />
-                        Current Address
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2 md:col-span-2">
-                          <label className="block text-sm font-medium text-slate-700">Street Address</label>
-                          <input
-                            name="personalDetails.currentAddress.street"
-                            value={formData.personalDetails.currentAddress?.street || ""}
-                            onChange={handleChange}
-                            placeholder="Plot No. 42, Sector 17, Vashi"
-                            className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium text-slate-700">City</label>
-                          <input
-                            name="personalDetails.currentAddress.city"
-                            value={formData.personalDetails.currentAddress?.city || ""}
-                            onChange={handleChange}
-                            placeholder="Navi Mumbai"
-                            className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-slate-700">State</label>
-                            <input
-                              name="personalDetails.currentAddress.state"
-                              value={formData.personalDetails.currentAddress?.state || ""}
-                              onChange={handleChange}
-                              placeholder="Maharashtra"
-                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-slate-700">ZIP Code</label>
-                            <input
-                              name="personalDetails.currentAddress.zipCode"
-                              value={formData.personalDetails.currentAddress?.zipCode || ""}
-                              onChange={handleChange}
-                              placeholder="400703"
-                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Permanent Address */}
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-                          <Home className="w-4 h-4 text-slate-500" />
-                          Permanent Address
+                    {/* Address Fields */}
+                    <div className="space-y-6 pt-4 border-t border-slate-100 mt-4">
+                      {/* Current Address */}
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-slate-500" />
+                          Current Address
                         </h3>
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setFormData(prev => ({
-                                  ...prev,
-                                  personalDetails: {
-                                    ...prev.personalDetails,
-                                    permanentAddress: { ...prev.personalDetails.currentAddress }
-                                  }
-                                }));
-                              }
-                            }}
-                            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 border-slate-300"
-                          />
-                          <span className="text-xs text-slate-600">Same as Current</span>
-                        </label>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2 md:col-span-2">
-                          <label className="block text-sm font-medium text-slate-700">Street Address</label>
-                          <input
-                            name="personalDetails.permanentAddress.street"
-                            value={formData.personalDetails.permanentAddress?.street || ""}
-                            onChange={handleChange}
-                            placeholder="Plot No. 42, Sector 17, Vashi"
-                            className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium text-slate-700">City</label>
-                          <input
-                            name="personalDetails.permanentAddress.city"
-                            value={formData.personalDetails.permanentAddress?.city || ""}
-                            onChange={handleChange}
-                            placeholder="Navi Mumbai"
-                            className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-slate-700">State</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2 md:col-span-2">
+                            <label className="block text-sm font-medium text-slate-700">Street Address</label>
                             <input
-                              name="personalDetails.permanentAddress.state"
-                              value={formData.personalDetails.permanentAddress?.state || ""}
+                              name="personalDetails.currentAddress.street"
+                              value={formData.personalDetails.currentAddress?.street || ""}
                               onChange={handleChange}
-                              placeholder="Maharashtra"
-                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                              placeholder="Plot No. 42, Sector 17, Vashi"
+                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="block text-sm font-medium text-slate-700">ZIP Code</label>
+                            <label className="block text-sm font-medium text-slate-700">City</label>
                             <input
-                              name="personalDetails.permanentAddress.zipCode"
-                              value={formData.personalDetails.permanentAddress?.zipCode || ""}
+                              name="personalDetails.currentAddress.city"
+                              value={formData.personalDetails.currentAddress?.city || ""}
                               onChange={handleChange}
-                              placeholder="400703"
-                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                              placeholder="Navi Mumbai"
+                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
                             />
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Date of Joining <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <input
-                          name="personalDetails.dateOfJoining"
-                          type="date"
-                          value={formData.personalDetails?.dateOfJoining || ""}
-                          onChange={handleChange}
-                          className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["personalDetails.dateOfJoining"]
-                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                            : "border-slate-300"
-                            }`}
-                        />
-                      </div>
-                      {errors["personalDetails.dateOfJoining"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors["personalDetails.dateOfJoining"]}</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Employee Status <span className="text-red-500">*</span>
-                      </label>
-                      <SimpleSelect
-                        value={formData.status}
-                        onChange={(e) =>
-                          handleSelectChange("status", e.target.value)
-                        }
-                        options={statusOptions}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Emergency Contact Section */}
-                  <div className="pt-4 border-t border-slate-100 mt-4">
-                    <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-slate-500" />
-                      Emergency Contact Person
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">Contact Name</label>
-                        <input
-                          name="personalDetails.emergencyContact.name"
-                          value={formData.personalDetails.emergencyContact?.name || ""}
-                          onChange={handleChange}
-                          placeholder="Amit Gaikwad"
-                          className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">Relationship</label>
-                        <input
-                          name="personalDetails.emergencyContact.relationship"
-                          value={formData.personalDetails.emergencyContact?.relationship || ""}
-                          onChange={handleChange}
-                          placeholder="Brother"
-                          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors["personalDetails.emergencyContact.relationship"]
-                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                            : "border-slate-300"
-                            }`}
-                        />
-                        {errors["personalDetails.emergencyContact.relationship"] && (
-                          <div className="flex items-center space-x-1 text-red-600 text-xs">
-                            <AlertCircle className="w-3 h-3" />
-                            <span>{errors["personalDetails.emergencyContact.relationship"]}</span>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-slate-700">State</label>
+                              <input
+                                name="personalDetails.currentAddress.state"
+                                value={formData.personalDetails.currentAddress?.state || ""}
+                                onChange={handleChange}
+                                placeholder="Maharashtra"
+                                className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-slate-700">ZIP Code</label>
+                              <input
+                                name="personalDetails.currentAddress.zipCode"
+                                value={formData.personalDetails.currentAddress?.zipCode || ""}
+                                onChange={handleChange}
+                                placeholder="400703"
+                                className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                              />
+                            </div>
                           </div>
-                        )}
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">Phone</label>
-                        <input
-                          name="personalDetails.emergencyContact.phone"
-                          value={formData.personalDetails.emergencyContact?.phone || ""}
-                          onChange={handleChange}
-                          placeholder="9876543210"
-                          maxLength={10}
-                          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors["personalDetails.emergencyContact.phone"]
-                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                            : "border-slate-300"
-                            }`}
-                        />
-                        {errors["personalDetails.emergencyContact.phone"] && (
-                          <div className="flex items-center space-x-1 text-red-600 text-xs">
-                            <AlertCircle className="w-3 h-3" />
-                            <span>{errors["personalDetails.emergencyContact.phone"]}</span>
+
+                      {/* Permanent Address */}
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                            <Home className="w-4 h-4 text-slate-500" />
+                            Permanent Address
+                          </h3>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    personalDetails: {
+                                      ...prev.personalDetails,
+                                      permanentAddress: { ...prev.personalDetails.currentAddress }
+                                    }
+                                  }));
+                                }
+                              }}
+                              className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300"
+                            />
+                            <span className="text-xs text-slate-600">Same as Current</span>
+                          </label>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2 md:col-span-2">
+                            <label className="block text-sm font-medium text-slate-700">Street Address</label>
+                            <input
+                              name="personalDetails.permanentAddress.street"
+                              value={formData.personalDetails.permanentAddress?.street || ""}
+                              onChange={handleChange}
+                              placeholder="Plot No. 42, Sector 17, Vashi"
+                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                            />
                           </div>
-                        )}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-medium text-slate-700">City</label>
+                            <input
+                              name="personalDetails.permanentAddress.city"
+                              value={formData.personalDetails.permanentAddress?.city || ""}
+                              onChange={handleChange}
+                              placeholder="Navi Mumbai"
+                              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-slate-700">State</label>
+                              <input
+                                name="personalDetails.permanentAddress.state"
+                                value={formData.personalDetails.permanentAddress?.state || ""}
+                                onChange={handleChange}
+                                placeholder="Maharashtra"
+                                className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-slate-700">ZIP Code</label>
+                              <input
+                                name="personalDetails.permanentAddress.zipCode"
+                                value={formData.personalDetails.permanentAddress?.zipCode || ""}
+                                onChange={handleChange}
+                                placeholder="400703"
+                                className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="space-y-2 mt-4">
-                      <label className="block text-sm font-medium text-slate-700">Address</label>
-                      <input
-                        name="personalDetails.emergencyContact.address"
-                        value={formData.personalDetails.emergencyContact?.address || ""}
-                        onChange={handleChange}
-                        placeholder="Plot No. 42, Sector 17, Vashi, Navi Mumbai"
-                        className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Financial Information Card - Updated to remove basic salary */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
-                <div className="p-6 border-b border-slate-200">
-                  <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center border border-green-100">
-                      <CreditCard className="w-4 h-4 text-green-600" />
-                    </div>
-                    Financial Information
-                  </h2>
-                  <p className="text-slate-600 text-sm mt-1">
-                    Bank account information and compliance data (Basic salary is
-                    now configured in Salary Structure section)
-                  </p>
-                </div>
-                <div className="p-6 space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        PAN Number
-                      </label>
-                      <div className="relative">
-                        <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <input
-                          name="salaryDetails.panNumber"
-                          value={formData.salaryDetails.panNumber}
-                          onChange={handleChange}
-                          placeholder="ABCDE1234F"
-                          className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["salaryDetails.panNumber"]
-                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                            : "border-slate-300"
-                            }`}
-                        />
-                      </div>
-                      {errors["salaryDetails.panNumber"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors["salaryDetails.panNumber"]}</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Aadhar Number <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="salaryDetails.aadharNumber"
-                        value={formData.salaryDetails.aadharNumber}
-                        onChange={handleChange}
-                        placeholder="1234 5678 9012"
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["salaryDetails.aadharNumber"]
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors["salaryDetails.aadharNumber"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors["salaryDetails.aadharNumber"]}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Bank Account Number <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="salaryDetails.bankAccount.accountNumber"
-                        value={formData.salaryDetails.bankAccount.accountNumber}
-                        onChange={handleChange}
-                        maxLength={20}
-                        placeholder="123456789012"
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["salaryDetails.bankAccount.accountNumber"]
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors["salaryDetails.bankAccount.accountNumber"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>
-                            {errors["salaryDetails.bankAccount.accountNumber"]}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Bank Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="salaryDetails.bankAccount.bankName"
-                        value={formData.salaryDetails.bankAccount.bankName}
-                        onChange={handleChange}
-                        placeholder="HDFC Bank"
-                        maxLength={40}
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["salaryDetails.bankAccount.bankName"]
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors["salaryDetails.bankAccount.bankName"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>
-                            {errors["salaryDetails.bankAccount.bankName"]}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        IFSC Code <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="salaryDetails.bankAccount.ifscCode"
-                        value={formData.salaryDetails.bankAccount.ifscCode}
-                        onChange={handleChange}
-                        placeholder="HDFC0001234"
-                        maxLength={11}
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["salaryDetails.bankAccount.ifscCode"]
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors["salaryDetails.bankAccount.ifscCode"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>
-                            {errors["salaryDetails.bankAccount.ifscCode"]}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Branch Name
-                      </label>
-                      <input
-                        name="salaryDetails.bankAccount.branch"
-                        value={formData.salaryDetails.bankAccount.branch}
-                        onChange={handleChange}
-                        maxLength={30}
-                        placeholder="Vashi Branch"
-                        className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-              {/* Compliance & Configuration Card */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
-                <div className="p-6 border-b border-slate-200">
-                  <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center border border-green-100">
-                      <Shield className="w-4 h-4 text-green-600" />
-                    </div>
-                    Compliance & Configuration
-                  </h2>
-                  <p className="text-slate-600 text-sm mt-1">
-                    Configure statutory compliance settings affecting salary structure
-                  </p>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* PF Toggle */}
-                    <div className="space-y-3">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Is PF Applicable
-                      </label>
-                      <div className="flex space-x-4">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="pfApplicable"
-                            value="yes"
-                            checked={formData.pfApplicable === "yes"}
-                            onChange={(e) =>
-                              handleComplianceChange("pfApplicable", e.target.value)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">Yes</span>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Date of Joining <span className="text-red-500">*</span>
                         </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
+                        <div className="relative">
+                          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                           <input
-                            type="radio"
-                            name="pfApplicable"
-                            value="no"
-                            checked={formData.pfApplicable === "no"}
-                            onChange={(e) =>
-                              handleComplianceChange("pfApplicable", e.target.value)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">No</span>
-                        </label>
-                      </div>
-                    </div>
-
-                    {/* ESIC Toggle */}
-                    <div className="space-y-3">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Is ESIC Applicable
-                      </label>
-                      <div className="flex space-x-4">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="esicApplicable"
-                            value="yes"
-                            checked={formData.esicApplicable === "yes"}
-                            onChange={(e) =>
-                              handleComplianceChange("esicApplicable", e.target.value)
-                            }
-                            disabled={
-                              (parseFloat(formData.payslipStructure?.basicSalary) || 0) > 21000
-                            }
-                            className={`w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300 ${(parseFloat(formData.payslipStructure?.basicSalary) || 0) > 21000
-                              ? "cursor-not-allowed opacity-50"
-                              : ""
+                            name="personalDetails.dateOfJoining"
+                            type="date"
+                            value={formData.personalDetails?.dateOfJoining || ""}
+                            onChange={handleChange}
+                            className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["personalDetails.dateOfJoining"]
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-slate-300"
                               }`}
                           />
-                          <span className={`text-sm text-slate-700 ${(parseFloat(formData.payslipStructure?.basicSalary) || 0) > 21000
-                            ? "opacity-50"
-                            : ""
-                            }`}>Yes</span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="esicApplicable"
-                            value="no"
-                            checked={formData.esicApplicable === "no"}
-                            onChange={(e) =>
-                              handleComplianceChange("esicApplicable", e.target.value)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">No</span>
-                        </label>
-                      </div>
-                      {(parseFloat(formData.payslipStructure?.basicSalary) || 0) > 21000 && (
-                        <p className="text-xs text-red-500">Not applicable for Basic Salary &gt; ₹21,000</p>
-                      )}
-                    </div>
-
-                    {/* PT Toggle */}
-                    <div className="space-y-3">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Is Compliant (PT Applicable)
-                      </label>
-                      <div className="flex space-x-4">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="isCompliant"
-                            checked={formData.isCompliant === true}
-                            onChange={() => handleComplianceChange("isCompliant", true)}
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">Yes</span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="isCompliant"
-                            checked={formData.isCompliant === false}
-                            onChange={() => handleComplianceChange("isCompliant", false)}
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">No</span>
-                        </label>
-                      </div>
-                    </div>
-
-                    {/* TDS Toggle */}
-                    <div className="space-y-3">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Is TDS Applicable
-                      </label>
-                      <div className="flex space-x-4">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="isTDSApplicable"
-                            value="yes"
-                            checked={formData.isTDSApplicable === true}
-                            onChange={() =>
-                              handleComplianceChange("isTDSApplicable", true)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">Yes</span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="isTDSApplicable"
-                            value="no"
-                            checked={formData.isTDSApplicable === false}
-                            onChange={() =>
-                              handleComplianceChange("isTDSApplicable", false)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">No</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Payslip Structure Card */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
-                <div className="p-6 border-b border-slate-200">
-                  <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center border border-purple-100">
-                      <BadgeDollarSign className="w-4 h-4 text-purple-600" />
-                    </div>
-                    Salary Structure
-                  </h2>
-                  <p className="text-slate-600 text-sm mt-1">
-                    Configure salary components, earnings, and deductions with PT &
-                    PF auto-calculation
-                  </p>
-                </div>
-                <div className="p-6">
-                  <PayslipStructureSection
-                    payslipStructure={formData.payslipStructure}
-                    onStructureChange={handlePayslipStructureChange}
-                    errors={errors}
-                    employeeGender={formData.personalDetails.gender}
-                    pfApplicable={formData.pfApplicable}
-                    esicApplicable={formData.esicApplicable}
-                    isTdsApplicable={formData.isTDSApplicable}
-                    isCompliant={formData.isCompliant}
-                  />
-                </div>
-              </div>
-
-              {/* Additional Information Card */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
-                <div className="p-6 border-b border-slate-200">
-                  <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center border border-purple-100">
-                      <UserCheck className="w-4 h-4 text-purple-600" />
-                    </div>
-                    Additional Information & Documents
-                  </h2>
-                  <p className="text-slate-600 text-sm mt-1">
-                    Employee status, preferences, attendance approval, and document
-                    uploads
-                  </p>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Working Hours <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="workingHr"
-                        value={formData.workingHr}
-                        onChange={handleChange}
-                        placeholder="9hr"
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors["workingHr"]
-                          ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                          : "border-slate-300"
-                          }`}
-                      />
-                      {errors["workingHr"] && (
-                        <div className="flex items-center space-x-1 text-red-600 text-xs">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>{errors["workingHr"]}</span>
                         </div>
-                      )}
-                    </div>
-
-
-
-                    <div className="space-y-3">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Is Probation
-                      </label>
-                      <div className="flex space-x-4">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="probation"
-                            value="yes"
-                            checked={formData.probation === "yes"}
-                            onChange={(e) =>
-                              handleRadioChange("probation", e.target.value)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">Yes</span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="probation"
-                            value="no"
-                            checked={formData.probation === "no"}
-                            onChange={(e) =>
-                              handleRadioChange("probation", e.target.value)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">No</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Is OT Applicable
-                      </label>
-                      <div className="flex space-x-4">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="otApplicable"
-                            value="yes"
-                            checked={formData.otApplicable === "yes"}
-                            onChange={(e) =>
-                              handleRadioChange("otApplicable", e.target.value)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">Yes</span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="otApplicable"
-                            value="no"
-                            checked={formData.otApplicable === "no"}
-                            onChange={(e) =>
-                              handleRadioChange("otApplicable", e.target.value)
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">No</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="block text-sm font-semibold text-slate-700">
-                        Is Attendance Approval Required{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <div className="flex space-x-4">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="attendanceApproval.required"
-                            value="yes"
-                            checked={formData.attendanceApproval.required === "yes"}
-                            onChange={(e) =>
-                              handleRadioChange(
-                                "attendanceApproval.required",
-                                e.target.value
-                              )
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">Yes</span>
-                        </label>
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="attendanceApproval.required"
-                            value="no"
-                            checked={formData.attendanceApproval.required === "no"}
-                            onChange={(e) =>
-                              handleRadioChange(
-                                "attendanceApproval.required",
-                                e.target.value
-                              )
-                            }
-                            className="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-slate-300"
-                          />
-                          <span className="text-sm text-slate-700">No</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  {/* Supervisor Selection Section */}
-                  {formData.attendanceApproval.required === "yes" && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                      <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2 mb-4">
-                        <UserCheck className="w-5 h-5 text-blue-600" />
-                        Attendance Approval Supervisors
-                      </h3>
-                      <p className="text-slate-600 text-sm mb-6">
-                        Select supervisors who will approve attendance for each
-                        shift
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Shift 1 Supervisor */}
-                        <div className="space-y-2">
-                          <label className="block text-sm font-semibold text-slate-700">
-                            <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-slate-500" />
-                              Shift 1 Supervisor{" "}
-                              <span className="text-red-500">*</span>
-                            </div>
-                          </label>
-                          {loadingSupervisors ? (
-                            <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
-                              Loading supervisors...
-                            </div>
-                          ) : (
-                            <SimpleSelect
-                              value={formData.attendanceApproval.shift1Supervisor}
-                              onChange={(e) =>
-                                handleSelectChange(
-                                  "attendanceApproval.shift1Supervisor",
-                                  e.target.value
-                                )
-                              }
-                              options={availableSupervisors}
-                              placeholder={
-                                formData.jobDetails.organizationId
-                                  ? "Select shift 1 supervisor"
-                                  : "Select organization first"
-                              }
-                              error={errors["attendanceApproval.shift1Supervisor"]}
-                              disabled={
-                                !formData.jobDetails.organizationId ||
-                                loadingSupervisors
-                              }
-                            />
-                          )}
-                          <p className="text-xs text-slate-500 mt-1">
-                            Supervisor for morning/day shift attendance approval
-                          </p>
-                        </div>
-                        {/* Shift 2 Supervisor */}
-                        <div className="space-y-2">
-                          <label className="block text-sm font-semibold text-slate-700">
-                            <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-slate-500" />
-                              Shift 2 Supervisor{" "}
-                              <span className="text-red-500">*</span>
-                            </div>
-                          </label>
-                          {loadingSupervisors ? (
-                            <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
-                              Loading supervisors...
-                            </div>
-                          ) : (
-                            <SimpleSelect
-                              value={formData.attendanceApproval.shift2Supervisor}
-                              onChange={(e) =>
-                                handleSelectChange(
-                                  "attendanceApproval.shift2Supervisor",
-                                  e.target.value
-                                )
-                              }
-                              options={availableSupervisors}
-                              placeholder={
-                                formData.jobDetails.organizationId
-                                  ? "Select shift 2 supervisor"
-                                  : "Select organization first"
-                              }
-                              error={errors["attendanceApproval.shift2Supervisor"]}
-                              disabled={
-                                !formData.jobDetails.organizationId ||
-                                loadingSupervisors
-                              }
-                            />
-                          )}
-                          <p className="text-xs text-slate-500 mt-1">
-                            Supervisor for evening/night shift attendance approval
-                          </p>
-                        </div>
-                      </div>
-                      {availableSupervisors.length === 0 &&
-                        formData.jobDetails.organizationId &&
-                        !loadingSupervisors && (
-                          <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                            <p className="text-sm text-yellow-800">
-                              No supervisors available for this organization. Please
-                              create employee profiles first before assigning
-                              supervisors.
-                            </p>
+                        {errors["personalDetails.dateOfJoining"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>{errors["personalDetails.dateOfJoining"]}</span>
                           </div>
                         )}
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Employee Status <span className="text-red-500">*</span>
+                        </label>
+                        <SimpleSelect
+                          value={formData.status}
+                          onChange={(e) =>
+                            handleSelectChange("status", e.target.value)
+                          }
+                          options={statusOptions}
+                        />
+                      </div>
                     </div>
-                  )}
-                  {/* Document Upload Section */}
-                  {formData.jobDetails.categoryId && (
-                    <div className="space-y-6 pt-6 border-t border-slate-200">
-                      <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                        <FileText className="w-5 h-5 text-slate-600" />
-                        Employee Documents
+
+                    {/* Emergency Contact Section */}
+                    <div className="pt-4 border-t border-slate-100 mt-4">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                        <Phone className="w-4 h-4 text-slate-500" />
+                        Emergency Contact Person
                       </h3>
-                      <p className="text-slate-600 text-sm">
-                        Upload all required documents for employee verification.
-                        Files will be uploaded to Cloudinary. Required documents are
-                        marked with <span className="text-red-500">*</span>
-                      </p>
-                      <DocumentUploadSection
-                        uploadedFiles={uploadedFiles}
-                        onFilesChange={handleFilesChange}
-                        onFileRemove={handleFileRemove}
-                        onFileView={(file) => window.open(file.url, "_blank")}
-                        employeeCategory={formData.jobDetails.category}
-                        categoryId={formData.jobDetails.categoryId}
-                      />
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-slate-700">Contact Name</label>
+                          <input
+                            name="personalDetails.emergencyContact.name"
+                            value={formData.personalDetails.emergencyContact?.name || ""}
+                            onChange={handleChange}
+                            placeholder="Amit Gaikwad"
+                            className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-slate-700">Relationship</label>
+                          <input
+                            name="personalDetails.emergencyContact.relationship"
+                            value={formData.personalDetails.emergencyContact?.relationship || ""}
+                            onChange={handleChange}
+                            placeholder="Brother"
+                            className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors ${errors["personalDetails.emergencyContact.relationship"]
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-slate-300"
+                              }`}
+                          />
+                          {errors["personalDetails.emergencyContact.relationship"] && (
+                            <div className="flex items-center space-x-1 text-red-600 text-xs">
+                              <AlertCircle className="w-3 h-3" />
+                              <span>{errors["personalDetails.emergencyContact.relationship"]}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-slate-700">Phone</label>
+                          <input
+                            name="personalDetails.emergencyContact.phone"
+                            value={formData.personalDetails.emergencyContact?.phone || ""}
+                            onChange={handleChange}
+                            placeholder="9876543210"
+                            maxLength={10}
+                            className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors ${errors["personalDetails.emergencyContact.phone"]
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-slate-300"
+                              }`}
+                          />
+                          {errors["personalDetails.emergencyContact.phone"] && (
+                            <div className="flex items-center space-x-1 text-red-600 text-xs">
+                              <AlertCircle className="w-3 h-3" />
+                              <span>{errors["personalDetails.emergencyContact.phone"]}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="space-y-2 mt-4">
+                        <label className="block text-sm font-medium text-slate-700">Address</label>
+                        <input
+                          name="personalDetails.emergencyContact.address"
+                          value={formData.personalDetails.emergencyContact?.address || ""}
+                          onChange={handleChange}
+                          placeholder="Plot No. 42, Sector 17, Vashi, Navi Mumbai"
+                          className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                        />
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
+
+                {/* Financial Information Card - Updated to remove basic salary */}
+              </motion.div>
+            )}
+
+            {currentStep === 2 && (
+              <motion.div
+                key="step2"
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                custom={direction}
+                transition={{ duration: 0.3, type: "tween" }}
+                className="space-y-6"
+              >
+                <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
+                  <div className="p-6 border-b border-slate-200">
+                    <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
+                      <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                        <CreditCard className="w-4 h-4 text-indigo-600" />
+                      </div>
+                      Financial Information
+                    </h2>
+                    <p className="text-slate-600 text-sm mt-1">
+                      Bank account information and compliance data (Basic salary is
+                      now configured in Salary Structure section)
+                    </p>
+                  </div>
+                  <div className="p-6 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          PAN Number
+                        </label>
+                        <div className="relative">
+                          <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            name="salaryDetails.panNumber"
+                            value={formData.salaryDetails.panNumber}
+                            onChange={handleChange}
+                            placeholder="ABCDE1234F"
+                            className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["salaryDetails.panNumber"]
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-slate-300"
+                              }`}
+                          />
+                        </div>
+                        {errors["salaryDetails.panNumber"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>{errors["salaryDetails.panNumber"]}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Aadhar Number <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          name="salaryDetails.aadharNumber"
+                          value={formData.salaryDetails.aadharNumber}
+                          onChange={handleChange}
+                          placeholder="1234 5678 9012"
+                          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["salaryDetails.aadharNumber"]
+                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                            : "border-slate-300"
+                            }`}
+                        />
+                        {errors["salaryDetails.aadharNumber"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>{errors["salaryDetails.aadharNumber"]}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Bank Account Number <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          name="salaryDetails.bankAccount.accountNumber"
+                          value={formData.salaryDetails.bankAccount.accountNumber}
+                          onChange={handleChange}
+                          maxLength={20}
+                          placeholder="123456789012"
+                          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["salaryDetails.bankAccount.accountNumber"]
+                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                            : "border-slate-300"
+                            }`}
+                        />
+                        {errors["salaryDetails.bankAccount.accountNumber"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>
+                              {errors["salaryDetails.bankAccount.accountNumber"]}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Bank Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          name="salaryDetails.bankAccount.bankName"
+                          value={formData.salaryDetails.bankAccount.bankName}
+                          onChange={handleChange}
+                          placeholder="HDFC Bank"
+                          maxLength={40}
+                          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["salaryDetails.bankAccount.bankName"]
+                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                            : "border-slate-300"
+                            }`}
+                        />
+                        {errors["salaryDetails.bankAccount.bankName"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>
+                              {errors["salaryDetails.bankAccount.bankName"]}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          IFSC Code <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          name="salaryDetails.bankAccount.ifscCode"
+                          value={formData.salaryDetails.bankAccount.ifscCode}
+                          onChange={handleChange}
+                          placeholder="HDFC0001234"
+                          maxLength={11}
+                          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["salaryDetails.bankAccount.ifscCode"]
+                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                            : "border-slate-300"
+                            }`}
+                        />
+                        {errors["salaryDetails.bankAccount.ifscCode"] && (
+                          <div className="flex items-center space-x-1 text-red-600 text-xs">
+                            <AlertCircle className="w-3 h-3" />
+                            <span>
+                              {errors["salaryDetails.bankAccount.ifscCode"]}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Branch Name
+                        </label>
+                        <input
+                          name="salaryDetails.bankAccount.branch"
+                          value={formData.salaryDetails.bankAccount.branch}
+                          onChange={handleChange}
+                          maxLength={30}
+                          placeholder="Vashi Branch"
+                          className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                {/* Compliance & Configuration Card */}
+                <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
+                  <div className="p-6 border-b border-slate-200">
+                    <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
+                      <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                        <Shield className="w-4 h-4 text-indigo-600" />
+                      </div>
+                      Compliance & Configuration
+                    </h2>
+                    <p className="text-slate-600 text-sm mt-1">
+                      Configure statutory compliance settings affecting salary structure
+                    </p>
+                  </div>
+                  <div className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* PF Toggle */}
+                      <div className="space-y-3">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Is PF Applicable
+                        </label>
+                        <div className="flex space-x-4">
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="pfApplicable"
+                              value="yes"
+                              checked={formData.pfApplicable === "yes"}
+                              onChange={(e) =>
+                                handleComplianceChange("pfApplicable", e.target.value)
+                              }
+                              className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                            />
+                            <span className="text-sm text-slate-700">Yes</span>
+                          </label>
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="pfApplicable"
+                              value="no"
+                              checked={formData.pfApplicable === "no"}
+                              onChange={(e) =>
+                                handleComplianceChange("pfApplicable", e.target.value)
+                              }
+                              className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                            />
+                            <span className="text-sm text-slate-700">No</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* ESIC Toggle */}
+                      <div className="space-y-3">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Is ESIC Applicable
+                        </label>
+                        <div className="flex space-x-4">
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="esicApplicable"
+                              value="yes"
+                              checked={formData.esicApplicable === "yes"}
+                              onChange={(e) =>
+                                handleComplianceChange("esicApplicable", e.target.value)
+                              }
+                              disabled={
+                                (parseFloat(formData.payslipStructure?.basicSalary) || 0) > 21000
+                              }
+                              className={`w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 ${(parseFloat(formData.payslipStructure?.basicSalary) || 0) > 21000
+                                ? "cursor-not-allowed opacity-50"
+                                : ""
+                                }`}
+                            />
+                            <span className={`text-sm text-slate-700 ${(parseFloat(formData.payslipStructure?.basicSalary) || 0) > 21000
+                              ? "opacity-50"
+                              : ""
+                              }`}>Yes</span>
+                          </label>
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="esicApplicable"
+                              value="no"
+                              checked={formData.esicApplicable === "no"}
+                              onChange={(e) =>
+                                handleComplianceChange("esicApplicable", e.target.value)
+                              }
+                              className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                            />
+                            <span className="text-sm text-slate-700">No</span>
+                          </label>
+                        </div>
+                        {(parseFloat(formData.payslipStructure?.basicSalary) || 0) > 21000 && (
+                          <p className="text-xs text-red-500">Not applicable for Basic Salary &gt; ₹21,000</p>
+                        )}
+                      </div>
+
+                      {/* PT Toggle */}
+                      <div className="space-y-3">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Is Compliant (PT Applicable)
+                        </label>
+                        <div className="flex space-x-4">
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="isCompliant"
+                              checked={formData.isCompliant === true}
+                              onChange={() => handleComplianceChange("isCompliant", true)}
+                              className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                            />
+                            <span className="text-sm text-slate-700">Yes</span>
+                          </label>
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="isCompliant"
+                              checked={formData.isCompliant === false}
+                              onChange={() => handleComplianceChange("isCompliant", false)}
+                              className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                            />
+                            <span className="text-sm text-slate-700">No</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* TDS Toggle */}
+                      <div className="space-y-3">
+                        <label className="block text-sm font-semibold text-slate-700">
+                          Is TDS Applicable
+                        </label>
+                        <div className="flex space-x-4">
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="isTDSApplicable"
+                              value="yes"
+                              checked={formData.isTDSApplicable === true}
+                              onChange={() =>
+                                handleComplianceChange("isTDSApplicable", true)
+                              }
+                              className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                            />
+                            <span className="text-sm text-slate-700">Yes</span>
+                          </label>
+                          <label className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="isTDSApplicable"
+                              value="no"
+                              checked={formData.isTDSApplicable === false}
+                              onChange={() =>
+                                handleComplianceChange("isTDSApplicable", false)
+                              }
+                              className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                            />
+                            <span className="text-sm text-slate-700">No</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payslip Structure Card */}
+
+              </motion.div>
+            )}
+            {currentStep === 3 && (
+              <motion.div
+                key="step3"
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                custom={direction}
+                transition={{ duration: 0.3, type: "tween" }}
+                className="space-y-6"
+              >
+                <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
+                  <div className="p-6 border-b border-slate-200">
+                    <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
+                      <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                        <BadgeDollarSign className="w-4 h-4 text-indigo-600" />
+                      </div>
+                      Salary Structure
+                    </h2>
+                    <p className="text-slate-600 text-sm mt-1">
+                      Configure salary components, earnings, and deductions with PT &
+                      PF auto-calculation
+                    </p>
+                  </div>
+                  <div className="p-6">
+                    <PayslipStructureSection
+                      payslipStructure={formData.payslipStructure}
+                      onStructureChange={handlePayslipStructureChange}
+                      errors={errors}
+                      employeeGender={formData.personalDetails.gender}
+                      pfApplicable={formData.pfApplicable}
+                      esicApplicable={formData.esicApplicable}
+                      isTdsApplicable={formData.isTDSApplicable}
+                      isCompliant={formData.isCompliant}
+                    />
+                  </div>
+                </div>
+
+                {/* Additional Information Card */}
+
+              </motion.div>
+            )
+            }
+            {
+              currentStep === 4 && (
+                <motion.div
+                  key="step4"
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  custom={direction}
+                  transition={{ duration: 0.3, type: "tween" }}
+                  className="space-y-6"
+                >
+                  <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
+                    <div className="p-6 border-b border-slate-200">
+                      <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
+                        <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                          <UserCheck className="w-4 h-4 text-indigo-600" />
+                        </div>
+                        Additional Information & Documents
+                      </h2>
+                      <p className="text-slate-600 text-sm mt-1">
+                        Employee status, preferences, attendance approval, and document
+                        uploads
+                      </p>
+                    </div>
+                    <div className="p-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div className="space-y-2">
+                          <label className="block text-sm font-semibold text-slate-700">
+                            Working Hours <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            name="workingHr"
+                            value={formData.workingHr}
+                            onChange={handleChange}
+                            placeholder="9hr"
+                            className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${errors["workingHr"]
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-slate-300"
+                              }`}
+                          />
+                          {errors["workingHr"] && (
+                            <div className="flex items-center space-x-1 text-red-600 text-xs">
+                              <AlertCircle className="w-3 h-3" />
+                              <span>{errors["workingHr"]}</span>
+                            </div>
+                          )}
+                        </div>
+
+
+
+                        <div className="space-y-3">
+                          <label className="block text-sm font-semibold text-slate-700">
+                            Is Probation
+                          </label>
+                          <div className="flex space-x-4">
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="probation"
+                                value="yes"
+                                checked={formData.probation === "yes"}
+                                onChange={(e) =>
+                                  handleRadioChange("probation", e.target.value)
+                                }
+                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                              />
+                              <span className="text-sm text-slate-700">Yes</span>
+                            </label>
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="probation"
+                                value="no"
+                                checked={formData.probation === "no"}
+                                onChange={(e) =>
+                                  handleRadioChange("probation", e.target.value)
+                                }
+                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                              />
+                              <span className="text-sm text-slate-700">No</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          <label className="block text-sm font-semibold text-slate-700">
+                            Is OT Applicable
+                          </label>
+                          <div className="flex space-x-4">
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="otApplicable"
+                                value="yes"
+                                checked={formData.otApplicable === "yes"}
+                                onChange={(e) =>
+                                  handleRadioChange("otApplicable", e.target.value)
+                                }
+                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                              />
+                              <span className="text-sm text-slate-700">Yes</span>
+                            </label>
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="otApplicable"
+                                value="no"
+                                checked={formData.otApplicable === "no"}
+                                onChange={(e) =>
+                                  handleRadioChange("otApplicable", e.target.value)
+                                }
+                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                              />
+                              <span className="text-sm text-slate-700">No</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          <label className="block text-sm font-semibold text-slate-700">
+                            Is Attendance Approval Required{" "}
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <div className="flex space-x-4">
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="attendanceApproval.required"
+                                value="yes"
+                                checked={formData.attendanceApproval.required === "yes"}
+                                onChange={(e) =>
+                                  handleRadioChange(
+                                    "attendanceApproval.required",
+                                    e.target.value
+                                  )
+                                }
+                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                              />
+                              <span className="text-sm text-slate-700">Yes</span>
+                            </label>
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="attendanceApproval.required"
+                                value="no"
+                                checked={formData.attendanceApproval.required === "no"}
+                                onChange={(e) =>
+                                  handleRadioChange(
+                                    "attendanceApproval.required",
+                                    e.target.value
+                                  )
+                                }
+                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                              />
+                              <span className="text-sm text-slate-700">No</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      {/* Supervisor Selection Section */}
+                      {formData.attendanceApproval.required === "yes" && (
+                        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mb-8">
+                          <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2 mb-4">
+                            <UserCheck className="w-5 h-5 text-indigo-600" />
+                            Attendance Approval Supervisors
+                          </h3>
+                          <p className="text-slate-600 text-sm mb-6">
+                            Select supervisors who will approve attendance for each
+                            shift
+                          </p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Shift 1 Supervisor */}
+                            <div className="space-y-2">
+                              <label className="block text-sm font-semibold text-slate-700">
+                                <div className="flex items-center gap-2">
+                                  <Clock className="w-4 h-4 text-slate-500" />
+                                  Shift 1 Supervisor{" "}
+                                  <span className="text-red-500">*</span>
+                                </div>
+                              </label>
+                              {loadingSupervisors ? (
+                                <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
+                                  Loading supervisors...
+                                </div>
+                              ) : (
+                                <SimpleSelect
+                                  value={formData.attendanceApproval.shift1Supervisor}
+                                  onChange={(e) =>
+                                    handleSelectChange(
+                                      "attendanceApproval.shift1Supervisor",
+                                      e.target.value
+                                    )
+                                  }
+                                  options={availableSupervisors}
+                                  placeholder={
+                                    formData.jobDetails.organizationId
+                                      ? "Select shift 1 supervisor"
+                                      : "Select organization first"
+                                  }
+                                  error={errors["attendanceApproval.shift1Supervisor"]}
+                                  disabled={
+                                    !formData.jobDetails.organizationId ||
+                                    loadingSupervisors
+                                  }
+                                />
+                              )}
+                              <p className="text-xs text-slate-500 mt-1">
+                                Supervisor for morning/day shift attendance approval
+                              </p>
+                            </div>
+                            {/* Shift 2 Supervisor */}
+                            <div className="space-y-2">
+                              <label className="block text-sm font-semibold text-slate-700">
+                                <div className="flex items-center gap-2">
+                                  <Clock className="w-4 h-4 text-slate-500" />
+                                  Shift 2 Supervisor{" "}
+                                  <span className="text-red-500">*</span>
+                                </div>
+                              </label>
+                              {loadingSupervisors ? (
+                                <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 animate-pulse">
+                                  Loading supervisors...
+                                </div>
+                              ) : (
+                                <SimpleSelect
+                                  value={formData.attendanceApproval.shift2Supervisor}
+                                  onChange={(e) =>
+                                    handleSelectChange(
+                                      "attendanceApproval.shift2Supervisor",
+                                      e.target.value
+                                    )
+                                  }
+                                  options={availableSupervisors}
+                                  placeholder={
+                                    formData.jobDetails.organizationId
+                                      ? "Select shift 2 supervisor"
+                                      : "Select organization first"
+                                  }
+                                  error={errors["attendanceApproval.shift2Supervisor"]}
+                                  disabled={
+                                    !formData.jobDetails.organizationId ||
+                                    loadingSupervisors
+                                  }
+                                />
+                              )}
+                              <p className="text-xs text-slate-500 mt-1">
+                                Supervisor for evening/night shift attendance approval
+                              </p>
+                            </div>
+                          </div>
+                          {availableSupervisors.length === 0 &&
+                            formData.jobDetails.organizationId &&
+                            !loadingSupervisors && (
+                              <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
+                                <p className="text-sm text-amber-800">
+                                  No supervisors available for this organization. Please
+                                  create employee profiles first before assigning
+                                  supervisors.
+                                </p>
+                              </div>
+                            )}
+                        </div>
+                      )}
+                      {/* Document Upload Section */}
+                      {formData.jobDetails.categoryId && (
+                        <div className="space-y-6 pt-6 border-t border-slate-200">
+                          <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                            <FileText className="w-5 h-5 text-slate-600" />
+                            Employee Documents
+                          </h3>
+                          <p className="text-slate-600 text-sm">
+                            Upload all required documents for employee verification.
+                            Files will be uploaded to Cloudinary. Required documents are
+                            marked with <span className="text-red-500">*</span>
+                          </p>
+                          <DocumentUploadSection
+                            uploadedFiles={uploadedFiles}
+                            onFilesChange={handleFilesChange}
+                            onFileRemove={handleFileRemove}
+                            onFileView={(file) => window.open(file.url, "_blank")}
+                            employeeCategory={formData.jobDetails.category}
+                            categoryId={formData.jobDetails.categoryId}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div >
+
+                </motion.div >
+              )
+            }
+          </AnimatePresence >
+
+          {/* Sticky Footer Navigation */}
+          < div className="sticky bottom-0 bg-white border-t border-slate-200 p-4 -mx-6 mt-auto shadow-lg z-20" >
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              <button
+                type="button"
+                onClick={handlePrev}
+                disabled={currentStep === 0}
+                className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-colors ${currentStep === 0
+                  ? "text-slate-300 cursor-not-allowed"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </button>
+
+              <div className="flex items-center gap-3">
+                {currentStep === steps.length - 1 || formData.role === "attendance_only" ? (
+                  <button
+                    type="submit"
+                    disabled={loading || fetchLoading}
+                    className="inline-flex items-center gap-2 px-8 py-2.5 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        {isEdit ? "Update" : "Submit"}
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4" />
+                        {isEdit ? "Update Employee" : "Create Employee"}
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="inline-flex items-center gap-2 px-8 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors shadow-md"
+                  >
+                    Next Step
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                )}
               </div>
-
-            </>
-          )}
-
-          {/* Submit Button */}
-          <div className="flex items-center justify-between pt-8">
-            <button
-              type="button"
-              onClick={handleBack}
-              className="inline-flex items-center gap-2 px-6 py-3 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
-            >
-              <X className="w-4 h-4" />
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading || fetchLoading}
-              className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  {isEdit ? "Updating..." : "Creating..."}
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4" />
-                  {isEdit ? "Update Employee" : "Create Employee"}
-                </>
-              )}
-            </button>
-          </div>
+            </div>
+          </div >
         </form >
+
       </div >
     </div >
   );

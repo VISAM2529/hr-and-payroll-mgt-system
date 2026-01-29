@@ -152,7 +152,7 @@ export default function DashboardPage() {
                   <p className="text-slate-600 text-sm mt-0.5">Track your tasks, deadlines, and productivity</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <button className="p-2.5 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors">
                   <RefreshCw className="h-5 w-5" />
@@ -166,6 +166,30 @@ export default function DashboardPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+          {/* ESS Quick Portal */}
+          <Link href="/ess">
+            <div className="group bg-gradient-to-r from-indigo-600 to-violet-700 rounded-2xl p-8 text-white shadow-xl shadow-indigo-200 hover:scale-[1.01] transition-all cursor-pointer relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+                <Shield className="w-48 h-48" />
+              </div>
+              <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-white/20 rounded-lg backdrop-blur-md">
+                      <Eye className="w-6 h-6" />
+                    </div>
+                    <span className="text-sm font-bold tracking-widest uppercase opacity-80">Employee Self-Service Portal</span>
+                  </div>
+                  <h2 className="text-3xl font-black mb-2 tracking-tight">Access Your Pay & Tax Dashboard</h2>
+                  <p className="text-indigo-100 max-w-md">View historic payslips, submit investment declarations for FY 2025-26, and project your net salary.</p>
+                </div>
+                <div className="bg-white/10 hover:bg-white/20 border border-white/20 px-8 py-4 rounded-xl backdrop-blur-md transition-all flex items-center gap-3 font-bold group-hover:gap-5">
+                  Launch Portal <ChevronRight className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
           {/* Task KPIs */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
             <div className="p-6 border-b border-slate-200">
@@ -176,7 +200,7 @@ export default function DashboardPage() {
                 Task Performance Indicators
               </h2>
             </div>
-            
+
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                 {taskStats.map((stat, index) => (
@@ -221,7 +245,7 @@ export default function DashboardPage() {
                   Quick Task Actions
                 </h2>
               </div>
-              
+
               <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {quickTaskActions.map((action, index) => (
@@ -253,7 +277,7 @@ export default function DashboardPage() {
                   Recent Activity
                 </h2>
               </div>
-              
+
               <div className="p-6">
                 <div className="space-y-4">
                   {recentTaskActivities.map((activity) => (
@@ -505,7 +529,7 @@ export default function DashboardPage() {
                   <p className="text-slate-600 text-sm mt-0.5">Team management and performance monitoring</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <button className="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                   <RefreshCw className="h-5 w-5" />
@@ -525,6 +549,26 @@ export default function DashboardPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+          {/* Personal ESS Portal */}
+          <Link href="/ess">
+            <div className="group bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-6 text-white shadow-lg hover:scale-[1.005] transition-all cursor-pointer relative overflow-hidden">
+              <div className="relative z-10 flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                  <div className="p-2 bg-white/20 rounded-lg">
+                    <Eye className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold">Your Personal Pay & Taxes</h2>
+                    <p className="text-indigo-100 text-sm">Access your own payslips and investment declarations</p>
+                  </div>
+                </div>
+                <div className="bg-white/10 px-4 py-2 rounded-lg border border-white/20 text-sm font-bold flex items-center gap-2">
+                  Open My Portal <ChevronRight className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
           {/* Team Overview KPIs */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
             <div className="p-6 border-b border-slate-200">
@@ -536,7 +580,7 @@ export default function DashboardPage() {
               </h2>
               <p className="text-slate-600 text-sm mt-1">Your team's current performance and status</p>
             </div>
-            
+
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {teamStats.map((stat, index) => (
@@ -581,7 +625,7 @@ export default function DashboardPage() {
               </h2>
               <p className="text-slate-600 text-sm mt-1">Key performance indicators for your team</p>
             </div>
-            
+
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {supervisorStats.map((stat, index) => (
@@ -628,22 +672,20 @@ export default function DashboardPage() {
                 </h2>
                 <p className="text-slate-600 text-sm mt-1">Attention required for these team matters</p>
               </div>
-              
+
               <div className="p-6">
                 <div className="space-y-4">
                   {teamAlerts.map((alert, index) => (
-                    <div key={index} className={`p-4 rounded-lg border-l-4 ${
-                      alert.severity === 'medium' ? 'bg-yellow-50 border-yellow-400' : 'bg-blue-50 border-blue-400'
-                    }`}>
+                    <div key={index} className={`p-4 rounded-lg border-l-4 ${alert.severity === 'medium' ? 'bg-yellow-50 border-yellow-400' : 'bg-blue-50 border-blue-400'
+                      }`}>
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-semibold text-slate-900">{alert.title}</h3>
                           <p className="text-sm text-slate-600 mt-1">{alert.message}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700'
+                            }`}>
                             {alert.count} items
                           </span>
                           <Link href={alert.href}>
@@ -672,7 +714,7 @@ export default function DashboardPage() {
                 </h2>
                 <p className="text-slate-600 text-sm mt-1">Quick access to frequently used management tools</p>
               </div>
-              
+
               <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {quickSupervisorActions.map((action, index) => (
@@ -705,7 +747,7 @@ export default function DashboardPage() {
                   Top Performers
                 </h2>
               </div>
-              
+
               <div className="p-6">
                 <div className="space-y-4">
                   {topPerformers.map((performer, index) => (
@@ -722,15 +764,14 @@ export default function DashboardPage() {
                           <span className="text-xs text-slate-500">{performer.efficiency} efficiency</span>
                         </div>
                       </div>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        performer.rating === 'Excellent' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                      }`}>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${performer.rating === 'Excellent' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                        }`}>
                         {performer.rating}
                       </span>
                     </div>
                   ))}
                 </div>
-                
+
                 <Link href="/team/performance">
                   <button className="w-full mt-4 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors">
                     View Full Team Report
@@ -756,17 +797,16 @@ export default function DashboardPage() {
               </div>
               <p className="text-slate-600 text-sm mt-1">Recent activities and updates from your team</p>
             </div>
-            
+
             <div className="p-6">
               <div className="space-y-4">
                 {teamActivities.map((activity) => (
                   <div key={activity.id} className="flex items-start gap-4 p-4 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      activity.status === 'success' ? 'bg-green-100 text-green-600' :
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${activity.status === 'success' ? 'bg-green-100 text-green-600' :
                       activity.status === 'warning' ? 'bg-yellow-100 text-yellow-600' :
-                      activity.status === 'error' ? 'bg-red-100 text-red-600' :
-                      'bg-blue-100 text-blue-600'
-                    }`}>
+                        activity.status === 'error' ? 'bg-red-100 text-red-600' :
+                          'bg-blue-100 text-blue-600'
+                      }`}>
                       <activity.icon className="h-4 w-4" />
                     </div>
                     <div className="flex-1">
@@ -968,7 +1008,7 @@ export default function DashboardPage() {
         description: 'Create operational and financial reports',
         icon: BarChart3,
         // href: '/reports',
-         href: '/',
+        href: '/',
         color: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200'
       },
       {
@@ -976,7 +1016,7 @@ export default function DashboardPage() {
         description: 'Plan and coordinate delivery routes',
         icon: Truck,
         // href: '/shipments/schedule',
-          href: '/',
+        href: '/',
         color: 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200'
       }
     ];
@@ -1044,7 +1084,7 @@ export default function DashboardPage() {
                   <p className="text-slate-600 text-sm mt-0.5">Real-time insights and operational control center</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <button className="p-2.5 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors">
                   <RefreshCw className="h-5 w-5" />
@@ -1066,7 +1106,7 @@ export default function DashboardPage() {
               </h2>
               <p className="text-slate-600 text-sm mt-1">Real-time operational metrics and performance tracking</p>
             </div>
-            
+
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, index) => (
@@ -1116,22 +1156,20 @@ export default function DashboardPage() {
                 </h2>
                 <p className="text-slate-600 text-sm mt-1">Immediate attention required for these issues</p>
               </div>
-              
+
               <div className="p-6">
                 <div className="space-y-4">
                   {criticalAlerts.map((alert, index) => (
-                    <div key={index} className={`p-4 rounded-lg border-l-4 ${
-                      alert.severity === 'high' ? 'bg-red-50 border-red-400' : 'bg-yellow-50 border-yellow-400'
-                    }`}>
+                    <div key={index} className={`p-4 rounded-lg border-l-4 ${alert.severity === 'high' ? 'bg-red-50 border-red-400' : 'bg-yellow-50 border-yellow-400'
+                      }`}>
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-semibold text-slate-900">{alert.title}</h3>
                           <p className="text-sm text-slate-600 mt-1">{alert.message}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            alert.severity === 'high' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${alert.severity === 'high' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                            }`}>
                             {alert.count} items
                           </span>
                           <Link href={alert.href}>
@@ -1160,7 +1198,7 @@ export default function DashboardPage() {
                 </h2>
                 <p className="text-slate-600 text-sm mt-1">Frequently used operations and shortcuts</p>
               </div>
-              
+
               <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {quickActions.map((action, index) => (
@@ -1193,31 +1231,29 @@ export default function DashboardPage() {
                   Upcoming Deadlines
                 </h2>
               </div>
-              
+
               <div className="p-6">
                 <div className="space-y-4">
                   {upcomingDeadlines.map((deadline, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                      <div className={`w-2 h-2 rounded-full mt-2 ${
-                        deadline.priority === 'high' ? 'bg-red-500' : 'bg-yellow-500'
-                      }`}></div>
+                      <div className={`w-2 h-2 rounded-full mt-2 ${deadline.priority === 'high' ? 'bg-red-500' : 'bg-yellow-500'
+                        }`}></div>
                       <div className="flex-1">
                         <h4 className="font-medium text-slate-900 text-sm">{deadline.title}</h4>
                         <p className="text-xs text-slate-600 mt-1">
                           Due: {new Date(deadline.date).toLocaleDateString()}
                         </p>
                       </div>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        deadline.type === 'report' ? 'bg-blue-100 text-blue-700' :
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${deadline.type === 'report' ? 'bg-blue-100 text-blue-700' :
                         deadline.type === 'contract' ? 'bg-green-100 text-green-700' :
-                        'bg-orange-100 text-orange-700'
-                      }`}>
+                          'bg-orange-100 text-orange-700'
+                        }`}>
                         {deadline.type}
                       </span>
                     </div>
                   ))}
                 </div>
-                
+
                 <Link href="/tasks/calendar">
                   <button className="w-full mt-4 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition-colors">
                     View Full Calendar
@@ -1243,17 +1279,16 @@ export default function DashboardPage() {
               </div>
               <p className="text-slate-600 text-sm mt-1">Latest system events and operational updates</p>
             </div>
-            
+
             <div className="p-6">
               <div className="space-y-4">
                 {recentActivities.map((activity) => (
                   <div key={activity.id} className="flex items-start gap-4 p-4 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      activity.status === 'success' ? 'bg-green-100 text-green-600' :
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${activity.status === 'success' ? 'bg-green-100 text-green-600' :
                       activity.status === 'warning' ? 'bg-yellow-100 text-yellow-600' :
-                      activity.status === 'error' ? 'bg-red-100 text-red-600' :
-                      'bg-blue-100 text-blue-600'
-                    }`}>
+                        activity.status === 'error' ? 'bg-red-100 text-red-600' :
+                          'bg-blue-100 text-blue-600'
+                      }`}>
                       <activity.icon className="h-4 w-4" />
                     </div>
                     <div className="flex-1">
@@ -1261,12 +1296,11 @@ export default function DashboardPage() {
                       <p className="text-sm text-slate-600 mt-1">{activity.description}</p>
                       <span className="text-xs text-slate-500">{activity.time}</span>
                     </div>
-                    <div className={`w-2 h-2 rounded-full ${
-                      activity.status === 'success' ? 'bg-green-500' :
+                    <div className={`w-2 h-2 rounded-full ${activity.status === 'success' ? 'bg-green-500' :
                       activity.status === 'warning' ? 'bg-yellow-500' :
-                      activity.status === 'error' ? 'bg-red-500' :
-                      'bg-blue-500'
-                    }`}></div>
+                        activity.status === 'error' ? 'bg-red-500' :
+                          'bg-blue-500'
+                      }`}></div>
                   </div>
                 ))}
               </div>
@@ -1289,23 +1323,23 @@ export default function DashboardPage() {
                     <span className="font-semibold text-slate-900">94.5%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-green-500 h-2 rounded-full" style={{width: '94.5%'}}></div>
+                    <div className="bg-green-500 h-2 rounded-full" style={{ width: '94.5%' }}></div>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-600">On-Time Delivery</span>
                     <span className="font-semibold text-slate-900">87.2%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-yellow-500 h-2 rounded-full" style={{width: '87.2%'}}></div>
+                    <div className="bg-yellow-500 h-2 rounded-full" style={{ width: '87.2%' }}></div>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-600">Supplier Performance</span>
                     <span className="font-semibold text-slate-900">91.8%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-blue-500 h-2 rounded-full" style={{width: '91.8%'}}></div>
+                    <div className="bg-blue-500 h-2 rounded-full" style={{ width: '91.8%' }}></div>
                   </div>
                 </div>
               </div>
@@ -1332,7 +1366,7 @@ export default function DashboardPage() {
                     </div>
                     <TrendingUp className="w-5 h-5 text-yellow-600" />
                   </div>
-                  
+
                   <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
@@ -1344,7 +1378,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">

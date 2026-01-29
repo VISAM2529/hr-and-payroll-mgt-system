@@ -282,6 +282,24 @@ const employeeSchema = new mongoose.Schema(
         required: false,
         default: null,
       },
+      businessUnitId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "BusinessUnit",
+        required: false,
+        default: null,
+      },
+      teamId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Team",
+        required: false,
+        default: null,
+      },
+      costCenterId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "CostCenter",
+        required: false,
+        default: null,
+      },
       designation: { // Employee Designation
         type: String,
         required: true,
@@ -395,117 +413,155 @@ employeeSchema.virtual('fullName').get(function () {
 });
 
 // Method to calculate salary components
-employeeSchema.methods.calculateSalaryComponents = function (workingDays = null) {
-  const structure = this.payslipStructure;
-  let basicSalary = structure.basicSalary;
+employeeSchema.methods.calculateSalaryComponents = function (params = {}) {
+  const { workingDaysInMonth = 26, presentDays = null, lopDays = 0, month = null } = params;
 
-  // Calculate basic salary based on salary type
-  if (structure.salaryType === 'perday' && workingDays) {
-    basicSalary = structure.basicSalary * workingDays;
+  const structure = this.payslipStructure;
+  if (!structure) {
+    throw new Error("Salary structure (payslipStructure) is missing for this employee.");
   }
 
-  // Calculate earnings
-  const calculatedEarnings = structure.earnings
+  const standardBasic = structure.basicSalary || 0;
+
+  let basicSalary = standardBasic;
+  let lopAmount = 0;
+
+  // Calculate LOP (Loss of Pay) if applicable
+  if (lopDays > 0 && workingDaysInMonth > 0 && standardBasic > 0) {
+    lopAmount = (standardBasic / workingDaysInMonth) * lopDays;
+    basicSalary = Math.max(0, standardBasic - lopAmount);
+  }
+
+  // Calculate earnings based on the actual basic salary
+  const earnings = structure.earnings || [];
+  const calculatedEarnings = earnings
     .filter(e => e.enabled)
     .map(earning => {
       let amount = 0;
       if (earning.calculationType === 'percentage') {
-        amount = (basicSalary * earning.percentage) / 100;
+        amount = (basicSalary * (earning.percentage || 0)) / 100;
       } else {
-        amount = earning.fixedAmount;
+        amount = earning.fixedAmount || 0;
       }
       return {
         ...earning.toObject(),
-        calculatedAmount: amount
+        calculatedAmount: Math.round(amount)
       };
     });
 
-  // Calculate Gross Salary (Basic + Warnings)
+  // Calculate Gross Salary (Actual Basic + Earnings)
   const grossSalary = basicSalary + calculatedEarnings.reduce((sum, e) => sum + e.calculatedAmount, 0);
 
   // Calculate configured deductions
-  let calculatedDeductions = structure.deductions
+  const deductions = structure.deductions || [];
+  let calculatedDeductions = deductions
     .filter(d => d.enabled)
     .map(deduction => {
       let amount = 0;
       if (deduction.calculationType === 'percentage') {
-        amount = (basicSalary * deduction.percentage) / 100;
+        amount = (basicSalary * (deduction.percentage || 0)) / 100;
       } else {
-        amount = deduction.fixedAmount;
+        amount = deduction.fixedAmount || 0;
       }
       return {
         ...deduction.toObject(),
-        calculatedAmount: amount
+        calculatedAmount: Math.round(amount)
       };
     });
 
-  // ========== AUTO-CALCULATED DEDUCTIONS (PF & ESIC) ==========
-  // Check PF Applicability (On Basic)
+  // Add LOP as a deduction if it was calculated
+  if (lopAmount > 0) {
+    calculatedDeductions.push({
+      name: 'Loss of Pay (LOP)',
+      calculatedAmount: lopAmount,
+      autoCalculated: true
+    });
+  }
+
+  // ========== AUTO-CALCULATED STATUTORY DEDUCTIONS (India Compliance) ==========
+
+  // 1. PF (Provident Fund) - 12% of Basic, capped at 15,000 ceiling
   if (this.pfApplicable === 'yes') {
-    // Check if PF is already being deducted (sent from frontend) to avoid double deduction
-    const existingPF = calculatedDeductions.some(d =>
-      d.name.toLowerCase().includes('provident fund') ||
-      d.name.toLowerCase().includes('pf')
-    );
+    const pfWage = Math.min(basicSalary, 15000);
+    const pfEmployee = Math.round(pfWage * 0.12);
+    const pfEmployer = Math.round(pfWage * 0.13); // Includes admin charges usually
 
-    if (!existingPF) {
-      const pfEmployee = (basicSalary * 12) / 100; // 12%
-      const pfEmployer = (basicSalary * 13) / 100; // 13%
+    calculatedDeductions.push({
+      name: 'Provident Fund (PF)',
+      calculatedAmount: pfEmployee,
+      autoCalculated: true,
+      employerContribution: pfEmployer
+    });
+  }
 
+  // 2. ESIC - 0.75% of Gross, only if Gross <= 21,000
+  if (this.esicApplicable === 'yes' && grossSalary <= 21000) {
+    const esicEmployee = Math.ceil(grossSalary * 0.0075);
+    const esicEmployer = Math.ceil(grossSalary * 0.0325);
+
+    calculatedDeductions.push({
+      name: 'ESIC',
+      calculatedAmount: esicEmployee,
+      autoCalculated: true,
+      employerContribution: esicEmployer
+    });
+  }
+
+  // 3. Professional Tax (PT) - Maharashtra Slabs
+  // Slabs: 0-7500: 0, 7501-10000: 175, >10000: 200 (2500 in March)
+  if (grossSalary > 7500) {
+    let ptAmount = 0;
+    if (grossSalary > 7500 && grossSalary <= 10000) {
+      ptAmount = 175;
+    } else if (grossSalary > 10000) {
+      ptAmount = 200;
+      // In February or March (depending on state rules), it's often adjusted
+      if (month === 3) ptAmount = 300; // Total 2500/year adjustment
+    }
+
+    if (ptAmount > 0) {
       calculatedDeductions.push({
-        name: 'PF (Employee 12%)',
-        calculatedAmount: pfEmployee,
-        autoCalculated: true
-      });
-      calculatedDeductions.push({
-        name: 'PF (Employer 13%)',
-        calculatedAmount: pfEmployer,
+        name: 'Professional Tax (PT)',
+        calculatedAmount: ptAmount,
         autoCalculated: true
       });
     }
   }
 
-  // Check ESIC Applicability (On Gross) - Only if Gross <= 21000
-  if (this.esicApplicable === 'yes') {
-    // ESIC calculation usually depends on the "Wages" definition which often matches Gross in simpler setups.
-    if (grossSalary <= 21000) {
-      // Check if ESIC is already being deducted
-      const existingESIC = calculatedDeductions.some(d =>
-        d.name.toLowerCase().includes('esic') ||
-        d.name.toLowerCase().includes('esi')
-      );
+  // 4. TDS (Income Tax) - Placeholder logic for now
+  // In a real system, this would use investment declarations and annual projections
+  if (this.isTDSApplicable) {
+    const annualGross = grossSalary * 12;
+    let monthlyTDS = 0;
+    if (annualGross > 700000) { // Simple 7L exemption logic for New Regime
+      monthlyTDS = Math.round(((annualGross - 700000) * 0.1) / 12);
+    }
 
-      if (!existingESIC) {
-        const esicEmployee = (grossSalary * 0.75) / 100; // 0.75%
-        const esicEmployer = (grossSalary * 3.25) / 100; // 3.25%
-
-        calculatedDeductions.push({
-          name: 'ESIC (Employee 0.75%)',
-          calculatedAmount: esicEmployee,
-          autoCalculated: true
-        });
-        calculatedDeductions.push({
-          name: 'ESIC (Employer 3.25%)',
-          calculatedAmount: esicEmployer,
-          autoCalculated: true
-        });
-      }
+    if (monthlyTDS > 0) {
+      calculatedDeductions.push({
+        name: 'Income Tax (TDS)',
+        calculatedAmount: monthlyTDS,
+        autoCalculated: true
+      });
     }
   }
-  // ============================================================
 
-  const totalEarnings = grossSalary; // Gross is effectively Total Earnings here
+  // ============================================================================
+
+  const totalEarnings = grossSalary;
   const totalDeductions = calculatedDeductions.reduce((sum, d) => sum + d.calculatedAmount, 0);
-  const netSalary = totalEarnings - totalDeductions;
+  const netSalary = Math.round(totalEarnings - totalDeductions);
 
   return {
     basicSalary,
+    standardBasic,
     earnings: calculatedEarnings,
     deductions: calculatedDeductions,
     totalEarnings,
     totalDeductions,
     netSalary,
-    salaryType: structure.salaryType
+    salaryType: structure.salaryType,
+    lopAmount
   };
 };
 

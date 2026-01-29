@@ -8,13 +8,15 @@ import {
     isSameMonth,
     subMonths,
     addMonths,
-    subYears,
-    addYears,
+    isToday,
+    startOfWeek,
+    endOfWeek,
+    eachDayOfInterval,
+    isSameDay,
     startOfYear,
     endOfYear,
-    isSameYear,
     eachMonthOfInterval,
-    isToday
+    isSameYear
 } from "date-fns";
 import {
     CheckCircle2,
@@ -23,17 +25,22 @@ import {
     Calendar,
     AlertCircle,
     Briefcase,
-    Coffee,
     Sun,
-    CalendarDays,
     ChevronLeft,
     ChevronRight,
     BarChart3,
     List as ListIcon,
     PieChart,
-    ChevronDown,
-    ChevronUp,
-    Timer
+    Timer,
+    Flame,
+    Zap,
+    Target,
+    LayoutDashboard,
+    Search,
+    Filter,
+    ArrowUpRight,
+    Play,
+    Square
 } from "lucide-react";
 import {
     Chart as ChartJS,
@@ -43,9 +50,12 @@ import {
     Title,
     Tooltip,
     Legend,
-    ArcElement
+    ArcElement,
+    PointElement,
+    LineElement
 } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
+import { toast } from "react-hot-toast";
 
 ChartJS.register(
     CategoryScale,
@@ -54,469 +64,493 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    ArcElement
+    ArcElement,
+    PointElement,
+    LineElement
+);
+
+const TabButton = ({ active, label, icon: Icon, onClick }) => (
+    <button
+        onClick={onClick}
+        className={`flex items-center gap-2 px-6 py-3 text-sm font-semibold transition-all duration-300 border-b-2 ${active
+            ? 'border-indigo-600 text-indigo-600 bg-indigo-50/30'
+            : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+            }`}
+    >
+        <Icon className={`w-4 h-4 ${active ? 'text-indigo-600' : 'text-slate-400'}`} />
+        {label}
+    </button>
+);
+
+const Card = ({ children, className = "" }) => (
+    <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 ${className}`}>
+        {children}
+    </div>
 );
 
 export default function MyAttendancePage() {
     const [attendance, setAttendance] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [viewMode, setViewMode] = useState('monthly'); // 'monthly' | 'yearly'
+    const [activeTab, setActiveTab] = useState("overview");
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const [viewMode, setViewMode] = useState('monthly');
+    const [isPunchedIn, setIsPunchedIn] = useState(false);
+    const [elapsedTime, setElapsedTime] = useState("00:00:00");
 
     useEffect(() => {
         fetchAttendance();
     }, []);
 
+    // Timer simulation for Punch Widget
+    useEffect(() => {
+        let interval;
+        if (isPunchedIn) {
+            const startTime = Date.now();
+            interval = setInterval(() => {
+                const diff = Date.now() - startTime;
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                setElapsedTime(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`);
+            }, 1000);
+        } else {
+            setElapsedTime("00:00:00");
+        }
+        return () => clearInterval(interval);
+    }, [isPunchedIn]);
+
     const fetchAttendance = async () => {
         try {
+            setLoading(true);
             const response = await fetch("/api/employee/attendance");
             const data = await response.json();
-
             if (data.success) {
                 setAttendance(data.data);
-            } else {
-                setError(data.error || "Failed to fetch attendance");
             }
         } catch (err) {
-            setError("An error occurred while fetching attendance");
-            console.error(err);
+            toast.error("Failed to load attendance records");
         } finally {
             setLoading(false);
         }
     };
 
-    // --- Highlighting Today's Attendance ---
     const todayRecord = useMemo(() => {
-        return attendance.find(record => isToday(new Date(record.date)));
+        return attendance.find(record => isSameDay(new Date(record.date), new Date()));
     }, [attendance]);
 
-    // --- Filtering Logic ---
-    const filteredAttendance = useMemo(() => {
-        if (viewMode === 'monthly') {
-            return attendance.filter(record =>
-                isSameMonth(new Date(record.date), currentDate)
-            );
-        } else {
-            return attendance.filter(record =>
-                isSameYear(new Date(record.date), currentDate)
-            );
-        }
-    }, [attendance, currentDate, viewMode]);
-
-    // --- Statistics Logic ---
     const stats = useMemo(() => {
-        const initialStats = {
+        const filtered = viewMode === 'monthly'
+            ? attendance.filter(r => isSameMonth(new Date(r.date), currentDate))
+            : attendance.filter(r => isSameYear(new Date(r.date), currentDate));
+
+        const res = {
             present: 0,
             absent: 0,
             halfDay: 0,
             leave: 0,
-            holiday: 0,
-            weekend: 0,
-            totalWorkHours: 0
+            totalHours: 0,
+            streak: 0,
+            punctuality: 0
         };
 
-        return filteredAttendance.reduce((acc, record) => {
-            const status = record.status?.toLowerCase();
-            if (status === 'present') acc.present++;
-            else if (status === 'absent') acc.absent++;
-            else if (status === 'half-day') acc.halfDay++;
-            else if (status === 'leave') acc.leave++;
-            else if (status === 'holiday') acc.holiday++;
-            else if (status === 'weekend') acc.weekend++;
+        filtered.forEach(r => {
+            const status = r.status?.toLowerCase();
+            if (status === 'present') res.present++;
+            else if (status === 'absent') res.absent++;
+            else if (status === 'half-day') res.halfDay++;
+            else if (status === 'leave') res.leave++;
+            res.totalHours += (r.workedHours || 0);
+        });
 
-            if (record.workedHours) {
-                acc.totalWorkHours += record.workedHours;
-            }
+        // Mock Streak and Punctuality for design demo
+        res.streak = 12;
+        res.punctuality = 95;
 
-            return acc;
-        }, initialStats);
-    }, [filteredAttendance]);
+        return { ...res, currentMonthRecords: filtered };
+    }, [attendance, currentDate, viewMode]);
 
-    // --- Chart Data Preparation ---
-    const barChartData = useMemo(() => {
-        if (viewMode === 'monthly') {
-            const daysInMonth = Array.from({ length: endOfMonth(currentDate).getDate() }, (_, i) => i + 1);
+    const calendarDays = useMemo(() => {
+        const start = startOfWeek(startOfMonth(currentDate));
+        const end = endOfWeek(endOfMonth(currentDate));
+        return eachDayOfInterval({ start, end });
+    }, [currentDate]);
 
-            const hoursPerDay = daysInMonth.map(day => {
-                const record = filteredAttendance.find(r =>
-                    new Date(r.date).getDate() === day && isSameMonth(new Date(r.date), currentDate)
-                );
-                return record ? record.workedHours || 0 : 0;
-            });
-
-            return {
-                labels: daysInMonth.map(d => d.toString()),
-                datasets: [
-                    {
-                        label: 'Worked Hours',
-                        data: hoursPerDay,
-                        backgroundColor: 'rgba(99, 102, 241, 0.6)',
-                        borderColor: 'rgb(79, 70, 229)',
-                        borderWidth: 1,
-                        borderRadius: 4,
-                    },
-                ],
-            };
-        } else {
-            const months = eachMonthOfInterval({
-                start: startOfYear(currentDate),
-                end: endOfYear(currentDate)
-            });
-
-            const presentPerMonth = months.map(month => filteredAttendance.filter(r => isSameMonth(new Date(r.date), month) && r.status?.toLowerCase() === 'present').length);
-            const absentPerMonth = months.map(month => filteredAttendance.filter(r => isSameMonth(new Date(r.date), month) && r.status?.toLowerCase() === 'absent').length);
-            const leavesPerMonth = months.map(month => filteredAttendance.filter(r => isSameMonth(new Date(r.date), month) && r.status?.toLowerCase() === 'leave').length);
-
-            return {
-                labels: months.map(m => format(m, 'MMM')),
-                datasets: [
-                    { label: 'Present', data: presentPerMonth, backgroundColor: 'rgba(34, 197, 94, 0.6)', borderColor: 'rgb(22, 163, 74)', borderWidth: 1, borderRadius: 4 },
-                    { label: 'Absent', data: absentPerMonth, backgroundColor: 'rgba(239, 68, 68, 0.6)', borderColor: 'rgb(220, 38, 38)', borderWidth: 1, borderRadius: 4 },
-                    { label: 'Leaves', data: leavesPerMonth, backgroundColor: 'rgba(245, 158, 11, 0.6)', borderColor: 'rgb(217, 119, 6)', borderWidth: 1, borderRadius: 4 }
-                ]
-            };
-        }
-    }, [filteredAttendance, currentDate, viewMode]);
-
-    const pieChartData = useMemo(() => {
-        const total = stats.present + stats.absent + stats.leave + stats.halfDay;
-        // Avoid partial charts if no data
-        if (total === 0) return { labels: [], datasets: [] };
-
-        return {
-            labels: ['Present', 'Absent', 'Leave', 'Half Day'],
-            datasets: [
-                {
-                    data: [stats.present, stats.absent, stats.leave, stats.halfDay],
-                    backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)', // Green
-                        'rgba(239, 68, 68, 0.8)', // Red
-                        'rgba(245, 158, 11, 0.8)', // Amber
-                        'rgba(59, 130, 246, 0.8)', // Blue
-                    ],
-                    borderColor: [
-                        'rgb(22, 163, 74)',
-                        'rgb(220, 38, 38)',
-                        'rgb(217, 119, 6)',
-                        'rgb(37, 99, 235)',
-                    ],
-                    borderWidth: 1,
-                },
-            ],
-        };
-    }, [stats]);
-
-
-    const chartOptions = {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: false,
-            },
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: viewMode === 'monthly' ? 'Hours' : 'Days'
-                }
-            }
-        }
-    };
-
-    const pieOptions = {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'right', // Legend on the right for pie
-            },
-        },
-    };
-
-    // --- Navigation Handlers ---
-    const handlePrevious = () => {
-        if (viewMode === 'monthly') {
-            setCurrentDate(prev => subMonths(prev, 1));
-        } else {
-            setCurrentDate(prev => subYears(prev, 1));
-        }
-    };
-
-    const handleNext = () => {
-        if (viewMode === 'monthly') {
-            setCurrentDate(prev => addMonths(prev, 1));
-        } else {
-            setCurrentDate(prev => addYears(prev, 1));
-        }
-    };
-
-    const getStatusColor = (status) => {
+    const getStatusStyle = (status) => {
         switch (status?.toLowerCase()) {
-            case "present": return "bg-green-100 text-green-700 border-green-200";
-            case "absent": return "bg-red-100 text-red-700 border-red-200";
-            case "leave": return "bg-amber-100 text-amber-700 border-amber-200";
-            case "half-day": return "bg-blue-100 text-blue-700 border-blue-200";
-            case "holiday": return "bg-purple-100 text-purple-700 border-purple-200";
-            case "weekend": return "bg-gray-100 text-gray-700 border-gray-200";
-            default: return "bg-gray-50 text-gray-600 border-gray-200";
+            case 'present': return 'bg-emerald-500 text-white';
+            case 'absent': return 'bg-rose-500 text-white';
+            case 'half-day': return 'bg-sky-500 text-white';
+            case 'leave': return 'bg-amber-500 text-white';
+            default: return 'bg-slate-100 text-slate-400';
         }
     };
 
-    const formatTime = (dateString) => {
-        if (!dateString) return "-";
-        return format(new Date(dateString), "h:mm a");
+    const getDayRecord = (day) => {
+        return attendance.find(r => isSameDay(new Date(r.date), day));
+    };
+
+    const handlePunch = () => {
+        setIsPunchedIn(!isPunchedIn);
+        toast.success(isPunchedIn ? "Punched out successfully" : "Punched in successfully");
     };
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+            <div className="flex h-[80vh] items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-8">
-            {/* Header & Controls */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">
-                        My Attendance
-                    </h1>
-                    <p className="text-gray-500 mt-1">
-                        {viewMode === 'monthly' ? 'Daily tracking & work hours' : 'Annual overview & trends'}
-                    </p>
-                </div>
+        <div className="p-6 bg-slate-50 min-h-screen">
+            <div className="max-w-7xl mx-auto space-y-8">
 
-                <div className="flex items-center gap-4 bg-white p-1.5 rounded-xl shadow-sm border border-gray-200">
-                    <div className="flex bg-gray-100 rounded-lg p-1">
-                        <button
-                            onClick={() => setViewMode('monthly')}
-                            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${viewMode === 'monthly'
-                                    ? 'bg-white text-indigo-600 shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
-                                }`}
-                        >
-                            Monthly
-                        </button>
-                        <button
-                            onClick={() => setViewMode('yearly')}
-                            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${viewMode === 'yearly'
-                                    ? 'bg-white text-indigo-600 shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
-                                }`}
-                        >
-                            Yearly
-                        </button>
-                    </div>
+                {/* Hero Header Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-2 bg-indigo-600 rounded-[3rem] p-8 text-white relative overflow-hidden shadow-2xl shadow-indigo-200">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-400/20 rounded-full -ml-32 -mb-32 blur-3xl"></div>
 
-                    <div className="h-6 w-px bg-gray-200 mx-2"></div>
-
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={handlePrevious}
-                            className="p-2 hover:bg-gray-50 rounded-lg text-gray-600 transition-colors"
-                        >
-                            <ChevronLeft className="w-5 h-5" />
-                        </button>
-                        <span className="text-base font-semibold text-gray-900 min-w-[140px] text-center">
-                            {viewMode === 'monthly'
-                                ? format(currentDate, "MMMM yyyy")
-                                : format(currentDate, "yyyy")
-                            }
-                        </span>
-                        <button
-                            onClick={handleNext}
-                            className="p-2 hover:bg-gray-50 rounded-lg text-gray-600 transition-colors"
-                        >
-                            <ChevronRight className="w-5 h-5" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Today's Highlight & Statistics */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Today's Status Card */}
-                <div className="bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-200">
-                    <div className="flex items-start justify-between">
-                        <div>
-                            <p className="text-indigo-100 font-medium mb-1">Today ({format(new Date(), 'MMM d')})</p>
-                            <h2 className="text-3xl font-bold">
-                                {todayRecord ? todayRecord.status : "Not Checked In"}
-                            </h2>
-                        </div>
-                        <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">
-                            <Timer className="w-6 h-6 text-white" />
-                        </div>
-                    </div>
-
-                    <div className="mt-8 grid grid-cols-2 gap-4">
-                        <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-                            <p className="text-xs text-indigo-100 mb-1 uppercase tracking-wider">Check In</p>
-                            <p className="font-semibold text-lg">{todayRecord ? formatTime(todayRecord.checkIn) : "--:--"}</p>
-                        </div>
-                        <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-                            <p className="text-xs text-indigo-100 mb-1 uppercase tracking-wider">Hrs So Far</p>
-                            <p className="font-semibold text-lg">{todayRecord?.workedHours ? todayRecord.workedHours.toFixed(1) + 'h' : "--"}</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Pie Chart Card */}
-                <div className="bg-white border border-gray-100 shadow-lg shadow-gray-100/50 rounded-2xl p-6 flex flex-col items-center justify-center">
-                    <h3 className="text-gray-500 text-sm font-medium mb-4 w-full text-left flex items-center gap-2">
-                        <PieChart className="w-4 h-4" /> Attendance Distribution
-                    </h3>
-                    <div className="w-full h-[180px] flex items-center justify-center">
-                        {pieChartData.datasets.length > 0 ? (
-                            <Pie data={pieChartData} options={pieOptions} />
-                        ) : (
-                            <div className="text-gray-400 text-sm">No data for this period</div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Summary Stats (Compact) */}
-                <div className="grid grid-cols-2 gap-3">
-                    <StatCard title="Present" value={stats.present} icon={CheckCircle2} color="text-green-600" bg="bg-green-50" borderColor="border-green-100" />
-                    <StatCard title="Absent" value={stats.absent} icon={XCircle} color="text-red-600" bg="bg-red-50" borderColor="border-red-100" />
-                    <StatCard title="Leaves" value={stats.leave} icon={Briefcase} color="text-amber-600" bg="bg-amber-50" borderColor="border-amber-100" />
-                    <StatCard title="Holidays" value={stats.holiday} icon={Sun} color="text-purple-600" bg="bg-purple-50" borderColor="border-purple-100" />
-                </div>
-            </div>
-
-            {/* Main Charts */}
-            <div className="bg-white border border-gray-100 shadow-lg shadow-gray-100/50 rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                        <BarChart3 className="w-5 h-5 text-indigo-500" />
-                        {viewMode === 'monthly' ? 'Work Hours Overview' : 'Attendance Trends'}
-                    </h2>
-                </div>
-                <div className="h-[300px] w-full">
-                    <Bar options={{ ...chartOptions, maintainAspectRatio: false }} data={barChartData} />
-                </div>
-            </div>
-
-            {/* Collapsible Data Table */}
-            <div className="bg-white border border-gray-100 shadow-lg shadow-gray-100/50 rounded-2xl overflow-hidden">
-                <div
-                    className="px-6 py-4 border-b border-gray-100 bg-gray-50/30 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
-                    onClick={() => setIsHistoryOpen(!isHistoryOpen)}
-                >
-                    <div className="flex items-center gap-2">
-                        <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                            <ListIcon className="w-5 h-5 text-indigo-500" />
-                            Detailed History
-                        </h2>
-                        <span className="px-2 py-0.5 rounded-full bg-gray-100 text-xs font-medium text-gray-600">
-                            {filteredAttendance.length} records
-                        </span>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        {viewMode === 'monthly' && (
-                            <div className="text-sm text-gray-500 hidden sm:block">
-                                Total Hours: <span className="font-medium text-indigo-600">{stats.totalWorkHours.toFixed(1)} hrs</span>
+                        <div className="relative z-10 flex flex-col h-full justify-between">
+                            <div>
+                                <h1 className="text-4xl font-black tracking-tight">Track Your Time, <br />Master Your Growth.</h1>
+                                <p className="text-indigo-100 mt-4 max-w-md">Your work consistency is your strongest asset. Stay disciplined, stay present.</p>
                             </div>
-                        )}
-                        {isHistoryOpen ? (
-                            <ChevronUp className="w-5 h-5 text-gray-400" />
-                        ) : (
-                            <ChevronDown className="w-5 h-5 text-gray-400" />
-                        )}
+
+                            <div className="mt-12 flex flex-wrap gap-6">
+                                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20">
+                                    <div className="p-2 bg-amber-400 rounded-lg shadow-lg">
+                                        <Flame className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-200">Active Streak</p>
+                                        <p className="text-xl font-black">{stats.streak} Days</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20">
+                                    <div className="p-2 bg-emerald-400 rounded-lg shadow-lg">
+                                        <Target className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-200">Punctuality Score</p>
+                                        <p className="text-xl font-black">{stats.punctuality}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    {/* High-Fidelity Punch Widget */}
+                    <Card className="p-8 border-none bg-white shadow-xl shadow-indigo-100/50 flex flex-col items-center justify-between text-center group">
+                        <div className="w-full flex justify-between items-center mb-6">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <div className={`w-2 h-2 rounded-full animate-pulse ${isPunchedIn ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
+                                {isPunchedIn ? 'System Active' : 'System Idle'}
+                            </span>
+                            <Timer className="w-4 h-4 text-slate-300" />
+                        </div>
+
+                        <div className="relative mb-8">
+                            <div className={`absolute inset-0 rounded-full blur-2xl transition-all duration-700 ${isPunchedIn ? 'bg-indigo-400/30 scale-125' : 'bg-slate-200/0 scale-100'}`}></div>
+                            <div className="relative text-5xl font-black text-slate-900 font-mono tracking-tighter">
+                                {isPunchedIn ? elapsedTime : "00:00:00"}
+                            </div>
+                            <p className="text-xs text-slate-400 font-bold mt-2 uppercase tracking-wide">Work Session Duration</p>
+                        </div>
+
+                        <button
+                            onClick={handlePunch}
+                            className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 transform active:scale-95 shadow-lg ${isPunchedIn
+                                    ? 'bg-white border-2 border-rose-500 text-rose-500 hover:bg-rose-50 shadow-rose-100'
+                                    : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200'
+                                }`}
+                        >
+                            {isPunchedIn ? <Square className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
+                            {isPunchedIn ? 'Punch Out' : 'Punch In Now'}
+                        </button>
+
+                        <div className="w-full mt-6 pt-6 border-t border-slate-100 flex justify-around">
+                            <div className="text-center">
+                                <p className="text-[9px] font-bold text-slate-400 uppercase">In Time</p>
+                                <p className="text-xs font-bold text-slate-700">{todayRecord ? format(new Date(todayRecord.checkIn), 'h:mm a') : '--:--'}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-[9px] font-bold text-slate-400 uppercase">Status</p>
+                                <p className="text-xs font-bold text-indigo-600">{todayRecord ? todayRecord.status : 'N/A'}</p>
+                            </div>
+                        </div>
+                    </Card>
                 </div>
 
-                {isHistoryOpen && (
-                    <div className="overflow-x-auto animate-in slide-in-from-top-2 duration-200">
-                        <table className="w-full">
-                            <thead>
-                                <tr className="bg-gray-50/50">
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Check In</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Check Out</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Duration</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-50">
-                                {filteredAttendance.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
-                                            <div className="flex flex-col items-center justify-center gap-3">
-                                                <Calendar className="w-10 h-10 text-gray-300" />
-                                                <p>No attendance records found for this period</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    filteredAttendance.map((record) => (
-                                        <tr key={record._id} className="hover:bg-gray-50/80 transition-colors duration-200 group">
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-white transition-colors">
-                                                        <Calendar className="w-4 h-4 text-gray-500" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-sm font-medium text-gray-900">{format(new Date(record.date), "MMM d, yyyy")}</p>
-                                                        <p className="text-xs text-gray-500">{format(new Date(record.date), "EEEE")}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(record.status)}`}>
-                                                    {record.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">{formatTime(record.checkIn)}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">{formatTime(record.checkOut)}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                                                    <Clock className="w-3.5 h-3.5 text-gray-400" />
-                                                    {record.workedHours ? `${record.workedHours.toFixed(1)} hrs` : "-"}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {record.dayType === 'Half' ? 'Half Day' : 'Full Day'}
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                {/* Main Navigation Tabs */}
+                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+                    <nav className="flex px-2 overflow-x-auto no-scrollbar">
+                        <TabButton
+                            active={activeTab === "overview"}
+                            label="Overview"
+                            icon={LayoutDashboard}
+                            onClick={() => setActiveTab("overview")}
+                        />
+                        <TabButton
+                            active={activeTab === "calendar"}
+                            label="Visual Calendar"
+                            icon={Calendar}
+                            onClick={() => setActiveTab("calendar")}
+                        />
+                        <TabButton
+                            active={activeTab === "insights"}
+                            label="Trends & Analytics"
+                            icon={BarChart3}
+                            onClick={() => setActiveTab("insights")}
+                        />
+                        <TabButton
+                            active={activeTab === "history"}
+                            label="Detailed Logs"
+                            icon={ListIcon}
+                            onClick={() => setActiveTab("history")}
+                        />
+                    </nav>
+                </div>
+
+                {/* Tab Content: Overview */}
+                {activeTab === "overview" && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <StatCard title="Present Days" value={stats.present} sub="Current Month" icon={CheckCircle2} color="indigo" />
+                        <StatCard title="Leave Balance" value={4} sub="Days Available" icon={Briefcase} color="amber" />
+                        <StatCard title="Avg. Work Hours" value={`${(stats.totalHours / (stats.present || 1)).toFixed(1)}h`} sub="Daily Average" icon={Clock} color="sky" />
+                        <StatCard title="Monthly Goal" value="85%" sub="Compliance" icon={Zap} color="emerald" />
                     </div>
                 )}
-            </div>
 
-            {error && (
-                <div className="fixed bottom-6 right-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-2 shadow-xl animate-in fade-in slide-in-from-bottom-4">
-                    <AlertCircle className="w-5 h-5" />
-                    {error}
-                </div>
-            )}
+                {/* Tab Content: Calendar */}
+                {activeTab === "calendar" && (
+                    <Card className="p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h2 className="text-2xl font-black text-slate-900">Visual Attendance Log</h2>
+                                <p className="text-sm text-slate-500">FY 2025-26 • {format(currentDate, 'MMMM')}</p>
+                            </div>
+                            <div className="flex items-center gap-3 bg-slate-50 p-1.5 rounded-2xl border border-slate-200">
+                                <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all"><ChevronLeft className="w-5 h-5" /></button>
+                                <span className="text-sm font-bold min-w-[120px] text-center">{format(currentDate, 'MMMM yyyy')}</span>
+                                <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all"><ChevronRight className="w-5 h-5" /></button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-7 gap-4">
+                            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+                                <div key={day} className="text-center text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">{day}</div>
+                            ))}
+                            {calendarDays.map((day, idx) => {
+                                const record = getDayRecord(day);
+                                const isCurrentMonth = isSameMonth(day, currentDate);
+                                return (
+                                    <div
+                                        key={idx}
+                                        className={`relative group aspect-square rounded-2xl p-2 transition-all flex flex-col items-center justify-center border ${isCurrentMonth ? 'bg-white border-slate-100 hover:border-indigo-300' : 'bg-slate-50/50 border-transparent opacity-30 pointer-events-none'
+                                            }`}
+                                    >
+                                        <span className={`text-sm font-bold ${isToday(day) ? 'text-indigo-600' : 'text-slate-700'}`}>
+                                            {format(day, 'd')}
+                                        </span>
+                                        {record && (
+                                            <div className={`mt-2 w-2 h-2 rounded-full ${getStatusStyle(record.status)} shadow-lg shadow-indigo-100`}></div>
+                                        )}
+                                        {isToday(day) && (
+                                            <div className="absolute -top-1 -right-1">
+                                                <div className="w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+                                            </div>
+                                        )}
+
+                                        {/* Hover Tooltip */}
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-32 p-3 bg-slate-900 text-white rounded-xl text-[10px] invisible group-hover:visible z-30 shadow-xl line-clamp-2">
+                                            {record ? (
+                                                <>
+                                                    <p className="font-black text-indigo-400">{record.status}</p>
+                                                    <p>Time: {format(new Date(record.checkIn), 'h:mm a')}</p>
+                                                    <p>Hours: {record.workedHours}h</p>
+                                                </>
+                                            ) : (
+                                                <p className="opacity-60">No Record Found</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="mt-8 flex flex-wrap gap-6 pt-8 border-t border-slate-100 justify-center">
+                            <LegendItem color="bg-emerald-500" label="Present" />
+                            <LegendItem color="bg-rose-500" label="Absent" />
+                            <LegendItem color="bg-sky-500" label="Half Day" />
+                            <LegendItem color="bg-amber-500" label="Leave" />
+                            <LegendItem color="bg-slate-100" label="Weekend/Holiday" />
+                        </div>
+                    </Card>
+                )}
+
+                {/* Tab Content: Insights */}
+                {activeTab === "insights" && (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <Card className="p-8">
+                            <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                <BarChart3 className="w-5 h-5 text-indigo-500" />
+                                Work Hours Trend
+                            </h3>
+                            <div className="h-[300px]">
+                                <Bar
+                                    data={{
+                                        labels: stats.currentMonthRecords.map(r => format(new Date(r.date), 'dd')),
+                                        datasets: [{
+                                            label: 'Hours Worked',
+                                            data: stats.currentMonthRecords.map(r => r.workedHours),
+                                            backgroundColor: 'rgba(79, 70, 229, 0.4)',
+                                            borderColor: 'rgb(79, 70, 229)',
+                                            borderWidth: 2,
+                                            borderRadius: 8,
+                                            barThickness: 12
+                                        }]
+                                    }}
+                                    options={{ maintainAspectRatio: false }}
+                                />
+                            </div>
+                        </Card>
+                        <Card className="p-8">
+                            <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                <PieChart className="w-5 h-5 text-amber-500" />
+                                Distribution
+                            </h3>
+                            <div className="h-[300px] flex items-center justify-center">
+                                <Pie
+                                    data={{
+                                        labels: ['Present', 'Absent', 'Half Day', 'Leave'],
+                                        datasets: [{
+                                            data: [stats.present, stats.absent, stats.halfDay, stats.leave],
+                                            backgroundColor: [
+                                                '#10b981', '#f43f5e', '#0ea5e9', '#f59e0b'
+                                            ],
+                                            borderWidth: 0,
+                                            hoverOffset: 20
+                                        }]
+                                    }}
+                                />
+                            </div>
+                        </Card>
+                    </div>
+                )}
+
+                {/* Tab Content: History */}
+                {activeTab === "history" && (
+                    <Card className="overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 border-none shadow-xl shadow-indigo-100/30">
+                        <div className="p-6 bg-white border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="relative flex-1 max-w-md">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                <input placeholder="Search logs..." className="w-full pl-10 pr-4 py-2 bg-slate-50 border-none rounded-2xl text-xs focus:ring-2 focus:ring-indigo-500/10" />
+                            </div>
+                            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50">
+                                <Filter className="w-3 h-3" /> Filter Logs
+                            </button>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead className="bg-slate-50/50">
+                                    <tr>
+                                        <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Date & Day</th>
+                                        <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Time Logs</th>
+                                        <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Duration</th>
+                                        <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                                        <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-50">
+                                    {stats.currentMonthRecords.map((r, i) => (
+                                        <tr key={i} className="group hover:bg-indigo-50/20 transition-all duration-300">
+                                            <td className="p-6">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="p-3 bg-white border border-slate-100 rounded-2xl group-hover:bg-white shadow-sm transition-all">
+                                                        <Calendar className="w-5 h-5 text-indigo-600" />
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-bold text-slate-900">{format(new Date(r.date), 'MMM dd, yyyy')}</p>
+                                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{format(new Date(r.date), 'EEEE')}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="p-6">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                                        {format(new Date(r.checkIn), 'h:mm a')}
+                                                    </span>
+                                                    <span className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                                                        {format(new Date(r.checkOut || r.checkIn), 'h:mm a')}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td className="p-6">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold">{r.workedHours}h</span>
+                                                </div>
+                                            </td>
+                                            <td className="p-6">
+                                                <StatusBadge status={r.status} />
+                                            </td>
+                                            <td className="p-6">
+                                                <button className="p-2 hover:bg-white rounded-lg transition-all text-slate-400 hover:text-indigo-600">
+                                                    <ArrowUpRight className="w-4 h-4" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </Card>
+                )}
+            </div>
         </div>
     );
 }
 
-function StatCard({ title, value, icon: Icon, color, bg, borderColor }) {
+function StatCard({ title, value, sub, icon: Icon, color }) {
+    const colors = {
+        indigo: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+        amber: 'bg-amber-50 text-amber-600 border-amber-100',
+        sky: 'bg-sky-50 text-sky-600 border-sky-100',
+        emerald: 'bg-emerald-50 text-emerald-600 border-emerald-100'
+    };
     return (
-        <div className={`p-4 rounded-xl border ${borderColor} ${bg} flex flex-col items-center justify-center gap-1 transition-transform hover:scale-105 active:scale-95 duration-200`}>
-            <div className={`p-2 rounded-full bg-white shadow-sm ${color} mb-1`}>
-                <Icon className="w-4 h-4" />
+        <Card className="p-6 hover:scale-105 active:scale-95 transition-all cursor-pointer">
+            <div className={`p-3 rounded-2xl w-fit mb-4 ${colors[color]} border`}>
+                <Icon className="w-6 h-6" />
             </div>
-            <div className="text-center">
-                <span className="block text-xl font-bold text-gray-900">{value}</span>
-                <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">{title}</span>
-            </div>
-        </div>
+            <h3 className="text-3xl font-black text-slate-900 tracking-tighter">{value}</h3>
+            <p className="text-sm font-bold text-slate-900 mt-1">{title}</p>
+            <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mt-1">{sub}</p>
+        </Card>
     );
 }
+
+const StatusBadge = ({ status }) => {
+    const styles = {
+        'Present': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        'Absent': 'bg-rose-50 text-rose-700 border-rose-200',
+        'Half Day': 'bg-sky-50 text-sky-700 border-sky-200',
+        'Leave': 'bg-amber-50 text-amber-700 border-amber-200',
+        'Holiday': 'bg-purple-50 text-purple-700 border-purple-200'
+    };
+    return (
+        <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${styles[status]}`}>
+            {status}
+        </span>
+    );
+};
+
+const LegendItem = ({ color, label }) => (
+    <div className="flex items-center gap-2">
+        <div className={`w-3 h-3 rounded-full ${color}`}></div>
+        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{label}</span>
+    </div>
+);

@@ -6,12 +6,16 @@ import User from '@/lib/db/models/User';
 import Department from '@/lib/db/models/crm/Department/department';
 import EmployeeCategory from '@/lib/db/models/crm/employee/EmployeeCategory';
 import EmployeeType from '@/lib/db/models/crm/employee/EmployeeType';
+import Organization from '@/lib/db/models/crm/organization/Organization';
+import BusinessUnit from '@/lib/db/models/crm/organization/BusinessUnit';
+import Team from '@/lib/db/models/crm/organization/Team';
+import CostCenter from '@/lib/db/models/finance/CostCenter';
 import { logActivity } from '@/lib/logger';
 
 // Helper function to clean ObjectId fields
 const cleanObjectIdFields = (data) => {
   const cleaned = { ...data };
-  
+
   if (cleaned.jobDetails) {
     if (cleaned.jobDetails.departmentId === '' || !cleaned.jobDetails.departmentId) {
       cleaned.jobDetails.departmentId = null;
@@ -36,8 +40,23 @@ const cleanObjectIdFields = (data) => {
     if (cleaned.jobDetails.categoryId === '' || !cleaned.jobDetails.categoryId) {
       cleaned.jobDetails.categoryId = null;
     }
+    if (cleaned.jobDetails.businessUnitId === '' || !cleaned.jobDetails.businessUnitId) {
+      cleaned.jobDetails.businessUnitId = null;
+    }
+    if (cleaned.jobDetails.teamId === '' || !cleaned.jobDetails.teamId) {
+      cleaned.jobDetails.teamId = null;
+    }
+    if (cleaned.jobDetails.costCenterId === '' || !cleaned.jobDetails.costCenterId) {
+      cleaned.jobDetails.costCenterId = null;
+    }
+    if (cleaned.jobDetails.businessUnitId === '' || !cleaned.jobDetails.businessUnitId) {
+      cleaned.jobDetails.businessUnitId = null;
+    }
+    if (cleaned.jobDetails.teamId === '' || !cleaned.jobDetails.teamId) {
+      cleaned.jobDetails.teamId = null;
+    }
   }
-  
+
   if (cleaned.attendanceApproval) {
     if (cleaned.attendanceApproval.shift1Supervisor === '' || !cleaned.attendanceApproval.shift1Supervisor) {
       cleaned.attendanceApproval.shift1Supervisor = null;
@@ -46,7 +65,7 @@ const cleanObjectIdFields = (data) => {
       cleaned.attendanceApproval.shift2Supervisor = null;
     }
   }
-  
+
   return cleaned;
 };
 
@@ -54,21 +73,23 @@ const cleanObjectIdFields = (data) => {
 export async function GET(request, { params }) {
   try {
     await dbConnect();
-    const {id} = await params;
+    const { id } = await params;
     const employee = await Employee.findById(id)
       .populate('jobDetails.reportingManager', 'personalDetails.firstName personalDetails.lastName employeeId')
       .populate('jobDetails.departmentId', 'departmentName')
       .populate('jobDetails.organizationId', 'name')
+      .populate('jobDetails.businessUnitId', 'name')
+      .populate('jobDetails.teamId', 'name')
+      .populate('jobDetails.costCenterId', 'name code')
       .populate('attendanceApproval.shift1Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
-      .populate('attendanceApproval.shift2Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
       .populate('attendanceApproval.shift2Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
       .populate('jobDetails.employeeTypeId', 'employeeType')
       .populate('jobDetails.categoryId', 'employeeCategory')
-    
+
     if (!employee) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
-    
+
     return NextResponse.json(employee);
   } catch (error) {
     console.error('❌ Error in GET /api/payroll/employees/[id]:', error);
@@ -80,31 +101,31 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await dbConnect();
-    const {id} = await params;
+    const { id } = await params;
     const body = await request.json();
     console.log("📥 Updating employee with data:", JSON.stringify(body, null, 2));
-    
+
     // Check if employee exists
     const existingEmployee = await Employee.findById(id);
     if (!existingEmployee) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
-    
+
     // Check if email is being changed and if it already exists
     if (body.personalDetails?.email && body.personalDetails.email !== existingEmployee.personalDetails.email) {
-      const existingEmail = await Employee.findOne({ 
+      const existingEmail = await Employee.findOne({
         'personalDetails.email': body.personalDetails.email,
         _id: { $ne: params.id }
       });
-      
+
       if (existingEmail) {
         return NextResponse.json(
-          { error: 'Email already exists' }, 
+          { error: 'Email already exists' },
           { status: 400 }
         );
       }
     }
-    
+
     // Clean ObjectId fields
     const cleanedBody = cleanObjectIdFields(body);
     const updateData = {
@@ -125,11 +146,11 @@ export async function PUT(request, { params }) {
 
       isCompliant: (cleanedBody.isCompliant !== undefined) ? cleanedBody.isCompliant : existingEmployee.isCompliant,
       isTDSApplicable: (cleanedBody.isTDSApplicable !== undefined) ? cleanedBody.isTDSApplicable : existingEmployee.isTDSApplicable,
-      
+
       // Personal Details
       personalDetails: {
         ...existingEmployee.personalDetails, // properties not in schema but in DB?
-        ...cleanedBody.personalDetails, 
+        ...cleanedBody.personalDetails,
         // Ensure nesting merging
         bloodGroup: cleanedBody.personalDetails?.bloodGroup || existingEmployee.personalDetails?.bloodGroup || '',
         address: cleanedBody.personalDetails?.currentAddress || cleanedBody.personalDetails?.address || existingEmployee.personalDetails?.address || {},
@@ -145,7 +166,7 @@ export async function PUT(request, { params }) {
       pfApplicable: cleanedBody.pfApplicable || existingEmployee.pfApplicable || 'no',
       probation: cleanedBody.probation || existingEmployee.probation || 'no',
       isAttending: cleanedBody.isAttending || existingEmployee.isAttending || 'no',
-      
+
       // Job details
       jobDetails: {
         ...(existingEmployee.jobDetails?.toObject ? existingEmployee.jobDetails.toObject() : existingEmployee.jobDetails),
@@ -158,68 +179,74 @@ export async function PUT(request, { params }) {
         supervisor: (cleanedBody.jobDetails?.supervisor !== undefined) ? cleanedBody.jobDetails.supervisor : existingEmployee.jobDetails?.supervisor,
         workLocation: cleanedBody.jobDetails?.workLocation || existingEmployee.jobDetails?.workLocation || '',
         // Nested hierarchy fields
+        // Nested hierarchy fields
         employeeTypeId: cleanedBody.jobDetails?.employeeTypeId || existingEmployee.jobDetails?.employeeTypeId,
         categoryId: cleanedBody.jobDetails?.categoryId || existingEmployee.jobDetails?.categoryId,
+        businessUnitId: cleanedBody.jobDetails?.businessUnitId || existingEmployee.jobDetails?.businessUnitId,
+        teamId: cleanedBody.jobDetails?.teamId || existingEmployee.jobDetails?.teamId,
+        costCenterId: cleanedBody.jobDetails?.costCenterId || existingEmployee.jobDetails?.costCenterId,
       },
-      
+
       // Attendance approval
       attendanceApproval: {
         required: cleanedBody.attendanceApproval?.required || existingEmployee.attendanceApproval?.required || 'no',
         shift1Supervisor: cleanedBody.attendanceApproval?.shift1Supervisor || existingEmployee.attendanceApproval?.shift1Supervisor || null,
         shift2Supervisor: cleanedBody.attendanceApproval?.shift2Supervisor || existingEmployee.attendanceApproval?.shift2Supervisor || null,
       },
-      
+
       // Salary Details (Merge)
       salaryDetails: {
         ...(existingEmployee.salaryDetails || {}),
         ...cleanedBody.salaryDetails,
         bankAccount: {
-            ...(existingEmployee.salaryDetails?.bankAccount || {}),
-            ...(cleanedBody.salaryDetails?.bankAccount || {}),
-            branchAddress: cleanedBody.salaryDetails?.bankAccount?.branchAddress || existingEmployee.salaryDetails?.bankAccount?.branchAddress || ''
+          ...(existingEmployee.salaryDetails?.bankAccount || {}),
+          ...(cleanedBody.salaryDetails?.bankAccount || {}),
+          branchAddress: cleanedBody.salaryDetails?.bankAccount?.branchAddress || existingEmployee.salaryDetails?.bankAccount?.branchAddress || ''
         }
       },
 
       // Documents - merge if provided, otherwise keep existing
       documents: cleanedBody.documents || existingEmployee.documents || [],
-      
+
       // Status
       status: cleanedBody.status || existingEmployee.status || 'Active',
 
       // Payslip Structure
       payslipStructure: cleanedBody.payslipStructure ? {
-          ...cleanedBody.payslipStructure,
-          // ensure we don't lose existing nested fields if we only sent partial updates? 
-          // Use whole object replacement for structure usually safe as form sends whole object.
-          // But let's be safe if we can. 
-          // Actually form sends complete structure, so replacing is safer than deep merging arrays manually.
+        ...cleanedBody.payslipStructure,
+        // ensure we don't lose existing nested fields if we only sent partial updates? 
+        // Use whole object replacement for structure usually safe as form sends whole object.
+        // But let's be safe if we can. 
+        // Actually form sends complete structure, so replacing is safer than deep merging arrays manually.
       } : existingEmployee.payslipStructure
     };
-    
+
     console.log("📝 Final update data:", JSON.stringify(updateData, null, 2));
-    
+
     const employee = await Employee.findByIdAndUpdate(
       id,
       updateData,
-      { 
-        new: true, 
+      {
+        new: true,
         runValidators: true,
-        context: 'query' 
+        context: 'query'
       }
     )
-    .populate('jobDetails.reportingManager', 'personalDetails.firstName personalDetails.lastName employeeId')
-    .populate('jobDetails.departmentId', 'departmentName')
-    .populate('jobDetails.organizationId', 'name')
-    .populate('attendanceApproval.shift1Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
-    .populate('attendanceApproval.shift2Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
-    .populate('attendanceApproval.shift2Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
-    .populate('jobDetails.employeeTypeId', 'employeeType')
-    .populate('jobDetails.categoryId', 'employeeCategory')
-    
+      .populate('jobDetails.reportingManager', 'personalDetails.firstName personalDetails.lastName employeeId')
+      .populate('jobDetails.departmentId', 'departmentName')
+      .populate('jobDetails.organizationId', 'name')
+      .populate('jobDetails.businessUnitId', 'name')
+      .populate('jobDetails.teamId', 'name')
+      .populate('jobDetails.costCenterId', 'name code')
+      .populate('attendanceApproval.shift1Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
+      .populate('attendanceApproval.shift2Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
+      .populate('jobDetails.employeeTypeId', 'employeeType')
+      .populate('jobDetails.categoryId', 'employeeCategory')
+
     if (!employee) {
       return NextResponse.json({ error: 'Employee not found after update' }, { status: 404 });
     }
-    
+
     console.log("✅ Employee updated successfully:", employee.employeeId);
     console.log("📊 Updated details:", {
       id: employee._id,
@@ -234,7 +261,7 @@ export async function PUT(request, { params }) {
     // Log activity
     let performer = null;
     if (body.updatedBy) {
-        performer = await User.findById(body.updatedBy);
+      performer = await User.findById(body.updatedBy);
     }
 
     await logActivity({
@@ -253,11 +280,11 @@ export async function PUT(request, { params }) {
       },
       req: request
     });
-    
+
     return NextResponse.json(employee);
   } catch (error) {
     console.error('❌ Error in PUT /api/payroll/employees/[id]:', error);
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: error.message,
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     }, { status: 500 });
@@ -268,21 +295,21 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
-    const {id} = await params;
+    const { id } = await params;
     // Soft delete by changing status to "Inactive"
     const employee = await Employee.findByIdAndUpdate(
       id,
-      { 
+      {
         status: 'Inactive',
         updatedAt: new Date()
       },
       { new: true }
     );
-    
+
     if (!employee) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
-    
+
     console.log("✅ Employee soft deleted (status changed to Inactive):", employee.employeeId);
 
     // Log activity
@@ -293,8 +320,8 @@ export async function DELETE(request, { params }) {
       description: `Soft deleted employee (Inactive): ${employee.personalDetails.firstName} ${employee.personalDetails.lastName} (${employee.employeeId})`,
       req: request
     });
-    
-    return NextResponse.json({ 
+
+    return NextResponse.json({
       message: 'Employee status changed to Inactive successfully',
       employeeId: employee.employeeId,
       name: `${employee.personalDetails.firstName} ${employee.personalDetails.lastName}`,

@@ -5,18 +5,15 @@ import { useSession } from "@/context/SessionContext";
 import {
   Eye,
   EyeOff,
-  Lock,
   User,
   AlertCircle,
-  CheckCircle,
-  Shield,
   Loader2,
-  ArrowRight,
-  BarChart3,
-  Users,
-  Mail,
-  Calendar,
+  Lock,
+  Check,
+  Briefcase,
+  Shield,
   ClipboardCheck,
+  LayoutDashboard
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "react-hot-toast";
@@ -31,6 +28,7 @@ const LoginPage = () => {
     password: "",
     role: "employee",
   });
+  const [rememberMe, setRememberMe] = useState(false);
 
   const router = useRouter();
 
@@ -38,70 +36,45 @@ const LoginPage = () => {
     {
       value: "admin",
       label: "Admin",
-      fullName: "System Administrator",
-      icon: Shield,
-      color: "text-red-600",
-      bgColor: "bg-red-50",
-      borderColor: "border-red-200",
       usernameLabel: "Username",
       usernamePlaceholder: "Enter username",
       passwordLabel: "Password",
       passwordPlaceholder: "Enter password",
       passwordType: "password",
-      usernameIcon: User,
-      passwordIcon: Lock,
+      usernameIcon: Shield,
     },
     {
       value: "employee",
       label: "Employee",
-      fullName: "Employee Login",
-      icon: User,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-200",
       usernameLabel: "Employee ID",
       usernamePlaceholder: "Enter Employee ID",
       passwordLabel: "Password",
       passwordPlaceholder: "Enter password",
       passwordType: "password",
       usernameIcon: User,
-      passwordIcon: Lock,
     },
-    {
-      value: "supervisor",
-      label: "Supervisor",
-      fullName: "Supervisor Login",
-      icon: Users,
-      color: "text-yellow-600",
-      bgColor: "bg-yellow-50",
-      borderColor: "border-yellow-200",
-      usernameLabel: "Employee ID",
-      usernamePlaceholder: "Enter Employee ID",
-      passwordLabel: "Password",
-      passwordPlaceholder: "Enter password",
-      passwordType: "password",
-      usernameIcon: User,
-      passwordIcon: Lock,
-    },
-    {
-      value: "attendance_only",
-      label: "Attendance",
-      fullName: "Attendance Marker",
-      icon: ClipboardCheck,
-      color: "text-green-600",
-      bgColor: "bg-green-50",
-      borderColor: "border-green-200",
-      usernameLabel: "Employee ID",
-      usernamePlaceholder: "Enter Employee ID",
-      passwordLabel: "Password",
-      passwordPlaceholder: "Enter password",
-      passwordType: "password",
-      usernameIcon: User,
-      passwordIcon: Lock,
-    },
+    // {
+    //   value: "supervisor",
+    //   label: "Supervisor",
+    //   usernameLabel: "Employee ID",
+    //   usernamePlaceholder: "Enter Employee ID",
+    //   passwordLabel: "Password",
+    //   passwordPlaceholder: "Enter password",
+    //   passwordType: "password",
+    //   usernameIcon: Briefcase,
+    // },
+    // {
+    //   value: "attendance_only",
+    //   label: "Attendance",
+    //   usernameLabel: "Employee ID",
+    //   usernamePlaceholder: "Enter Employee ID",
+    //   passwordLabel: "Password",
+    //   passwordPlaceholder: "Enter password",
+    //   passwordType: "password",
+    //   usernameIcon: ClipboardCheck,
+    // },
   ];
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -110,35 +83,15 @@ const LoginPage = () => {
     }
   };
 
-  // Email validation for supervisor role
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  };
-
-  // Form validation
   const validateForm = () => {
     const newErrors = {};
-
-    // Username validation based on role
-    if (!formData.username.trim()) {
-      newErrors.username = "This field is required";
-    }
-
-    // Password validation
-    if (!formData.password.trim()) {
-      newErrors.password = "This field is required";
-    }
-
-
-    // Role validation
+    if (!formData.username.trim()) newErrors.username = "This field is required";
+    if (!formData.password.trim()) newErrors.password = "This field is required";
     if (!formData.role) newErrors.role = "Please select a role";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -153,159 +106,93 @@ const LoginPage = () => {
         formData.role
       );
 
-      console.log(response);
-
       if (response.success) {
         toast.success("Login successful! Welcome back!");
-        if (formData.role === "admin") {
-          router.push("/payroll/employees");
-        }
-        else if (formData.role === "employee") {
-          router.push("/payroll/my-payslip");
-        }
-        else if (formData.role === "supervisor") {
-          router.push("/payroll/attendance");
-        }
-        else if (formData.role === "attendance_only") {
-          router.push("/payroll/attendance");
-        } else {
-          router.push("/");
-        }
-
+        if (formData.role === "admin") router.push("/payroll/employees");
+        else if (formData.role === "employee") router.push("/payroll/my-payslip");
+        else if (formData.role === "supervisor") router.push("/payroll/attendance");
+        else if (formData.role === "attendance_only") router.push("/payroll/attendance");
+        else router.push("/");
       } else {
-        if (response.message) {
-          setErrors({ general: response.message });
-          toast.error(response.message);
-        } else {
-          toast.error("Login failed. Please try again.");
-        }
+        const msg = response.message || "Login failed. Please try again.";
+        setErrors({ general: msg });
+        toast.error(msg);
       }
     } catch (error) {
       console.error("Login error:", error);
-
-      if (error.response?.status === 401) {
-        setErrors({ general: "Invalid credentials" });
-        toast.error("Invalid username or password.");
-      } else {
-        setErrors({
-          general:
-            error.response?.data?.message || "Login failed. Please try again.",
-        });
-        toast.error(
-          error.response?.data?.message || "Login failed. Please try again."
-        );
-      }
+      const msg = error.response?.data?.message || "Invalid credentials or server error";
+      setErrors({ general: msg });
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle Enter key press
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && !loading) {
-      handleSubmit(e);
-    }
+    if (e.key === "Enter" && !loading) handleSubmit(e);
   };
 
-  const selectedRole = roles.find((r) => r.value === formData.role);
+  const selectedRole = roles.find((r) => r.value === formData.role) || roles[1];
+  const UsernameIcon = selectedRole.usernameIcon;
 
   return (
-    <div className="h-screen bg-slate-50 flex overflow-hidden">
-      <Toaster />
-      {/* Left Side */}
-      <div className="hidden lg:flex lg:flex-1 bg-slate-900 relative">
-        <div className="flex flex-col justify-center px-12 py-8 text-white w-full">
+    <div className="min-h-screen flex bg-white font-sans text-slate-800">
+      <Toaster position="top-center" />
+
+      {/* Left Side - Form Section */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-12 lg:px-20 xl:px-24 bg-white z-10">
+        <div className="max-w-md w-full mx-auto">
+          {/* Brand / Logo */}
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+              {/* Simple Logo Icon */}
+              <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+            </div>
+            <span className="text-xl font-bold text-slate-900 tracking-tight">HRPayroll</span>
+          </div>
+
           <div className="mb-8">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">
-                  SupplyChainPro
-                </h1>
-                <p className="text-slate-400">Business Management Platform</p>
-              </div>
-            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Welcome Back</h1>
+            <p className="text-slate-500">Enter your {selectedRole.usernameLabel.toLowerCase()} and password to access your account.</p>
           </div>
 
-          <div className="space-y-6 mb-8">
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-1">
-                Comprehensive Business Solution
-              </h3>
-              <p className="text-slate-300 text-sm leading-relaxed">
-                Streamline operations with integrated payroll management and
-                task coordination.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-1">
-                Role-Based Access Control
-              </h3>
-              <p className="text-slate-300 text-sm leading-relaxed">
-                Secure departmental access with optimized workflow management.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-1">
-                Enterprise-Grade Security
-              </h3>
-              <p className="text-slate-300 text-sm leading-relaxed">
-                Advanced security protocols to protect your business data.
-              </p>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-700 pt-6">
-            <p className="text-slate-400 text-sm">
-              Trusted by businesses worldwide for operational excellence.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Side */}
-      <div className="flex-1 lg:flex-none lg:w-1/2 flex items-center justify-center p-6 bg-white">
-        <div className="w-full max-w-lg">
-          <div className="lg:hidden text-center mb-6">
-            <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mx-auto mb-3">
-              <BarChart3 className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-xl font-bold text-slate-900">
-              SupplyChainPro
-            </h1>
-          </div>
-
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-slate-900 mb-1">Sign In</h2>
-            <p className="text-slate-600 text-sm">
-              Access your business dashboard
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {errors.general && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                <div className="flex items-center space-x-2 text-red-600">
-                  <AlertCircle className="w-4 h-4" />
-                  <span className="text-xs font-medium">{errors.general}</span>
-                </div>
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2 text-red-600 text-sm">
+                <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>{errors.general}</span>
               </div>
             )}
 
-            {/* Username Field */}
-            <div className="space-y-1">
-              <label
-                htmlFor="username"
-                className="block text-xs font-medium text-slate-700"
-              >
+            {/* Role Selection Tabs */}
+            <div className="flex p-1 bg-slate-100 rounded-xl">
+              {roles.map(role => {
+                const isActive = formData.role === role.value;
+                return (
+                  <button
+                    key={role.value}
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, role: role.value }))}
+                    className={`flex-1 flex items-center justify-center py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${isActive
+                      ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200'
+                      : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                      }`}
+                  >
+                    {role.label}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Username Input */}
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-slate-700" htmlFor="username">
                 {selectedRole.usernameLabel}
               </label>
-              <div className="relative flex items-center">
-                {selectedRole.usernameIcon && (
-                  <selectedRole.usernameIcon className="absolute left-3 w-4 h-4 text-slate-400 pointer-events-none" />
-                )}
+              <div className="relative group">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                  <UsernameIcon className="w-5 h-5" />
+                </div>
                 <input
                   id="username"
                   name="username"
@@ -314,169 +201,167 @@ const LoginPage = () => {
                   onChange={handleChange}
                   onKeyPress={handleKeyPress}
                   placeholder={selectedRole.usernamePlaceholder}
-                  className={`w-full pl-10 pr-4 py-2.5 border rounded-lg text-sm leading-5 focus:outline-none focus:ring-2 transition-colors ${errors.username
-                    ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                    : "border-slate-300 focus:ring-yellow-500 focus:border-yellow-500"
+                  className={`w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-xl outline-none transition-all duration-200 ${errors.username
+                    ? "border-red-300 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                    : "border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 placeholder:text-slate-400"
                     }`}
                 />
               </div>
-              {errors.username && (
-                <div className="flex items-center space-x-1 text-red-600 text-xs">
-                  <AlertCircle className="w-3 h-3" />
-                  <span>{errors.username}</span>
-                </div>
-              )}
+              {errors.username && <p className="text-xs text-red-600 font-medium pl-1">{errors.username}</p>}
             </div>
 
-            {/* Password/DOB Field */}
-            <div className="space-y-1">
-              <label
-                htmlFor="password"
-                className="block text-xs font-medium text-slate-700"
-              >
-                {selectedRole.passwordLabel}
+            {/* Password Input */}
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-slate-700" htmlFor="password">
+                Password
               </label>
-              <div className="relative flex items-center">
-                {selectedRole.passwordIcon && (
-                  <selectedRole.passwordIcon className="absolute left-3 w-4 h-4 text-slate-400 pointer-events-none" />
-                )}
+              <div className="relative group">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                  <Lock className="w-5 h-5" />
+                </div>
                 <input
                   id="password"
                   name="password"
-                  type={
-                    formData.role === "admin"
-                      ? showPassword
-                        ? "text"
-                        : "password"
-                      : selectedRole.passwordType
-                  }
+                  type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={handleChange}
                   onKeyPress={handleKeyPress}
                   placeholder={selectedRole.passwordPlaceholder}
-                  className={`w-full pl-10 pr-11 py-2.5 border rounded-lg text-sm leading-5 focus:outline-none focus:ring-2 transition-colors ${errors.password
-                    ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                    : "border-slate-300 focus:ring-yellow-500 focus:border-yellow-500"
+                  className={`w-full pl-10 pr-12 py-3 bg-slate-50 border rounded-xl outline-none transition-all duration-200 ${errors.password
+                    ? "border-red-300 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                    : "border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 placeholder:text-slate-400"
                     }`}
                 />
-                {formData.role === "admin" && (
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-indigo-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
-              {errors.password && (
-                <div className="flex items-center space-x-1 text-red-600 text-xs">
-                  <AlertCircle className="w-3 h-3" />
-                  <span>{errors.password}</span>
-                </div>
-              )}
+              {errors.password && <p className="text-xs text-red-600 font-medium pl-1">{errors.password}</p>}
             </div>
 
-            {/* Role Selection */}
-            <div className="space-y-2">
-              <label className="block text-xs font-medium text-slate-700">
-                Role
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                {roles.map((role) => {
-                  const Icon = role.icon;
-                  const isSelected = formData.role === role.value;
-                  return (
-                    <label
-                      key={role.value}
-                      className={`flex items-center p-2.5 border rounded-lg cursor-pointer transition-all hover:bg-slate-50 ${isSelected
-                        ? "border-yellow-300 bg-yellow-50"
-                        : "border-slate-200 bg-white"
-                        }`}
-                    >
-                      <input
-                        type="radio"
-                        name="role"
-                        value={role.value}
-                        checked={isSelected}
-                        onChange={handleChange}
-                        className="sr-only"
-                      />
-                      <div
-                        className={`w-6 h-6 rounded flex items-center justify-center mr-2.5 ${isSelected ? "bg-yellow-100" : "bg-slate-100"
-                          }`}
-                      >
-                        <Icon
-                          className={`w-3 h-3 ${isSelected ? "text-yellow-600" : "text-slate-500"
-                            }`}
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <div
-                          className={`font-medium text-xs ${isSelected ? "text-yellow-800" : "text-slate-900"
-                            }`}
-                        >
-                          {role.label}
-                        </div>
-                        <div className="text-xs text-slate-600">
-                          {role.fullName}
-                        </div>
-                      </div>
-                      {isSelected && (
-                        <CheckCircle className="w-4 h-4 text-yellow-600" />
-                      )}
-                    </label>
-                  );
-                })}
-              </div>
-              {errors.role && (
-                <div className="flex items-center space-x-1 text-red-600 text-xs">
-                  <AlertCircle className="w-3 h-3" />
-                  <span>{errors.role}</span>
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${rememberMe ? 'bg-indigo-600 border-indigo-600' : 'border-slate-300 group-hover:border-indigo-400'}`}>
+                  {rememberMe && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
                 </div>
-              )}
+                <input
+                  type="checkbox"
+                  className="hidden"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <span className="text-sm text-slate-600 group-hover:text-slate-800">Remember Me</span>
+              </label>
+
+              <button
+                type="button"
+                onClick={() => toast.success("Reset password link sent to your email!")}
+                className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 hover:underline"
+              >
+                Forgot Password?
+              </button>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Signing In...
-                </>
-              ) : (
-                <>
-                  Sign In
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Log In"}
             </button>
 
-            <div className="text-center space-y-2 pt-2">
-              <button
-                type="button"
-                className="text-xs text-yellow-600 hover:text-yellow-700 font-medium transition-colors"
-                onClick={() =>
-                  toast.error(
-                    "Contact your system administrator for password reset"
-                  )
-                }
-              >
-                Forgot password?
-              </button>
-              <p className="text-xs text-slate-500">
-                Contact IT support for assistance
+
+
+            <div className="text-center mt-6">
+              <p className="text-sm text-slate-500">
+                Don't Have An Account?{" "}
+                <button type="button" onClick={() => router.push("/auth/register")} className="text-indigo-600 font-semibold hover:underline">
+                  Register Now.
+                </button>
               </p>
             </div>
           </form>
+
+          <div className="mt-8 pt-6 border-t border-slate-100 flex justify-between text-xs text-slate-400">
+            <span>Copyright © 2026 HRPayroll</span>
+            <span className="cursor-pointer hover:text-slate-600">Privacy Policy</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Side - Hero/Decorative Section */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-indigo-600 overflow-hidden items-center justify-center">
+        {/* Background Circles/Gradients */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-xl px-8 flex flex-col h-full justify-center">
+          <div className="mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              Effortlessly manage your team <br /> and operations.
+            </h2>
+            <p className="text-indigo-100 text-lg">
+              Log in to access your CRM dashboard and manage your team from one central platform.
+            </p>
+          </div>
+
+          {/* Dashboard Mockup/Visual */}
+          <div className="relative w-full aspect-[16/10] bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-4 shadow-2xl flex flex-col gap-4 overflow-hidden">
+
+            {/* Fake Header */}
+            <div className="flex items-center justify-between">
+              <div className="w-24 h-6 bg-white/20 rounded-md"></div>
+              <div className="flex gap-2">
+                <div className="w-6 h-6 bg-white/20 rounded-full"></div>
+                <div className="w-6 h-6 bg-white/20 rounded-full"></div>
+              </div>
+            </div>
+
+            {/* Fake Content Grid */}
+            <div className="grid grid-cols-3 gap-4 flex-1">
+              {/* Card 1 */}
+              <div className="bg-white/10 rounded-lg p-3 col-span-1 flex flex-col justify-between">
+                <div className="w-8 h-8 bg-indigo-500/50 rounded-md mb-2"></div>
+                <div className="space-y-2">
+                  <div className="w-16 h-3 bg-white/30 rounded"></div>
+                  <div className="w-20 h-5 bg-white rounded"></div>
+                </div>
+              </div>
+              {/* Card 2 */}
+              <div className="bg-white/10 rounded-lg p-3 col-span-2 relative overflow-hidden">
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-indigo-500/30 to-transparent"></div>
+                <div className="flex items-end gap-2 h-full pb-2 px-2">
+                  <div className="w-full bg-white/30 rounded-t-sm h-[40%]"></div>
+                  <div className="w-full bg-white/50 rounded-t-sm h-[70%]"></div>
+                  <div className="w-full bg-indigo-400 rounded-t-sm h-[50%]"></div>
+                  <div className="w-full bg-white/30 rounded-t-sm h-[60%]"></div>
+                  <div className="w-full bg-white/20 rounded-t-sm h-[30%]"></div>
+                </div>
+              </div>
+              {/* Bottom Table Fake */}
+              <div className="bg-white/20 rounded-lg col-span-3 p-3 space-y-2">
+                <div className="w-full h-8 bg-white/10 rounded flex items-center px-2 gap-4">
+                  <div className="w-4 h-4 rounded-full bg-white/30"></div>
+                  <div className="w-20 h-2 bg-white/30 rounded"></div>
+                  <div className="flex-1"></div>
+                  <div className="w-12 h-2 bg-white/30 rounded"></div>
+                </div>
+                <div className="w-full h-8 bg-white/5 rounded flex items-center px-2 gap-4">
+                  <div className="w-4 h-4 rounded-full bg-white/20"></div>
+                  <div className="w-16 h-2 bg-white/20 rounded"></div>
+                  <div className="flex-1"></div>
+                  <div className="w-10 h-2 bg-white/20 rounded"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -10,6 +10,11 @@ const departmentSchema = new mongoose.Schema(
       ref: "Organization",
       required: true,
     },
+    businessUnitId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "BusinessUnit",
+      required: false, // Optional for now to support legacy data
+    },
     departmentName: {
       type: String,
       required: true,
@@ -42,7 +47,7 @@ const departmentSchema = new mongoose.Schema(
 );
 
 departmentSchema.index(
-  { organizationId: 1, departmentName: 1 }, 
+  { organizationId: 1, departmentName: 1 },
   { unique: true }
 );
 // Index for search

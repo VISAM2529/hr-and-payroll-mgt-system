@@ -10,6 +10,9 @@ import EmployeeCategory from '@/lib/db/models/crm/employee/EmployeeCategory';
 import EmployeeSubCategory from '@/lib/db/models/crm/employee/EmployeeSubCategory';
 import DocumentRequirement from '@/lib/db/models/payroll/DocumentRequirement';
 import DocumentReminder from '@/lib/db/models/payroll/DocumentReminder';
+import BusinessUnit from '@/lib/db/models/crm/organization/BusinessUnit';
+import Team from '@/lib/db/models/crm/organization/Team';
+import CostCenter from '@/lib/db/models/finance/CostCenter';
 import { logActivity } from '@/lib/logger';
 // Helper function to convert empty strings to null for ObjectId fields
 const cleanObjectIdFields = (data) => {
@@ -38,6 +41,21 @@ const cleanObjectIdFields = (data) => {
     }
     if (cleaned.jobDetails.categoryId === '' || !cleaned.jobDetails.categoryId) {
       cleaned.jobDetails.categoryId = null;
+    }
+    if (cleaned.jobDetails.businessUnitId === '' || !cleaned.jobDetails.businessUnitId) {
+      cleaned.jobDetails.businessUnitId = null;
+    }
+    if (cleaned.jobDetails.teamId === '' || !cleaned.jobDetails.teamId) {
+      cleaned.jobDetails.teamId = null;
+    }
+    if (cleaned.jobDetails.costCenterId === '' || !cleaned.jobDetails.costCenterId) {
+      cleaned.jobDetails.costCenterId = null;
+    }
+    if (cleaned.jobDetails.businessUnitId === '' || !cleaned.jobDetails.businessUnitId) {
+      cleaned.jobDetails.businessUnitId = null;
+    }
+    if (cleaned.jobDetails.teamId === '' || !cleaned.jobDetails.teamId) {
+      cleaned.jobDetails.teamId = null;
     }
   }
 
@@ -232,7 +250,6 @@ export async function GET(request) {
         { 'personalDetails.lastName': { $regex: search, $options: 'i' } },
         { 'personalDetails.email': { $regex: search, $options: 'i' } },
         { 'jobDetails.designation': { $regex: search, $options: 'i' } },
-        { 'personalDetails.phone': { $regex: search, $options: 'i' } }
       ];
     }
 
@@ -240,6 +257,9 @@ export async function GET(request) {
       .populate('jobDetails.reportingManager', 'personalDetails.firstName personalDetails.lastName employeeId')
       .populate('jobDetails.departmentId', 'departmentName')
       .populate('jobDetails.organizationId', 'name')
+      .populate('jobDetails.businessUnitId', 'name')
+      .populate('jobDetails.teamId', 'name')
+      .populate('jobDetails.costCenterId', 'name code')
       .populate('attendanceApproval.shift1Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
       .populate('attendanceApproval.shift2Supervisor', 'personalDetails.firstName personalDetails.lastName employeeId')
       .populate('jobDetails.employeeTypeId', 'employeeType')
@@ -476,6 +496,9 @@ export async function POST(request) {
         workLocation: cleanedBody.jobDetails?.workLocation || '',
         employeeTypeId: cleanedBody.jobDetails?.employeeTypeId || null,
         categoryId: cleanedBody.jobDetails?.categoryId || null,
+        businessUnitId: cleanedBody.jobDetails?.businessUnitId || null,
+        teamId: cleanedBody.jobDetails?.teamId || null,
+        costCenterId: cleanedBody.jobDetails?.costCenterId || null,
       },
 
       // Attendance approval
@@ -529,6 +552,9 @@ export async function POST(request) {
       { path: 'attendanceApproval.shift2Supervisor', select: 'personalDetails.firstName personalDetails.lastName employeeId' },
       { path: 'jobDetails.employeeTypeId', select: 'employeeType' },
       { path: 'jobDetails.categoryId', select: 'employeeCategory' },
+      { path: 'jobDetails.businessUnitId', select: 'name' },
+      { path: 'jobDetails.teamId', select: 'name' },
+      { path: 'jobDetails.costCenterId', select: 'name code' },
     ]);
 
     console.log("✅ Employee created successfully:", employee.employeeId);

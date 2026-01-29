@@ -5,7 +5,7 @@ import {
   Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Users, Calendar,
   Building, TrendingUp, Grid3X3, List, ChevronDown, Briefcase, RefreshCw, X,
   Truck, Warehouse, Package, BarChart3, Settings, Bell, MapPin, Phone, Mail,
-  FilterX, AlertCircle, CheckCircle,
+  FilterX, AlertCircle, CheckCircle, CheckCircle2,
   Download, ChevronLeft, ChevronRight, MoreHorizontal, Loader2, Building2,
   Layers, ChevronUp
 } from 'lucide-react';
@@ -25,6 +25,20 @@ export default function EmployeeList() {
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [error, setError] = useState(null);
   const [exportLoading, setExportLoading] = useState(false);
+
+  // Lifecycle Modal State
+  const [lifecycleModal, setLifecycleModal] = useState({
+    isOpen: false,
+    employee: null,
+    action: 'Promotion' // Promotion, Transfer, Exit
+  });
+  const [lifecycleLoading, setLifecycleLoading] = useState(false);
+  const [lifecycleData, setLifecycleData] = useState({
+    effectiveDate: new Date().toISOString().split('T')[0],
+    reason: '',
+    comments: '',
+    newDetails: {}
+  });
 
   // NEW: Organization grouping
   const [groupByOrganization, setGroupByOrganization] = useState(false);
@@ -51,7 +65,7 @@ export default function EmployeeList() {
       if (organizationFilter) params.append('organization', organizationFilter);
       // Fetch all employees for client-side pagination
       params.append('limit', '1000');
-       
+
       const response = await fetch(`/api/payroll/employees?${params}`);
       const data = await response.json();
 
@@ -316,6 +330,42 @@ export default function EmployeeList() {
     return icons[department] || Building;
   };
 
+  const handleLifecycleSubmit = async (e) => {
+    e.preventDefault();
+    if (!lifecycleModal.employee || !lifecycleData.effectiveDate || !lifecycleData.reason) {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    try {
+      setLifecycleLoading(true);
+      const response = await fetch(`/api/payroll/employees/${lifecycleModal.employee._id}/lifecycle`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: lifecycleModal.action,
+          effectiveDate: lifecycleData.effectiveDate,
+          reason: lifecycleData.reason,
+          comments: lifecycleData.comments,
+          newDetails: lifecycleData.newDetails,
+          performedBy: "ADMIN_USER_ID" // Placeholder, real ID should come from auth
+        })
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Failed to process lifecycle action");
+
+      toast.success(`${lifecycleModal.action} processed successfully`);
+      setLifecycleModal({ ...lifecycleModal, isOpen: false });
+      fetchEmployees();
+    } catch (error) {
+      console.error("Lifecycle error:", error);
+      toast.error(error.message);
+    } finally {
+      setLifecycleLoading(false);
+    }
+  };
+
   // Extract unique departments, statuses, and organizations
   const departments = [...new Set(employees.map(emp => emp.jobDetails?.department).filter(Boolean))];
   const statuses = [...new Set(employees.map(emp => emp.status).filter(Boolean))];
@@ -333,7 +383,7 @@ export default function EmployeeList() {
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center shadow-sm shadow-indigo-200">
                 <span className="text-white font-semibold text-sm">
                   {getInitials(employee.personalDetails?.firstName, employee.personalDetails?.lastName)}
                 </span>
@@ -391,9 +441,16 @@ export default function EmployeeList() {
             </div>
 
             <div className="flex items-center gap-1">
+              <button
+                onClick={() => setLifecycleModal({ isOpen: true, employee, action: 'Promotion' })}
+                className="p-2 hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 rounded-lg transition-colors"
+                title="Lifecycle Action"
+              >
+                <TrendingUp className="w-4 h-4" />
+              </button>
               <a
                 href={`/payroll/employees/${employee._id}`}
-                className="p-2 hover:bg-yellow-50 text-slate-400 hover:text-yellow-600 rounded-lg transition-colors"
+                className="p-2 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 rounded-lg transition-colors"
                 title="View Details"
               >
                 <Eye className="w-4 h-4" />
@@ -439,7 +496,7 @@ export default function EmployeeList() {
             <select
               value={employeesPerPage}
               onChange={(e) => handleEmployeesPerPageChange(e.target.value)}
-              className="border border-slate-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
+              className="border border-slate-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
             >
               <option value={6}>6</option>
               <option value={9}>9</option>
@@ -468,8 +525,8 @@ export default function EmployeeList() {
                   <button
                     onClick={() => handlePageChange(page)}
                     className={`h-9 w-9 flex items-center justify-center text-sm font-medium border transition-colors rounded-md ${currentPage === page
-                        ? "bg-yellow-500 border-yellow-500 text-white hover:bg-yellow-600"
-                        : "border-slate-300 text-slate-600 hover:bg-slate-50"
+                      ? "bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700 shadow-sm shadow-indigo-200"
+                      : "border-slate-300 text-slate-600 hover:bg-slate-50"
                       }`}
                   >
                     {page}
@@ -501,7 +558,7 @@ export default function EmployeeList() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-11 h-11 bg-indigo-600 rounded-xl flex items-center justify-center shadow-sm shadow-indigo-200">
                 <Users className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -526,7 +583,7 @@ export default function EmployeeList() {
 
               <a
                 href="/payroll/employees/new"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-sm shadow-indigo-200"
               >
                 <Plus className="w-4 h-4" />
                 Add Employee
@@ -555,65 +612,65 @@ export default function EmployeeList() {
             ))}
           </div>
         ) : (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Total Employees</p>
-                <p className="text-2xl font-bold text-slate-900 mt-2">{employees.length}</p>
-                <p className="text-xs text-slate-500 mt-1">Active workforce</p>
-              </div>
-              <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center border border-yellow-100">
-                <Users className="w-6 h-6 text-yellow-600" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-slate-600">Total Employees</p>
+                  <p className="text-2xl font-bold text-slate-900 mt-2">{employees.length}</p>
+                  <p className="text-xs text-slate-500 mt-1">Active workforce</p>
+                </div>
+                <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
+                  <Users className="w-6 h-6 text-indigo-600" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Active Staff</p>
-                <p className="text-2xl font-bold text-slate-900 mt-2">
-                  {employees.filter(e => e.status === 'Active').length}
-                </p>
-                <p className="text-xs text-slate-500 mt-1">Currently working</p>
-              </div>
-              <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center border border-green-100">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-slate-600">Active Staff</p>
+                  <p className="text-2xl font-bold text-slate-900 mt-2">
+                    {employees.filter(e => e.status === 'Active').length}
+                  </p>
+                  <p className="text-xs text-slate-500 mt-1">Currently working</p>
+                </div>
+                <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center border border-green-100">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Organizations</p>
-                <p className="text-2xl font-bold text-slate-900 mt-2">
-                  {organizations.length}
-                </p>
-                <p className="text-xs text-slate-500 mt-1">Business entities</p>
-              </div>
-              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center border border-purple-100">
-                <Building2 className="w-6 h-6 text-purple-600" />
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-slate-600">Organizations</p>
+                  <p className="text-2xl font-bold text-slate-900 mt-2">
+                    {organizations.length}
+                  </p>
+                  <p className="text-xs text-slate-500 mt-1">Business entities</p>
+                </div>
+                <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center border border-purple-100">
+                  <Building2 className="w-6 h-6 text-purple-600" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Departments</p>
-                <p className="text-2xl font-bold text-slate-900 mt-2">
-                  {departments.length}
-                </p>
-                <p className="text-xs text-slate-500 mt-1">Business units</p>
-              </div>
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
-                <Building className="w-6 h-6 text-blue-600" />
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-slate-600">Departments</p>
+                  <p className="text-2xl font-bold text-slate-900 mt-2">
+                    {departments.length}
+                  </p>
+                  <p className="text-xs text-slate-500 mt-1">Business units</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+                  <Building className="w-6 h-6 text-blue-600" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
         )}
 
         {/* NEW: Organization Grouping Toggle */}
@@ -636,13 +693,13 @@ export default function EmployeeList() {
                 <>
                   <button
                     onClick={expandAllOrgs}
-                    className="text-xs px-3 py-1.5 bg-white border border-blue-200 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors"
+                    className="text-xs px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 rounded-lg hover:bg-indigo-50 transition-colors"
                   >
                     Expand All
                   </button>
                   <button
                     onClick={collapseAllOrgs}
-                    className="text-xs px-3 py-1.5 bg-white border border-blue-200 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors"
+                    className="text-xs px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 rounded-lg hover:bg-indigo-50 transition-colors"
                   >
                     Collapse All
                   </button>
@@ -650,7 +707,7 @@ export default function EmployeeList() {
               )}
               <button
                 onClick={() => setGroupByOrganization(!groupByOrganization)}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${groupByOrganization ? 'bg-blue-600' : 'bg-slate-300'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${groupByOrganization ? 'bg-indigo-600' : 'bg-slate-300'
                   }`}
               >
                 <span
@@ -671,7 +728,7 @@ export default function EmployeeList() {
                   {groupByOrganization ? 'Organizations' : `Team Directory (${paginationData.totalEmployees})`}
                 </h2>
                 {hasActiveFilters && (
-                  <span className="inline-flex items-center px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full border border-yellow-200">
+                  <span className="inline-flex items-center px-2.5 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full border border-indigo-200">
                     Filtered Results
                   </span>
                 )}
@@ -691,7 +748,7 @@ export default function EmployeeList() {
                   <div className="flex bg-slate-100 rounded-lg p-1">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-2 rounded-md transition-all duration-200 ${viewMode === 'grid' ? 'bg-white shadow-sm text-yellow-600' : 'text-slate-500 hover:text-slate-700'
+                      className={`p-2 rounded-md transition-all duration-200 ${viewMode === 'grid' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'
                         }`}
                       title="Grid view"
                     >
@@ -699,7 +756,7 @@ export default function EmployeeList() {
                     </button>
                     <button
                       onClick={() => setViewMode('table')}
-                      className={`p-2 rounded-md transition-all duration-200 ${viewMode === 'table' ? 'bg-white shadow-sm text-yellow-600' : 'text-slate-500 hover:text-slate-700'
+                      className={`p-2 rounded-md transition-all duration-200 ${viewMode === 'table' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'
                         }`}
                       title="Table view"
                     >
@@ -721,7 +778,7 @@ export default function EmployeeList() {
                     placeholder="Search by name, ID, or department..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                   />
                 </div>
               </div>
@@ -732,7 +789,7 @@ export default function EmployeeList() {
                 <select
                   value={organizationFilter}
                   onChange={(e) => setOrganizationFilter(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                 >
                   <option value="">All Organizations</option>
                   {organizations.map(org => (
@@ -746,7 +803,7 @@ export default function EmployeeList() {
                 <select
                   value={departmentFilter}
                   onChange={(e) => setDepartmentFilter(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                 >
                   <option value="">All Departments</option>
                   {departments.map(dept => (
@@ -760,7 +817,7 @@ export default function EmployeeList() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                 >
                   <option value="">All Status</option>
                   {statuses.map(status => (
@@ -816,17 +873,17 @@ export default function EmployeeList() {
                     </div>
                     <div className="space-y-3 pt-2">
                       <div className="flex items-center gap-3">
-                         <Skeleton className="w-8 h-8 rounded-lg" />
-                         <div className="space-y-1 flex-1">
-                           <Skeleton className="h-3 w-full" />
-                           <Skeleton className="h-3 w-2/3" />
-                         </div>
+                        <Skeleton className="w-8 h-8 rounded-lg" />
+                        <div className="space-y-1 flex-1">
+                          <Skeleton className="h-3 w-full" />
+                          <Skeleton className="h-3 w-2/3" />
+                        </div>
                       </div>
                       <div className="flex items-center gap-3">
-                         <Skeleton className="w-8 h-8 rounded-lg" />
-                         <div className="space-y-1 flex-1">
-                           <Skeleton className="h-3 w-full" />
-                         </div>
+                        <Skeleton className="w-8 h-8 rounded-lg" />
+                        <div className="space-y-1 flex-1">
+                          <Skeleton className="h-3 w-full" />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -854,7 +911,7 @@ export default function EmployeeList() {
                       setStatusFilter('');
                       setOrganizationFilter('');
                     }}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg hover:bg-yellow-100 border border-yellow-200 text-sm font-medium transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 border border-indigo-200 text-sm font-medium transition-colors"
                   >
                     <FilterX className="w-4 h-4" />
                     Clear All Filters
@@ -862,7 +919,7 @@ export default function EmployeeList() {
                 ) : (
                   <a
                     href="/payroll/employees/new"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-sm shadow-indigo-200"
                   >
                     <Plus className="w-4 h-4" />
                     Add First Employee
@@ -957,7 +1014,7 @@ export default function EmployeeList() {
                               <tr key={employee._id} className="hover:bg-slate-50 transition-colors">
                                 <td className="py-4 px-6">
                                   <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                                    <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
                                       <span className="text-white font-semibold text-xs">
                                         {getInitials(employee.personalDetails?.firstName, employee.personalDetails?.lastName)}
                                       </span>
@@ -985,9 +1042,16 @@ export default function EmployeeList() {
                                 <td className="py-4 px-6">{getStatusBadge(employee.status)}</td>
                                 <td className="py-4 px-6 text-right">
                                   <div className="flex items-center justify-end gap-1">
+                                    <button
+                                      onClick={() => setLifecycleModal({ isOpen: true, employee, action: 'Promotion' })}
+                                      className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                                      title="Lifecycle Action"
+                                    >
+                                      <TrendingUp className="w-4 h-4" />
+                                    </button>
                                     <a
                                       href={`/payroll/employees/${employee._id}`}
-                                      className="p-2 text-slate-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                                      className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                                       title="View Details"
                                     >
                                       <Eye className="w-4 h-4" />
@@ -1022,6 +1086,155 @@ export default function EmployeeList() {
           </div>
         </div>
       </div>
+      {/* Lifecycle Modal */}
+      {lifecycleModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-slate-200">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600">
+                  <TrendingUp className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900">Employee Lifecycle</h3>
+                  <p className="text-xs text-slate-500">{lifecycleModal.employee?.personalDetails?.firstName} {lifecycleModal.employee?.personalDetails?.lastName}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setLifecycleModal({ ...lifecycleModal, isOpen: false })}
+                className="p-2 hover:bg-slate-200 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+
+            <form onSubmit={handleLifecycleSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Action Type</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {['Promotion', 'Transfer', 'Exit'].map(action => (
+                    <button
+                      key={action}
+                      type="button"
+                      onClick={() => setLifecycleModal({ ...lifecycleModal, action })}
+                      className={`py-2 px-3 text-xs font-bold rounded-lg border transition-all ${lifecycleModal.action === action
+                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-md'
+                        : 'bg-white border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600'
+                        }`}
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Effective Date</label>
+                  <input
+                    type="date"
+                    required
+                    value={lifecycleData.effectiveDate}
+                    onChange={(e) => setLifecycleData({ ...lifecycleData, effectiveDate: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Reason</label>
+                  <select
+                    required
+                    value={lifecycleData.reason}
+                    onChange={(e) => setLifecycleData({ ...lifecycleData, reason: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                  >
+                    <option value="">Select Reason</option>
+                    {lifecycleModal.action === 'Promotion' && (
+                      <>
+                        <option value="Merit Based">Merit Based</option>
+                        <option value="Annual Review">Annual Review</option>
+                        <option value="Restructuring">Restructuring</option>
+                      </>
+                    )}
+                    {lifecycleModal.action === 'Transfer' && (
+                      <>
+                        <option value="Branch Opening">Branch Opening</option>
+                        <option value="Relocation Request">Relocation Request</option>
+                        <option value="Project Assignment">Project Assignment</option>
+                      </>
+                    )}
+                    {lifecycleModal.action === 'Exit' && (
+                      <>
+                        <option value="Resignation">Resignation</option>
+                        <option value="Termination">Termination</option>
+                        <option value="Retirement">Retirement</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+              </div>
+
+              {lifecycleModal.action === 'Promotion' && (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">New Designation</label>
+                  <input
+                    type="text"
+                    placeholder="Enter new designation..."
+                    onChange={(e) => setLifecycleData({
+                      ...lifecycleData,
+                      newDetails: { ...lifecycleData.newDetails, designation: e.target.value }
+                    })}
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                  />
+                </div>
+              )}
+
+              {lifecycleModal.action === 'Transfer' && (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">New Work Location</label>
+                  <input
+                    type="text"
+                    placeholder="Enter new location..."
+                    onChange={(e) => setLifecycleData({
+                      ...lifecycleData,
+                      newDetails: { ...lifecycleData.newDetails, workLocation: e.target.value }
+                    })}
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Comments (Optional)</label>
+                <textarea
+                  rows="3"
+                  value={lifecycleData.comments}
+                  onChange={(e) => setLifecycleData({ ...lifecycleData, comments: e.target.value })}
+                  placeholder="Enter any additional notes..."
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+                />
+              </div>
+
+              <div className="pt-2 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setLifecycleModal({ ...lifecycleModal, isOpen: false })}
+                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={lifecycleLoading}
+                  className="flex-[2] py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2"
+                >
+                  {lifecycleLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+                  Confirm {lifecycleModal.action}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

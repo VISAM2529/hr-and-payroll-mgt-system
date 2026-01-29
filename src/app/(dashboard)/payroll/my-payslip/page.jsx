@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSession } from "@/context/SessionContext";
 import {
   Download,
@@ -8,19 +8,67 @@ import {
   Calendar,
   DollarSign,
   FileText,
-  Loader2,
   Search,
   Filter,
-  ChevronDown,
   TrendingUp,
   TrendingDown,
+  ChevronRight,
+  PieChart,
+  BarChart3,
+  LayoutDashboard,
+  Wallet,
+  DownloadCloud,
+  ExternalLink,
+  ChevronLeft,
+  Clock,
+  X,
+  Info,
+  Shield,
+  CheckCircle2,
+  Briefcase,
+  AlertCircle,
+  Zap
 } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+} from 'chart.js';
+import { Doughnut, Bar } from 'react-chartjs-2';
+import { toast } from "react-hot-toast";
+import { format } from "date-fns";
 
-const MyPayslipPage = () => {
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
+
+const TabButton = ({ active, label, icon: Icon, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`flex items-center gap-2 px-6 py-3 text-sm font-semibold transition-all duration-300 border-b-2 ${active
+      ? 'border-indigo-600 text-indigo-600 bg-indigo-50/30'
+      : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+      }`}
+  >
+    <Icon className={`w-4 h-4 ${active ? 'text-indigo-600' : 'text-slate-400'}`} />
+    {label}
+  </button>
+);
+
+const Card = ({ children, className = "" }) => (
+  <div className={`bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 ${className}`}>
+    {children}
+  </div>
+);
+
+export default function MyPayslipPage() {
   const { user } = useSession();
   const [payslips, setPayslips] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("overview");
   const [selectedPayslip, setSelectedPayslip] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [filters, setFilters] = useState({
@@ -47,484 +95,454 @@ const MyPayslipPage = () => {
 
       const response = await fetch(`/api/payroll/payslip?${queryParams}`);
       const data = await response.json();
-      console.log("Fetched payslips data:", data);
       if (response.ok) {
         setPayslips(data.payslips || []);
-      } else {
-        console.error("Failed to fetch payslips:", data.error);
       }
     } catch (error) {
-      console.error("Error fetching payslips:", error);
+      toast.error("Failed to fetch salary records");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleViewPayslip = (payslip) => {
-    setSelectedPayslip(payslip);
-    setShowModal(true);
-  };
+  const latestPayslip = payslips[0] || null;
 
-  const handleDownloadPayslip = (payslip) => {
-    // Implement PDF download logic here
-    console.log("Downloading payslip:", payslip.payslipId);
-  };
+  const stats = useMemo(() => {
+    const totalEarnings = payslips.reduce((acc, p) => acc + p.grossSalary, 0);
+    const totalNet = payslips.reduce((acc, p) => acc + p.netSalary, 0);
+    const totalDeductions = payslips.reduce((acc, p) => acc + p.totalDeductions, 0);
+    return { totalEarnings, totalNet, totalDeductions };
+  }, [payslips]);
 
-  const getMonthName = (month) => {
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    return months[month - 1];
-  };
+  const doughnutData = useMemo(() => {
+    if (!latestPayslip) return null;
+    return {
+      labels: ['Take Home', 'Deductions'],
+      datasets: [{
+        data: [latestPayslip.netSalary, latestPayslip.totalDeductions],
+        backgroundColor: ['#4f46e5', '#f43f5e'],
+        hoverOffset: 10,
+        borderWidth: 0,
+        spacing: 5,
+        borderRadius: 10
+      }]
+    };
+  }, [latestPayslip]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
+      maximumFractionDigits: 0
     }).format(amount);
   };
 
-  const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case "paid":
-        return "bg-green-100 text-green-800";
-      case "draft":
-        return "bg-yellow-100 text-yellow-800";
-      case "pending":
-        return "bg-blue-100 text-blue-800";
-      case "cancelled":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
+  const getMonthName = (month) => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return months[month - 1];
   };
 
-  if (loading) {
+  const handleViewDetails = (ps) => {
+    setSelectedPayslip(ps);
+    setShowModal(true);
+  };
+
+  if (loading && payslips.length === 0) {
     return (
-      <div className="p-6 space-y-6">
-        {/* Header Skeleton */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="space-y-2">
-              <Skeleton className="h-8 w-48" />
-              <Skeleton className="h-4 w-64" />
-            </div>
-            <Skeleton className="w-8 h-8 rounded-full" />
-          </div>
-          {/* Filters Skeleton */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="space-y-1">
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-10 w-full" />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Summary Cards Skeleton */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <Skeleton className="h-3 w-24" />
-                  <Skeleton className="h-8 w-16" />
-                </div>
-                <Skeleton className="w-8 h-8 rounded-lg" />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Table Skeleton */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="p-4 border-b border-slate-200 bg-slate-50">
-             <div className="grid grid-cols-7 gap-4">
-               {[...Array(7)].map((_, i) => <Skeleton key={i} className="h-4 w-full" />)}
-             </div>
-          </div>
-          <div className="divide-y divide-slate-200">
-             {[...Array(5)].map((_, i) => (
-                <div key={i} className="p-4 grid grid-cols-7 gap-4 items-center">
-                  <Skeleton className="h-4 w-16" />
-                  <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-6 w-16 rounded-full" />
-                  <div className="flex space-x-2">
-                    <Skeleton className="h-8 w-8 rounded-lg" />
-                    <Skeleton className="h-8 w-8 rounded-lg" />
-                  </div>
-                </div>
-             ))}
-          </div>
-        </div>
+      <div className="flex h-[80vh] items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">My Payslips</h1>
-            <p className="text-sm text-slate-600 mt-1">
-              View and download your salary payslips
-            </p>
+    <div className="p-6 bg-slate-50 min-h-screen">
+      <div className="max-w-7xl mx-auto space-y-8">
+
+        {/* Hero Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[3rem] p-10 text-white relative overflow-hidden shadow-2xl shadow-indigo-200">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-40 -mt-40 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-400/20 rounded-full -ml-40 -mb-40 blur-3xl"></div>
+
+            <div className="relative z-10 flex flex-col h-full justify-between">
+              <div>
+                <span className="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-widest border border-white/20">
+                  Latest Payout Received
+                </span>
+                <h1 className="text-5xl font-black tracking-tighter mt-6">
+                  {latestPayslip ? formatCurrency(latestPayslip.netSalary) : '₹0'}
+                </h1>
+                <p className="text-indigo-100 mt-2 font-medium flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  For {latestPayslip ? `${getMonthName(latestPayslip.month)} ${latestPayslip.year}` : 'N/A'}
+                </p>
+              </div>
+
+              <div className="mt-12 flex flex-wrap gap-8">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-200">Year to Date (Net)</p>
+                  <p className="text-2xl font-black">{formatCurrency(stats.totalNet)}</p>
+                </div>
+                <div className="w-px h-12 bg-white/10 hidden sm:block"></div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-200">Total Deductions</p>
+                  <p className="text-2xl font-black text-rose-300">{formatCurrency(stats.totalDeductions)}</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <FileText className="w-8 h-8 text-yellow-600" />
-          </div>
+
+          {/* Quick Analysis Widget */}
+          <Card className="p-8 border-none bg-white shadow-xl shadow-indigo-100/50 flex flex-col items-center justify-center text-center">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Salary Breakdown</h3>
+            <div className="w-full h-48 flex items-center justify-center relative">
+              {doughnutData ? (
+                <>
+                  <Doughnut data={doughnutData} options={{ maintainAspectRatio: false, plugins: { legend: { display: false } } }} />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">Gross</p>
+                    <p className="text-lg font-black text-slate-900 leading-none">
+                      {latestPayslip ? (latestPayslip.netSalary / latestPayslip.grossSalary * 100).toFixed(0) : 0}%
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center gap-3 text-slate-300">
+                  <PieChart className="w-12 h-12 opacity-20" />
+                  <p className="text-xs font-medium">No Data Available</p>
+                </div>
+              )}
+            </div>
+            <div className="w-full mt-6 grid grid-cols-2 gap-4">
+              <div className="text-left p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                <p className="text-[9px] font-bold text-slate-400 uppercase">Earnings</p>
+                <p className="text-xs font-black text-slate-900">{latestPayslip ? formatCurrency(latestPayslip.grossSalary) : '₹0'}</p>
+              </div>
+              <div className="text-left p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                <p className="text-[9px] font-bold text-slate-400 uppercase">Tax/Ded.</p>
+                <p className="text-xs font-black text-rose-500">{latestPayslip ? formatCurrency(latestPayslip.totalDeductions) : '₹0'}</p>
+              </div>
+            </div>
+          </Card>
         </div>
 
-        {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
-              Year
-            </label>
-            <select
-              value={filters.year}
-              onChange={(e) => setFilters({ ...filters, year: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            >
-              {[...Array(5)].map((_, i) => {
-                const year = new Date().getFullYear() - i;
-                return (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+        {/* Dashboard Navigation */}
+        <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden mb-8">
+          <nav className="flex px-4 overflow-x-auto no-scrollbar">
+            <TabButton
+              active={activeTab === "overview"}
+              label="Overview"
+              icon={LayoutDashboard}
+              onClick={() => setActiveTab("overview")}
+            />
+            <TabButton
+              active={activeTab === "history"}
+              label="Pay History"
+              icon={Clock}
+              onClick={() => setActiveTab("history")}
+            />
+            <TabButton
+              active={activeTab === "analytics"}
+              label="Salary Trends"
+              icon={BarChart3}
+              onClick={() => setActiveTab("analytics")}
+            />
+          </nav>
+        </div>
 
-          <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
-              Month
-            </label>
-            <select
-              value={filters.month}
-              onChange={(e) => setFilters({ ...filters, month: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            >
-              <option value="">All Months</option>
-              {[...Array(12)].map((_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {getMonthName(i + 1)}
-                </option>
+        {/* Tab: Overview / Recent Payslips */}
+        {activeTab === "overview" && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Recent Payouts</h2>
+              <button onClick={() => setActiveTab("history")} className="text-sm font-bold text-indigo-600 flex items-center gap-1 hover:gap-2 transition-all">
+                View Selection <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {payslips.slice(0, 3).map((ps, i) => (
+                <Card key={i} className="group p-8 border-none shadow-lg shadow-indigo-100 hover:shadow-2xl hover:shadow-indigo-200 transition-all transform hover:-translate-y-1">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-500">
+                      <Wallet className="w-7 h-7" />
+                    </div>
+                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${ps.status === 'Paid' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100'
+                      }`}>
+                      {ps.status}
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl font-black text-slate-900 mb-1">{getMonthName(ps.month)} {ps.year}</h3>
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-6">Net Take Home</p>
+
+                  <p className="text-3xl font-black text-slate-900 tracking-tighter mb-8">
+                    {formatCurrency(ps.netSalary)}
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => handleViewDetails(ps)}
+                      className="py-3 px-4 bg-slate-50 text-slate-900 rounded-xl text-xs font-black hover:bg-slate-100 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Eye className="w-4 h-4" /> View Detail
+                    </button>
+                    <button className="py-3 px-4 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-black hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center gap-2">
+                      <DownloadCloud className="w-4 h-4" /> Download
+                    </button>
+                  </div>
+                </Card>
               ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
-              Status
-            </label>
-            <select
-              value={filters.status}
-              onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            >
-              <option value="">All Status</option>
-              <option value="Paid">Paid</option>
-              <option value="Draft">Draft</option>
-              <option value="Pending">Pending</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Summary Cards */}
-      {payslips.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-slate-600 mb-1">Total Payslips</p>
-                <p className="text-2xl font-bold text-slate-900">{payslips.length}</p>
-              </div>
-              <FileText className="w-8 h-8 text-blue-600" />
+              {payslips.length === 0 && (
+                <Card className="col-span-full p-20 text-center flex flex-col items-center justify-center">
+                  <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                    <Shield className="w-10 h-10 text-slate-200" />
+                  </div>
+                  <h3 className="text-xl font-black text-slate-900">No payslips found</h3>
+                  <p className="text-slate-400 mt-2 max-w-xs mx-auto">Once your payroll is processed, your payslips will appear here for you to view and download.</p>
+                </Card>
+              )}
             </div>
           </div>
+        )}
 
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-            <div className="flex items-center justify-between">
+        {/* Tab: History List */}
+        {activeTab === "history" && (
+          <Card className="overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 border-none shadow-xl shadow-indigo-100/30">
+            <div className="p-8 bg-white border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <p className="text-xs text-slate-600 mb-1">Latest Salary</p>
-                <p className="text-2xl font-bold text-slate-900">
-                  {payslips[0] ? formatCurrency(payslips[0].netSalary) : "N/A"}
-                </p>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Earnings History</h2>
+                <p className="text-sm text-slate-500 mt-1">Found {payslips.length} salary records in your account</p>
               </div>
-              <DollarSign className="w-8 h-8 text-green-600" />
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-slate-600 mb-1">Paid Payslips</p>
-                <p className="text-2xl font-bold text-slate-900">
-                  {payslips.filter((p) => p.status === "Paid").length}
-                </p>
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="relative">
+                  <Filter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <select
+                    value={filters.year}
+                    onChange={(e) => setFilters({ ...filters, year: e.target.value })}
+                    className="pl-10 pr-4 py-2.5 bg-slate-50 border-none rounded-2xl text-xs font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/10"
+                  >
+                    {[2026, 2025, 2024].map(y => <option key={y} value={y}>{y}</option>)}
+                  </select>
+                </div>
               </div>
-              <TrendingUp className="w-8 h-8 text-yellow-600" />
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Payslips List */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        {payslips.length === 0 ? (
-          <div className="p-12 text-center">
-            <FileText className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">
-              No Payslips Found
-            </h3>
-            <p className="text-sm text-slate-600">
-              No payslips are available for the selected filters.
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">
-                    Payslip ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">
-                    Period
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">
-                    Gross Salary
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">
-                    Deductions
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">
-                    Net Salary
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {payslips.map((payslip) => (
-                  <tr key={payslip._id} className="hover:bg-slate-50">
-                    <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                      {payslip.payslipId}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
-                      {getMonthName(payslip.month)} {payslip.year}
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                      {formatCurrency(payslip.grossSalary)}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-red-600">
-                      {formatCurrency(payslip.totalDeductions)}
-                    </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-green-600">
-                      {formatCurrency(payslip.netSalary)}
-                    </td>
-                    <td className="px-6 py-4 text-sm">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                          payslip.status
-                        )}`}
-                      >
-                        {payslip.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm">
-                      <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() => handleViewPayslip(payslip)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="View Details"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDownloadPayslip(payslip)}
-                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                          title="Download PDF"
-                        >
-                          <Download className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-slate-50/50">
+                  <tr>
+                    <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Pay Period</th>
+                    <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Gross Pay</th>
+                    <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Reductions</th>
+                    <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Net Payout</th>
+                    <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                    <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {payslips.map((ps, i) => (
+                    <tr key={i} className="group hover:bg-slate-50/50 transition-all duration-300">
+                      <td className="p-6">
+                        <div className="flex items-center gap-4">
+                          <div className="p-3 bg-white border border-slate-100 rounded-2xl shadow-sm group-hover:border-indigo-200 group-hover:scale-110 transition-all duration-500">
+                            <Calendar className="w-5 h-5 text-indigo-600" />
+                          </div>
+                          <div>
+                            <p className="font-black text-slate-900">{getMonthName(ps.month)} {ps.year}</p>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">FY {ps.year}-{((ps.year + 1) % 100).toString().padStart(2, '0')}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-6 font-bold text-slate-700">{formatCurrency(ps.grossSalary)}</td>
+                      <td className="p-6 font-bold text-rose-500">-{formatCurrency(ps.totalDeductions)}</td>
+                      <td className="p-6">
+                        <span className="text-base font-black text-slate-900">{formatCurrency(ps.netSalary)}</span>
+                      </td>
+                      <td className="p-6">
+                        <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest ${ps.status === 'Paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+                          }`}>
+                          {ps.status}
+                        </span>
+                      </td>
+                      <td className="p-6 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <button onClick={() => handleViewDetails(ps)} className="p-3 bg-white border border-slate-200 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button className="p-3 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">
+                            <DownloadCloud className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        )}
+
+        {/* Tab: Analytics */}
+        {activeTab === "analytics" && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <Card className="p-10">
+              <h3 className="text-xl font-black text-slate-900 mb-8 flex items-center gap-3">
+                <TrendingUp className="w-6 h-6 text-indigo-600" />
+                Salary Growth Trend
+              </h3>
+              <div className="h-[350px]">
+                <Bar
+                  data={{
+                    labels: payslips.map(ps => getMonthName(ps.month)).reverse(),
+                    datasets: [{
+                      label: 'Net Salary',
+                      data: payslips.map(ps => ps.netSalary).reverse(),
+                      backgroundColor: 'rgba(79, 70, 229, 0.4)',
+                      borderColor: 'rgb(79, 70, 229)',
+                      borderWidth: 3,
+                      borderRadius: 12,
+                      barThickness: 24,
+                    }]
+                  }}
+                  options={{ maintainAspectRatio: false, plugins: { legend: { display: false } } }}
+                />
+              </div>
+            </Card>
+            <Card className="p-10 bg-gradient-to-br from-slate-900 to-indigo-950 text-white border-none shadow-2xl shadow-slate-200 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+              <h3 className="text-xl font-black mb-8 flex items-center gap-3">
+                <DollarSign className="w-6 h-6 text-amber-400" />
+                Yearly Projection
+              </h3>
+              <div className="space-y-8 relative z-10">
+                <div className="p-6 bg-white/5 rounded-[2rem] border border-white/10 backdrop-blur-sm">
+                  <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest mb-2">Projected Annual Net</p>
+                  <h4 className="text-4xl font-black">₹{(stats.totalNet / (payslips.length || 1) * 12).toLocaleString()}</h4>
+                  <p className="text-xs text-indigo-200/60 mt-2 font-medium">Based on current average payout of {formatCurrency(stats.totalNet / (payslips.length || 1))}</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-5 bg-white/5 rounded-3xl border border-white/10">
+                    <p className="text-[10px] font-bold text-indigo-300 uppercase mb-1">Tax Estimated</p>
+                    <p className="text-xl font-bold">10-15%</p>
+                  </div>
+                  <div className="p-5 bg-white/5 rounded-3xl border border-white/10">
+                    <p className="text-[10px] font-bold text-indigo-300 uppercase mb-1">Next Payout</p>
+                    <p className="text-xl font-bold">Expected</p>
+                  </div>
+                </div>
+
+                <div className="p-6 bg-amber-400/10 rounded-[2rem] border border-amber-400/20 flex items-start gap-4">
+                  <div className="p-3 bg-amber-400 rounded-2xl flex-shrink-0">
+                    <TrendingUp className="w-5 h-5 text-indigo-900" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-amber-100">Growth Insight</p>
+                    <p className="text-xs text-amber-100/60 mt-1 leading-relaxed">Your salary has remained consistent over the last {payslips.length} months. Ensure your investment declarations are up to date for maximum tax savings.</p>
+                  </div>
+                </div>
+              </div>
+            </Card>
           </div>
         )}
       </div>
 
-      {/* Modal for Payslip Details */}
+      {/* Premium Detail Modal */}
       {showModal && selectedPayslip && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-slate-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-900">
-                    Payslip Details
-                  </h2>
-                  <p className="text-sm text-slate-600 mt-1">
-                    {selectedPayslip.payslipId} - {getMonthName(selectedPayslip.month)}{" "}
-                    {selectedPayslip.year}
-                  </p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4 overflow-hidden">
+          <div className="bg-white w-full max-w-4xl rounded-[3rem] shadow-2xl flex flex-col md:flex-row max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-500">
+            {/* Left Sidebar Info */}
+            <div className="hidden md:flex md:w-80 bg-indigo-600 p-10 text-white flex-col justify-between">
+              <div>
+                <Shield className="w-12 h-12 text-white/50 mb-8" />
+                <h3 className="text-3xl font-black leading-tight">Payslip <br />Breakdown</h3>
+                <p className="text-indigo-100/60 mt-4 text-sm font-medium">Review your earnings and deductions in detail for this period.</p>
+              </div>
+
+              <div className="space-y-6">
+                <div className="p-5 bg-white/10 rounded-[2rem] border border-white/10">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-200 mb-1">Pay Period</p>
+                  <p className="text-lg font-black">{getMonthName(selectedPayslip.month)} {selectedPayslip.year}</p>
                 </div>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="text-slate-400 hover:text-slate-600"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+                <div className="p-5 bg-white/10 rounded-[2rem] border border-white/10">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-200 mb-1">Status</p>
+                  <p className="text-lg font-black">{selectedPayslip.status}</p>
+                </div>
               </div>
             </div>
 
-            <div className="p-6 space-y-6">
-              {/* Basic Info */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col bg-white overflow-hidden">
+              <div className="p-8 border-b border-slate-100 flex justify-between items-center">
                 <div>
-                  <p className="text-xs text-slate-600 mb-1">Working Days</p>
-                  <p className="text-lg font-semibold text-slate-900">
-                    {selectedPayslip.workingDays}
-                  </p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Payslip Identity</p>
+                  <h4 className="text-xl font-black text-slate-900">{selectedPayslip.payslipId}</h4>
                 </div>
-                <div>
-                  <p className="text-xs text-slate-600 mb-1">Present Days</p>
-                  <p className="text-lg font-semibold text-slate-900">
-                    {selectedPayslip.presentDays}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-slate-600 mb-1">Leave Days</p>
-                  <p className="text-lg font-semibold text-slate-900">
-                    {selectedPayslip.leaveDays}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-slate-600 mb-1">LOP Days</p>
-                  <p className="text-lg font-semibold text-red-600">
-                    {selectedPayslip.lopDays}
-                  </p>
-                </div>
-              </div>
-
-              {/* Earnings */}
-              <div>
-                <h3 className="text-sm font-semibold text-slate-900 mb-3">
-                  Earnings
-                </h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm text-slate-700">Basic Salary</span>
-                    <span className="text-sm font-semibold text-slate-900">
-                      {formatCurrency(selectedPayslip.basicSalary)}
-                    </span>
-                  </div>
-                  {selectedPayslip.earnings?.map((earning, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between p-3 bg-slate-50 rounded-lg"
-                    >
-                      <span className="text-sm text-slate-700">{earning.type}</span>
-                      <span className="text-sm font-semibold text-slate-900">
-                        {formatCurrency(earning.amount)}
-                      </span>
-                    </div>
-                  ))}
-                  <div className="flex justify-between p-3 bg-green-50 rounded-lg border border-green-200">
-                    <span className="text-sm font-semibold text-green-800">
-                      Gross Salary
-                    </span>
-                    <span className="text-sm font-bold text-green-800">
-                      {formatCurrency(selectedPayslip.grossSalary)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Deductions */}
-              <div>
-                <h3 className="text-sm font-semibold text-slate-900 mb-3">
-                  Deductions
-                </h3>
-                <div className="space-y-2">
-                  {selectedPayslip.deductions?.map((deduction, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between p-3 bg-slate-50 rounded-lg"
-                    >
-                      <span className="text-sm text-slate-700">{deduction.type}</span>
-                      <span className="text-sm font-semibold text-red-600">
-                        {formatCurrency(deduction.amount)}
-                      </span>
-                    </div>
-                  ))}
-                  <div className="flex justify-between p-3 bg-red-50 rounded-lg border border-red-200">
-                    <span className="text-sm font-semibold text-red-800">
-                      Total Deductions
-                    </span>
-                    <span className="text-sm font-bold text-red-800">
-                      {formatCurrency(selectedPayslip.totalDeductions)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Net Salary */}
-              <div className="p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl border border-yellow-200">
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold text-slate-900">
-                    Net Salary
-                  </span>
-                  <span className="text-2xl font-bold text-yellow-600">
-                    {formatCurrency(selectedPayslip.netSalary)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex justify-end space-x-3 pt-4 border-t border-slate-200">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
-                >
-                  Close
+                <button onClick={() => setShowModal(false)} className="p-3 hover:bg-slate-100 rounded-full transition-colors overflow-hidden">
+                  <X className="w-6 h-6 text-slate-400" />
                 </button>
-                <button
-                  onClick={() => handleDownloadPayslip(selectedPayslip)}
-                  className="px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg transition-colors flex items-center space-x-2"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download PDF</span>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-8 space-y-10 no-scrollbar">
+                {/* Attendance Summary */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <CompactStat label="Working Days" value={selectedPayslip.workingDays} icon={Calendar} color="indigo" />
+                  <CompactStat label="Present" value={selectedPayslip.presentDays} icon={CheckCircle2} color="emerald" />
+                  <CompactStat label="Leave" value={selectedPayslip.leaveDays} icon={Briefcase} color="amber" />
+                  <CompactStat label="LOP" value={selectedPayslip.lopDays} icon={AlertCircle} color="rose" />
+                </div>
+
+                {/* Items Breakdown */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                  <div className="space-y-4">
+                    <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                      <TrendingUp className="w-3 h-3 text-emerald-500" /> Earnings Component
+                    </h5>
+                    <div className="space-y-2">
+                      <BreakdownItem label="Basic Salary" value={selectedPayslip.basicSalary} />
+                      {selectedPayslip.earnings?.map((e, idx) => (
+                        <BreakdownItem key={idx} label={e.type} value={e.amount} />
+                      ))}
+                      <div className="pt-4 mt-4 border-t border-dashed border-slate-200 flex justify-between items-center">
+                        <span className="text-sm font-black text-slate-900">Gross Salary</span>
+                        <span className="text-sm font-black text-emerald-600">{formatCurrency(selectedPayslip.grossSalary)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                      <TrendingDown className="w-3 h-3 text-rose-500" /> Deductions Component
+                    </h5>
+                    <div className="space-y-2">
+                      {selectedPayslip.deductions?.map((d, idx) => (
+                        <BreakdownItem key={idx} label={d.type} value={d.amount} isNegative />
+                      ))}
+                      {selectedPayslip.deductions?.length === 0 && <p className="text-xs text-slate-400 italic">No deductions applied</p>}
+                      <div className="pt-4 mt-4 border-t border-dashed border-slate-200 flex justify-between items-center">
+                        <span className="text-sm font-black text-slate-900">Total Reductions</span>
+                        <span className="text-sm font-black text-rose-500">{formatCurrency(selectedPayslip.totalDeductions)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Net Payout Highlight */}
+                <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500"></div>
+                  <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-2">Final Net Payout</p>
+                  <h4 className="text-5xl font-black tracking-tighter group-hover:scale-110 transition-transform duration-500">{formatCurrency(selectedPayslip.netSalary)}</h4>
+                  <p className="text-xs text-slate-400 mt-4 max-w-md">Amount has been successfully credited to your registered bank account Ending with ****1234 on {format(new Date(), 'MMM dd, yyyy')}</p>
+                </div>
+              </div>
+
+              <div className="p-8 bg-slate-50 flex gap-4">
+                <button className="flex-1 py-4 bg-white border border-slate-200 rounded-[1.5rem] text-sm font-black text-slate-700 hover:bg-slate-100 transition-all flex items-center justify-center gap-2">
+                  <ExternalLink className="w-4 h-4" /> Share Info
+                </button>
+                <button className="flex-[2] py-4 bg-indigo-600 text-white rounded-[1.5rem] text-sm font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                  <DownloadCloud className="w-5 h-5" /> Download PDF Report
                 </button>
               </div>
             </div>
@@ -533,6 +551,35 @@ const MyPayslipPage = () => {
       )}
     </div>
   );
-};
+}
 
-export default MyPayslipPage;
+function CompactStat({ label, value, icon: Icon, color }) {
+  const colors = {
+    indigo: 'text-indigo-600 bg-indigo-50',
+    emerald: 'text-emerald-600 bg-emerald-50',
+    amber: 'text-amber-600 bg-amber-50',
+    rose: 'text-rose-600 bg-rose-50'
+  };
+  return (
+    <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-center gap-3">
+      <div className={`p-2 rounded-lg ${colors[color]}`}>
+        <Icon className="w-4 h-4" />
+      </div>
+      <div>
+        <p className="text-[8px] font-black text-slate-400 uppercase">{label}</p>
+        <p className="text-sm font-black text-slate-900 leading-none">{value}</p>
+      </div>
+    </div>
+  );
+}
+
+function BreakdownItem({ label, value, isNegative }) {
+  return (
+    <div className="flex justify-between items-center py-2 px-3 hover:bg-slate-50 rounded-xl transition-all">
+      <span className="text-xs font-bold text-slate-600">{label}</span>
+      <span className={`text-xs font-black ${isNegative ? 'text-rose-500' : 'text-slate-900'}`}>
+        {isNegative ? '-' : ''}₹{value?.toLocaleString()}
+      </span>
+    </div>
+  );
+}
