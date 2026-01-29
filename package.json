@@ -1,0 +1,51 @@
+{
+  "name": "myapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "cron:test": "node -e \"require('./src/lib/cron/attendance-cron').triggerAttendanceReportNow()\""
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-switch": "^1.2.6",
+    "axios": "^1.12.2",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "chart.js": "^4.5.1",
+    "cloudinary": "^2.8.0",
+    "clsx": "^2.1.1",
+    "cookie": "^1.0.2",
+    "date-fns": "^4.1.0",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
+    "lucide-react": "^0.544.0",
+    "mongoose": "^8.18.3",
+    "next": "^16.0.8",
+    "next-zod-route": "^1.0.0",
+    "node-cron": "^4.2.1",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^7.0.11",
+    "pdf-lib": "^1.17.1",
+    "react": "19.1.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "19.1.0",
+    "react-hot-toast": "^2.6.0",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "tailwindcss": "^4"
+  }
+}
