@@ -4,17 +4,17 @@ import './globals.css';
 import Script from "next/script";
 
 export const metadata = {
-  title: 'Unifoods',
-  description: 'Business Management Suite',
+  title: 'HR and Payroll Management System',
+  description: 'HR and Payroll Management System',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <Script 
+        <Script
           src="https://upload-widget.cloudinary.com/global/all.js"
-          strategy="afterInteractive" 
+          strategy="afterInteractive"
         />
       </head>
       <body>
