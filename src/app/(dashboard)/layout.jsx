@@ -44,6 +44,8 @@ import {
   GitGraph,
   Settings2,
   Briefcase,
+  Speaker,
+  MessageSquare,
 } from "lucide-react";
 import "../globals.css";
 import { useSession } from "@/context/SessionContext";
@@ -180,6 +182,15 @@ export default function DashboardLayout({ children }) {
         { name: "General Ledger", href: "/finance/ledger", icon: History },
         { name: "Vendor Management", href: "/finance/vendors", icon: Users },
       ],
+    },
+    {
+      name: "Communication Hub",
+      href: "/communication",
+      icon: MessageSquare, // Ensure MessageSquare is imported
+      children: [
+        { name: "Announcements", href: "/communication/announcements", icon: Speaker },
+        { name: "Surveys", href: "/communication/surveys", icon: FileText },
+      ]
     },
     {
       name: "Activity Logs",

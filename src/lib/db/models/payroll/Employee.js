@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { calculatePF, calculateESIC } from "@/services/compliance/pf-esic";
+import { calculatePT } from "@/services/compliance/professional-tax";
+
 
 const DEFAULT_USER_ID = "674e92d8ce08af0109923297"; // Default admin ID for system actions.
 
@@ -480,52 +483,44 @@ employeeSchema.methods.calculateSalaryComponents = function (params = {}) {
 
   // ========== AUTO-CALCULATED STATUTORY DEDUCTIONS (India Compliance) ==========
 
-  // 1. PF (Provident Fund) - 12% of Basic, capped at 15,000 ceiling
+  // 1. PF (Provident Fund)
   if (this.pfApplicable === 'yes') {
-    const pfWage = Math.min(basicSalary, 15000);
-    const pfEmployee = Math.round(pfWage * 0.12);
-    const pfEmployer = Math.round(pfWage * 0.13); // Includes admin charges usually
+    const pfDetails = calculatePF(basicSalary, true); // true = check applicability (already checked by if)
 
+    // Note: Service returns breakdown. We map it to the structure.
     calculatedDeductions.push({
       name: 'Provident Fund (PF)',
-      calculatedAmount: pfEmployee,
+      calculatedAmount: pfDetails.employeeShare,
       autoCalculated: true,
-      employerContribution: pfEmployer
+      employerContribution: pfDetails.employerShare.total
     });
   }
 
-  // 2. ESIC - 0.75% of Gross, only if Gross <= 21,000
-  if (this.esicApplicable === 'yes' && grossSalary <= 21000) {
-    const esicEmployee = Math.ceil(grossSalary * 0.0075);
-    const esicEmployer = Math.ceil(grossSalary * 0.0325);
+  // 2. ESIC
+  if (this.esicApplicable === 'yes') {
+    const esicDetails = calculateESIC(grossSalary, true);
 
-    calculatedDeductions.push({
-      name: 'ESIC',
-      calculatedAmount: esicEmployee,
-      autoCalculated: true,
-      employerContribution: esicEmployer
-    });
-  }
-
-  // 3. Professional Tax (PT) - Maharashtra Slabs
-  // Slabs: 0-7500: 0, 7501-10000: 175, >10000: 200 (2500 in March)
-  if (grossSalary > 7500) {
-    let ptAmount = 0;
-    if (grossSalary > 7500 && grossSalary <= 10000) {
-      ptAmount = 175;
-    } else if (grossSalary > 10000) {
-      ptAmount = 200;
-      // In February or March (depending on state rules), it's often adjusted
-      if (month === 3) ptAmount = 300; // Total 2500/year adjustment
-    }
-
-    if (ptAmount > 0) {
+    if (esicDetails.eligible && esicDetails.employeeShare > 0) {
       calculatedDeductions.push({
-        name: 'Professional Tax (PT)',
-        calculatedAmount: ptAmount,
-        autoCalculated: true
+        name: 'ESIC',
+        calculatedAmount: esicDetails.employeeShare,
+        autoCalculated: true,
+        employerContribution: esicDetails.employerShare
       });
     }
+  }
+
+  // 3. Professional Tax (PT) - State-wise
+  // Use work location state or fallback to Maharashtra
+  const state = this.personalDetails?.address?.state || 'Maharashtra';
+  const ptAmount = calculatePT(state, grossSalary, this.personalDetails?.gender || 'Male');
+
+  if (ptAmount > 0) {
+    calculatedDeductions.push({
+      name: 'Professional Tax (PT)',
+      calculatedAmount: ptAmount,
+      autoCalculated: true
+    });
   }
 
   // 4. TDS (Income Tax) - Placeholder logic for now
