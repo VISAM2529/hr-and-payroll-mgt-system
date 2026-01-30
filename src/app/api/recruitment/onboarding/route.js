@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/connect';
 import OnboardingChecklist from '@/lib/db/models/recruitment/OnboardingChecklist';
+import Employee from '@/lib/db/models/payroll/Employee';
 
 export async function GET(request) {
     try {

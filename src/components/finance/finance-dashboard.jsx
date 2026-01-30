@@ -12,6 +12,9 @@ import { format } from "date-fns";
 import toast from "react-hot-toast";
 import VendorManager from "./vendor-manager";
 import JournalEntryModal from "./journal-entry-modal"; // Import Modal
+import ExpenseDistributionChart from "./charts/expense-distribution";
+import CashFlowTrendChart from "./charts/cash-flow-trend";
+import FinancialReports from "./reports/financial-reports";
 
 export default function FinanceDashboard({ initialTab = "overview" }) {
     const [activeTab, setActiveTab] = useState(initialTab);
@@ -207,17 +210,13 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
                                     <h4 className="text-lg font-black text-slate-900 mb-6 flex items-center gap-2">
                                         <PieChart className="w-5 h-5 text-indigo-600" /> Expense Distribution
                                     </h4>
-                                    <div className="h-64 flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest text-[10px] border-2 border-dashed border-slate-200 rounded-3xl">
-                                        Charts coming soon
-                                    </div>
+                                    <ExpenseDistributionChart />
                                 </div>
                                 <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
                                     <h4 className="text-lg font-black text-slate-900 mb-6 flex items-center gap-2">
                                         <TrendingUp className="w-5 h-5 text-emerald-600" /> Cash Flow Trends
                                     </h4>
-                                    <div className="h-64 flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest text-[10px] border-2 border-dashed border-slate-200 rounded-3xl">
-                                        Analytics engine loading...
-                                    </div>
+                                    <CashFlowTrendChart />
                                 </div>
                             </div>
                         </div>
@@ -225,7 +224,7 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
                     {activeTab === "ledger" && <LedgerViewer />}
                     {activeTab === "cost-centers" && <CostCenterManager />}
                     {activeTab === "vendors" && <VendorManager />}
-                    {activeTab === "reports" && <div className="text-center py-20 text-slate-400 font-bold uppercase tracking-widest text-lg animate-pulse italic">Compiling advanced financial analytics...</div>}
+                    {activeTab === "reports" && <FinancialReports />}
                 </div>
             </div>
 

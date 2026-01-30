@@ -26,6 +26,7 @@ import { format } from "date-fns";
 import { useSession } from "@/context/SessionContext";
 import ESSLeaveManagement from "@/components/payroll/ess-leave-management";
 import ESSTalentDashboard from "@/components/talent/ess-talent-dashboard";
+import ESSSalaryProjection from "@/components/payroll/ess-salary-projection";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -595,23 +596,7 @@ export default function ESSDashboard() {
                 )}
 
                 {activeTab === "projection" && (
-                    <div className="max-w-4xl mx-auto py-12 text-center space-y-6">
-                        <div className="w-20 h-20 bg-indigo-50 rounded-3xl flex items-center justify-center text-indigo-600 mx-auto">
-                            <Calculator className="w-10 h-10" />
-                        </div>
-                        <h2 className="text-2xl font-black text-slate-900 italic">Coming Soon!</h2>
-                        <p className="text-slate-500 max-w-md mx-auto">
-                            The "What-if" calculator is being calibrated. Soon you'll be able to simulate your Net Take-home pay based on different investment scenarios and regimes.
-                        </p>
-                        <div className="flex justify-center gap-4 pt-6">
-                            <div className="px-4 py-2 bg-white rounded-full border border-slate-200 text-xs font-bold text-slate-400 flex items-center gap-2">
-                                <PlusCircle className="w-4 h-4" /> New Tax Regime
-                            </div>
-                            <div className="px-4 py-2 bg-white rounded-full border border-slate-200 text-xs font-bold text-slate-400 flex items-center gap-2">
-                                <PlusCircle className="w-4 h-4" /> Old Tax Regime
-                            </div>
-                        </div>
-                    </div>
+                    <ESSSalaryProjection employee={employee} />
                 )}
 
                 {activeTab === "leaves" && (

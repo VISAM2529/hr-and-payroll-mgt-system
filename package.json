@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "cron:test": "node -e \"require('./src/lib/cron/attendance-cron').triggerAttendanceReportNow()\""
+    "cron:test": "node -e \"require('./src/lib/cron/attendance-cron').triggerAttendanceReportNow()\"",
+    "seed": "node scripts/seed.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

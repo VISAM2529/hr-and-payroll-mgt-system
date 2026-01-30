@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/connect';
 import InvestmentDeclaration from '@/lib/db/models/payroll/InvestmentDeclaration';
+import Employee from '@/lib/db/models/payroll/Employee'; // Required for populate
 import { logActivity } from '@/lib/logger';
 
 export async function GET(request) {
@@ -8,7 +9,7 @@ export async function GET(request) {
         await dbConnect();
         const { searchParams } = new URL(request.url);
         const employeeId = searchParams.get('employeeId');
-        const financialYear = searchParams.get('financialYear') || "2025-26";
+        const financialYear = searchParams.get('financialYear') || "2024-2025";
 
         if (!employeeId) {
             // Admin view: Fetch all declarations for the FY

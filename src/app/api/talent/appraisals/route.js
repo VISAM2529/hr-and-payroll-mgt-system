@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
 import Appraisal from "@/lib/db/models/talent/Appraisal";
+import Employee from '@/lib/db/models/payroll/Employee';
 import { logActivity } from "@/lib/logger";
 
 // GET appraisals

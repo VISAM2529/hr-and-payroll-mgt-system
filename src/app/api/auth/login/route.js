@@ -434,32 +434,16 @@ export async function POST(req) {
       return res;
     }
 
-    // --- EMPLOYEE LOGIN (using Employee ID + DOB) ---
+    // --- EMPLOYEE LOGIN (using Employee ID + Password) ---
     if (role === 'employee') {
       // Find employee by employeeId
-      const employee = await Employee.findOne({ employeeId: username });
-      console.log('Employee lookup result:', employee);
+      // IMPORTANT: Need to explicitly select password as it is false by default
+      const employee = await Employee.findOne({ employeeId: username }).select('+password');
+
+      console.log('Employee lookup result:', employee ? 'Found' : 'not found');
+
       if (!employee) {
-        return NextResponse.json({ message: 'Invalid Employee ID or Date of Birth' }, { status: 401 });
-      }
-      console.log('Found employee:', employee.employeeId);
-
-      // Get DOB and normalize to YYYY-MM-DD
-      const rawDob = employee.personalDetails?.dateOfBirth;
-      if (!rawDob) {
-        return NextResponse.json({ message: 'Employee DOB not available' }, { status: 500 });
-      }
-
-      const dobDate = new Date(rawDob);
-      if (isNaN(dobDate.getTime())) {
-        return NextResponse.json({ message: 'Employee DOB format invalid' }, { status: 500 });
-      }
-
-      const dobString = dobDate.toISOString().split('T')[0]; // YYYY-MM-DD
-
-      // Compare password (DOB)
-      if (dobString !== password) {
-        return NextResponse.json({ message: 'Invalid Employee ID or Date of Birth' }, { status: 401 });
+        return NextResponse.json({ message: 'Invalid Employee ID or Password' }, { status: 401 });
       }
 
       // Check if employee is a supervisor (shouldn't login as regular employee)
@@ -467,6 +451,17 @@ export async function POST(req) {
         return NextResponse.json({
           message: 'Supervisors should use Supervisor login with email'
         }, { status: 403 });
+      }
+
+      // Check if password exists (migrated users might not have it)
+      if (!employee.password) {
+        return NextResponse.json({ message: 'Password not set for this account. Please contact HR.' }, { status: 403 });
+      }
+
+      // Compare password
+      const isMatch = await bcrypt.compare(password, employee.password);
+      if (!isMatch) {
+        return NextResponse.json({ message: 'Invalid Employee ID or Password' }, { status: 401 });
       }
 
       // Create token with role as "employee"

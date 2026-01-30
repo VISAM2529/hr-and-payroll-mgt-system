@@ -149,7 +149,12 @@ export default function PayrollRunPage() {
         }
     };
 
-    const getMonthName = (m) => format(new Date(2000, m - 1, 1), "MMMM");
+    const getMonthName = (m) => {
+        if (!m) return "";
+        const monthNum = parseInt(m);
+        if (isNaN(monthNum)) return m; // Return as is if it's a string name
+        return format(new Date(2000, monthNum - 1, 1), "MMMM");
+    };
 
     return (
         <div className="p-6 bg-slate-50 min-h-screen">

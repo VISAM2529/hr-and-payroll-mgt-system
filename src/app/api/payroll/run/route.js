@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/connect';
 import PayrollRun from '@/lib/db/models/payroll/PayrollRun';
+import Employee from '@/lib/db/models/payroll/Employee'; // Added import
 import Organization from '@/lib/db/models/crm/organization/Organization';
 import { logActivity } from '@/lib/logger';
 
@@ -44,6 +45,20 @@ export async function POST(request) {
 
         const runId = `PRUN-${year}${String(month).padStart(2, '0')}-${Math.floor(1000 + Math.random() * 9000)}`;
 
+        // Count eligible employees
+        // Need to import Employee model first at top of file if not present
+        // But since this is a route.js, we can do dynamic import or assume it's imported (it wasn't imported in view_file output)
+        // Let's check imports first.
+        // Wait, line 5 in original file view was empty import list? No, line 3 was PayrollRun. 
+        // I need to add Employee import at top.
+
+        // This tool call handles the logic insertion. I will need another one to add the import.
+
+        const totalEmployees = await Employee.countDocuments({
+            'jobDetails.organizationId': orgId,
+            status: 'Active'
+        });
+
         const run = await PayrollRun.create({
             runId,
             month,
@@ -51,6 +66,7 @@ export async function POST(request) {
             organizationId: orgId,
             generatedBy,
             status: 'Draft',
+            totalEmployees: totalEmployees, // Set initial count
             periodStart: new Date(year, month - 1, 1),
             periodEnd: new Date(year, month, 0)
         });
@@ -59,7 +75,7 @@ export async function POST(request) {
             action: "initialized",
             entity: "PayrollRun",
             entityId: run.runId,
-            description: `Initialized payroll run for ${month}/${year}`,
+            description: `Initialized payroll run for ${month}/${year} with ${totalEmployees} employees`,
             performedBy: { userId: generatedBy },
             req: request
         });
