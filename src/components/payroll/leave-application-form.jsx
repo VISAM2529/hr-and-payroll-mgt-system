@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Calendar, Save, X, FileText, Clock, 
+import {
+  Calendar, Save, X, FileText, Clock,
   User, Calculator, Upload, Loader2,
   CheckCircle, AlertTriangle, Info,
   Phone, MapPin, Building, Target
@@ -103,7 +103,7 @@ export default function LeaveApplicationForm() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Toaster/>
+      <Toaster />
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
@@ -117,9 +117,9 @@ export default function LeaveApplicationForm() {
                 <p className="text-slate-600">Submit a new leave application request</p>
               </div>
             </div>
-            
+
             <div className="flex gap-3">
-              <button 
+              <button
                 onClick={() => router.back()}
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
               >
@@ -223,7 +223,7 @@ export default function LeaveApplicationForm() {
 
                   {/* Duration Display */}
                   {totalDays > 0 && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="bg-slate-50 border border-blue-200 rounded-lg p-4">
                       <div className="flex items-center gap-2 text-blue-700">
                         <Calculator className="w-4 h-4" />
                         <span className="font-medium">Leave Duration: {totalDays} {totalDays === 1 ? 'day' : 'days'}</span>
@@ -414,9 +414,8 @@ export default function LeaveApplicationForm() {
                   {totalDays > 0 && (
                     <div className="flex justify-between items-center py-2">
                       <span className="text-sm text-slate-600">After Leave</span>
-                      <span className={`text-sm font-medium ${
-                        totalDays > remainingBalance ? 'text-red-600' : 'text-green-600'
-                      }`}>
+                      <span className={`text-sm font-medium ${totalDays > remainingBalance ? 'text-red-600' : 'text-green-600'
+                        }`}>
                         {remainingBalance - totalDays} days
                       </span>
                     </div>
@@ -430,9 +429,9 @@ export default function LeaveApplicationForm() {
                       <span className="text-sm font-medium">Insufficient Balance</span>
                     </div>
                     <p className="text-xs text-red-600">
-                      You're applying for more days than available. 
-                      {formData.isAdvanceLeave 
-                        ? ' This will be processed as advance leave.' 
+                      You're applying for more days than available.
+                      {formData.isAdvanceLeave
+                        ? ' This will be processed as advance leave.'
                         : ' Consider enabling advance leave option.'
                       }
                     </p>

@@ -1,6 +1,10 @@
 import EmployeeForm from '@/components/payroll/employee-form';
 import dbConnect from '@/lib/db/connect';
 import Employee from '@/lib/db/models/payroll/Employee';
+import Department from '@/lib/db/models/crm/Department/department';
+import Organization from '@/lib/db/models/crm/organization/Organization';
+import EmployeeType from '@/lib/db/models/crm/employee/EmployeeType';
+import EmployeeCategory from '@/lib/db/models/crm/employee/EmployeeCategory';
 
 export default async function EmployeeEditPage({ params }) {
   const { id } = await params;

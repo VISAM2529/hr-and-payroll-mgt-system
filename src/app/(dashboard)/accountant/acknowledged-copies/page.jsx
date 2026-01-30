@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import {
   FileText, CheckCircle2, Clock, Download, Search, Calendar, Users, Eye, XCircle,
-  RefreshCw, Settings, Bell, Zap, ArrowUp, ArrowDown,TrendingUp
+  RefreshCw, Settings, Zap, ArrowUp, ArrowDown, TrendingUp
 } from 'lucide-react';
 
 export default function AcknowledgedCopies() {
@@ -83,7 +83,7 @@ export default function AcknowledgedCopies() {
     // In a real application, this would generate and download a PDF/Excel report
     console.log('Generated Report:', filteredDocs);
     alert(`Report generated for ${filteredDocs.length} documents! Check console for details.`);
-    
+
     // Here you would typically:
     // 1. Make an API call to generate the report
     // 2. Download the generated file
@@ -101,12 +101,12 @@ export default function AcknowledgedCopies() {
         setDocuments(prev =>
           prev.map(doc =>
             doc.id === id
-              ? { 
-                  ...doc, 
-                  signed: true, 
-                  status: 'completed',
-                  attachedFile: file.name
-                }
+              ? {
+                ...doc,
+                signed: true,
+                status: 'completed',
+                attachedFile: file.name
+              }
               : doc
           )
         );
@@ -134,7 +134,7 @@ export default function AcknowledgedCopies() {
                 <p className="text-slate-600 text-sm mt-0.5">Manage delivery and invoice acknowledgments</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <button className="p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
                 <RefreshCw className="h-5 w-5" />
@@ -142,12 +142,7 @@ export default function AcknowledgedCopies() {
               {/* <button className="p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
                 <Settings className="h-5 w-5" />
               </button> */}
-              <button className="relative p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {pendingDocuments}
-                </span>
-              </button>
+
             </div>
           </div>
         </div>
@@ -161,11 +156,10 @@ export default function AcknowledgedCopies() {
               <button
                 onClick={handleSignDocuments}
                 disabled={selectedDocuments.length === 0}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedDocuments.length === 0
-                    ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
-                    : 'bg-green-500 text-white hover:bg-green-600'
-                }`}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${selectedDocuments.length === 0
+                  ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
+                  : 'bg-green-500 text-white hover:bg-green-600'
+                  }`}
               >
                 <CheckCircle2 className="h-4 w-4 inline mr-2" />
                 Mark as Signed ({selectedDocuments.length})
@@ -259,11 +253,10 @@ export default function AcknowledgedCopies() {
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      document.type === 'Delivery Copy' 
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-green-100 text-green-700'
-                    }`}>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${document.type === 'Delivery Copy'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'bg-green-100 text-green-700'
+                      }`}>
                       {document.type}
                     </span>
                   </td>
@@ -280,11 +273,10 @@ export default function AcknowledgedCopies() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      document.signed
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-yellow-100 text-yellow-700'
-                    }`}>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${document.signed
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-yellow-100 text-yellow-700'
+                      }`}>
                       {document.signed ? 'Signed' : 'Pending'}
                     </span>
                   </td>
@@ -328,9 +320,9 @@ export default function AcknowledgedCopies() {
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="group bg-white rounded-xl border border-blue-200 p-6 hover:shadow-lg transition-all duration-200 bg-blue-50 hover:scale-105">
+              <div className="group bg-white rounded-xl border border-blue-200 p-6 hover:shadow-lg transition-all duration-200 bg-slate-50 hover:scale-105">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
+                  <div className="p-3 rounded-xl bg-slate-50 border border-blue-200">
                     <FileText className="h-6 w-6 text-blue-600" />
                   </div>
                   <div className="flex items-center gap-1 text-sm">

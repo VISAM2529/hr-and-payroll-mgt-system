@@ -18,6 +18,9 @@ export default function RecruitmentHub() {
     const [loading, setLoading] = useState(true);
     const [showJobModal, setShowJobModal] = useState(false);
     const [showCandidateModal, setShowCandidateModal] = useState(false);
+    const [showOfferModal, setShowOfferModal] = useState(false);
+    const [offerModalData, setOfferModalData] = useState(null); // For pre-filling from candidate pipeline
+    const [pipelineFilter, setPipelineFilter] = useState(null); // { jobId, jobTitle }
     const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [stats, setStats] = useState({
         totalJobs: 0,
@@ -93,25 +96,57 @@ export default function RecruitmentHub() {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                    { label: "Total Requisitions", value: stats.totalJobs, icon: Briefcase, color: "indigo" },
-                    { label: "Active Positions", value: stats.activePositions, icon: Target, color: "emerald" },
-                    { label: "Candidates in Funnel", value: stats.totalCandidates, icon: Users, color: "blue" },
-                    { label: "Monthly Hires", value: stats.hiresThisMonth, icon: UserPlus, color: "orange" },
-                ].map((stat, i) => (
-                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden">
-                        <div className={`absolute top-0 right-0 w-24 h-24 bg-${stat.color}-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700`}></div>
-                        <div className="relative z-10 flex flex-col gap-4">
-                            <div className={`w-12 h-12 bg-${stat.color}-100 rounded-2xl flex items-center justify-center`}>
-                                <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
-                            </div>
-                            <div>
-                                <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{stat.label}</p>
-                                <h3 className="text-2xl font-black text-slate-900 mt-1">{stat.value}</h3>
-                            </div>
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden border-l-4 border-l-indigo-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10 flex flex-col gap-4">
+                        <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center">
+                            <Briefcase className="w-6 h-6 text-indigo-600" />
+                        </div>
+                        <div>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Total Requisitions</p>
+                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.totalJobs}</h3>
                         </div>
                     </div>
-                ))}
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden border-l-4 border-l-emerald-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10 flex flex-col gap-4">
+                        <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center">
+                            <Target className="w-6 h-6 text-emerald-600" />
+                        </div>
+                        <div>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Active Positions</p>
+                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.activePositions}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden border-l-4 border-l-blue-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10 flex flex-col gap-4">
+                        <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
+                            <Users className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Candidates in Funnel</p>
+                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.totalCandidates}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden border-l-4 border-l-orange-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10 flex flex-col gap-4">
+                        <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
+                            <UserPlus className="w-6 h-6 text-orange-600" />
+                        </div>
+                        <div>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Monthly Hires</p>
+                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.hiresThisMonth}</h3>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Main Navigation Tabs */}
@@ -136,15 +171,37 @@ export default function RecruitmentHub() {
                 </div>
 
                 <div className="p-8">
-                    {activeTab === "jobs" && <JobBoard jobs={jobs} onRefresh={fetchRecruitmentData} />}
+                    {activeTab === "jobs" && (
+                        <JobBoard
+                            jobs={jobs}
+                            onRefresh={fetchRecruitmentData}
+                            onViewPipeline={(jobId, jobTitle) => {
+                                setPipelineFilter({ jobId, jobTitle });
+                                setActiveTab("candidates");
+                            }}
+                        />
+                    )}
                     {activeTab === "candidates" && (
                         <CandidatePipeline
-                            candidates={candidates}
+                            candidates={pipelineFilter
+                                ? candidates.filter(c => c.jobRequisition?._id === pipelineFilter.jobId)
+                                : candidates
+                            }
+                            activeFilter={pipelineFilter}
+                            onClearFilter={() => setPipelineFilter(null)}
                             onRefresh={fetchRecruitmentData}
                             onSelectCandidate={(c) => setSelectedCandidate(c)}
                         />
                     )}
-                    {activeTab === "offers" && <OfferManagement onRefresh={fetchRecruitmentData} />}
+                    {activeTab === "offers" && (
+                        <OfferManagement
+                            onRefresh={fetchRecruitmentData}
+                            onCreateOffer={() => {
+                                setOfferModalData(null);
+                                setShowOfferModal(true);
+                            }}
+                        />
+                    )}
                 </div>
             </div>
 
@@ -170,6 +227,18 @@ export default function RecruitmentHub() {
                 />
             )}
 
+            {showOfferModal && (
+                <CreateOfferModal
+                    candidates={candidates}
+                    initialData={offerModalData}
+                    onClose={() => setShowOfferModal(false)}
+                    onSuccess={() => {
+                        setShowOfferModal(false);
+                        fetchRecruitmentData(); // Refresh to see new offer
+                    }}
+                />
+            )}
+
             {selectedCandidate && (
                 <CandidateDetailModal
                     candidate={selectedCandidate}
@@ -178,13 +247,19 @@ export default function RecruitmentHub() {
                         setSelectedCandidate(null);
                         fetchRecruitmentData();
                     }}
+                    onGenerateOffer={(candidate) => {
+                        setSelectedCandidate(null);
+                        setOfferModalData({ candidateId: candidate._id, name: candidate.name, jobTitle: candidate.jobRequisition?.title });
+                        setShowOfferModal(true);
+                        setActiveTab("offers");
+                    }}
                 />
             )}
         </div>
     );
 }
 
-function JobBoard({ jobs, onRefresh }) {
+function JobBoard({ jobs, onRefresh, onViewPipeline }) {
     if (jobs.length === 0) {
         return (
             <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
@@ -237,7 +312,10 @@ function JobBoard({ jobs, onRefresh }) {
                             ))}
                             <div className="w-8 h-8 rounded-full border-2 border-white bg-indigo-50 flex items-center justify-center text-[10px] font-black text-indigo-600 italic">+5</div>
                         </div>
-                        <button className="text-[10px] font-black text-indigo-600 hover:underline uppercase tracking-widest flex items-center gap-1">
+                        <button
+                            onClick={() => onViewPipeline(job._id, job.title)}
+                            className="text-[10px] font-black text-indigo-600 hover:underline uppercase tracking-widest flex items-center gap-1"
+                        >
                             Review Pipeline <ArrowUpRight className="w-3 h-3" />
                         </button>
                     </div>
@@ -247,13 +325,13 @@ function JobBoard({ jobs, onRefresh }) {
     );
 }
 
-function CandidatePipeline({ candidates, onRefresh, onSelectCandidate }) {
+function CandidatePipeline({ candidates, onRefresh, onSelectCandidate, activeFilter, onClearFilter }) {
     // Stage-wise grouping
     const stages = [
         "Applied", "Screening", "Technical Interview", "Managerial Interview", "HR Interview", "Offer Sent"
     ];
 
-    if (candidates.length === 0) {
+    if (candidates.length === 0 && !activeFilter) {
         return (
             <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
                 <p className="text-slate-500 font-bold">No candidates tracked yet.</p>
@@ -275,6 +353,26 @@ function CandidatePipeline({ candidates, onRefresh, onSelectCandidate }) {
                     <button className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all"><Filter className="w-4 h-4" /></button>
                 </div>
             </div>
+
+            {activeFilter && (
+                <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 flex justify-between items-center animate-in slide-in-from-top-2">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-indigo-100 rounded-xl text-indigo-600">
+                            <Briefcase className="w-4 h-4" />
+                        </div>
+                        <div>
+                            <p className="text-xs text-indigo-600 font-black uppercase tracking-wider">Filtered by Position</p>
+                            <p className="text-sm font-bold text-indigo-900">{activeFilter.jobTitle}</p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={onClearFilter}
+                        className="px-4 py-2 bg-white text-indigo-600 rounded-xl text-xs font-black shadow-sm hover:bg-indigo-600 hover:text-white transition-all flex items-center gap-2"
+                    >
+                        <XCircle className="w-3.5 h-3.5" /> Clear Filter
+                    </button>
+                </div>
+            )}
 
             <div className="overflow-x-auto pb-4">
                 <table className="w-full">
@@ -429,7 +527,7 @@ function AddCandidateModal({ jobs, onClose, onSuccess }) {
     );
 }
 
-function CandidateDetailModal({ candidate, onClose, onRefresh }) {
+function CandidateDetailModal({ candidate, onClose, onRefresh, onGenerateOffer }) {
     const [submitting, setSubmitting] = useState(false);
     const stages = [
         'Applied', 'Screening', 'Technical Interview', 'Managerial Interview', 'HR Interview', 'Offer Sent', 'Hired', 'Rejected'
@@ -517,7 +615,10 @@ function CandidateDetailModal({ candidate, onClose, onRefresh }) {
 
                     {candidate.status === 'HR Interview' && (
                         <div className="mt-8 pt-8 border-t border-slate-100">
-                            <button className="w-full py-4 bg-emerald-600 text-white rounded-2xl text-xs font-black shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
+                            <button
+                                onClick={() => onGenerateOffer(candidate)}
+                                className="w-full py-4 bg-emerald-600 text-white rounded-2xl text-xs font-black shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-all flex items-center justify-center gap-2"
+                            >
                                 <FileCheck className="w-4 h-4" /> Finalize & Generate Offer
                             </button>
                         </div>
@@ -528,13 +629,234 @@ function CandidateDetailModal({ candidate, onClose, onRefresh }) {
     );
 }
 
-function OfferManagement() {
-    return (
-        <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
-                <FileCheck className="w-8 h-8 text-slate-300" />
+function OfferManagement({ onRefresh, onCreateOffer }) {
+    const [offers, setOffers] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchOffers = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch('/api/recruitment/offers');
+                const data = await res.json();
+                setOffers(data.offers || []);
+            } catch (error) {
+                toast.error("Failed to load offers");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchOffers();
+    }, [onRefresh]); // Re-fetch when onRefresh (parent update) happens
+
+    if (loading) return <div className="text-center py-10"><Loader2 className="w-8 h-8 animate-spin mx-auto text-indigo-500" /></div>;
+
+    if (offers.length === 0) {
+        return (
+            <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <FileCheck className="w-8 h-8 text-slate-300" />
+                </div>
+                <p className="text-slate-500 font-bold">No offers generated yet.</p>
+                <button onClick={onCreateOffer} className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all">
+                    Generate First Offer
+                </button>
             </div>
-            <p className="text-slate-500 font-bold">Offer generation interface coming soon.</p>
+        );
+    }
+
+    return (
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <h3 className="font-black text-slate-800">Recent Offers</h3>
+                <button onClick={onCreateOffer} className="px-4 py-2 bg-black text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all flex items-center gap-2">
+                    <Plus className="w-3 h-3" /> New Offer
+                </button>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
+                {offers.map((offer) => (
+                    <div key={offer._id} className="p-6 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div className="flex items-center gap-4 w-full md:w-auto">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-black ${offer.status === 'Accepted' ? 'bg-emerald-100 text-emerald-600' :
+                                offer.status === 'Sent' ? 'bg-indigo-100 text-indigo-600' :
+                                    'bg-slate-100 text-slate-500'
+                                }`}>
+                                {offer.candidate?.name?.charAt(0) || '?'}
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-slate-900">{offer.candidate?.name}</h4>
+                                <p className="text-xs text-slate-500">{offer.jobTitle} • {offer.salary?.currency} {offer.salary?.amount?.toLocaleString()}</p>
+                            </div>
+                        </div>
+
+                        <div className="div flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
+                            <div className="text-right">
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Joining</p>
+                                <p className="text-xs font-bold text-slate-700">{format(new Date(offer.joiningDate), 'MMM d, yyyy')}</p>
+                            </div>
+                            <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${offer.status === 'Accepted' ? 'bg-emerald-50 text-emerald-600' :
+                                offer.status === 'Sent' ? 'bg-blue-50 text-blue-600' :
+                                    'bg-slate-100 text-slate-500'
+                                }`}>
+                                {offer.status}
+                            </span>
+                            <button className="p-2 hover:bg-slate-50 rounded-lg text-slate-400">
+                                <MoreVertical className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function CreateOfferModal({ candidates, initialData, onClose, onSuccess }) {
+    const [submitting, setSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        candidate: initialData?.candidateId || '',
+        jobTitle: initialData?.jobTitle || '',
+        amount: 0,
+        joiningDate: '',
+        expiryDate: '',
+        status: 'Sent'
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            setSubmitting(true);
+            const payload = {
+                candidate: formData.candidate,
+                jobTitle: formData.jobTitle,
+                salary: {
+                    amount: formData.amount,
+                    currency: 'INR',
+                    frequency: 'Yearly'
+                },
+                joiningDate: formData.joiningDate,
+                expiryDate: formData.expiryDate,
+                status: 'Sent' // Auto-send for now
+            };
+
+            const res = await fetch('/api/recruitment/offers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error("Failed to create offer");
+
+            // Also update candidate status to 'Offer Sent'
+            if (formData.candidate) {
+                await fetch('/api/recruitment/candidates', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: formData.candidate, status: 'Offer Sent' })
+                });
+            }
+
+            toast.success("Offer Letter Generated & Sent!");
+            onSuccess();
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-500">
+            <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl border border-slate-200 overflow-hidden scale-in duration-300">
+                <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                    <h2 className="text-xl font-black text-slate-900">Generate Offer Letter</h2>
+                    <button onClick={onClose} className="p-2 hover:bg-white rounded-xl transition-colors text-slate-400">&times;</button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="p-8 space-y-6">
+                    <div className="space-y-4">
+                        <div>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Candidate</label>
+                            {initialData?.name ? (
+                                <div className="w-full p-3 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-600 font-bold">
+                                    {initialData.name}
+                                </div>
+                            ) : (
+                                <select
+                                    required
+                                    value={formData.candidate}
+                                    onChange={e => setFormData({ ...formData, candidate: e.target.value })}
+                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none"
+                                >
+                                    <option value="">Select Candidate</option>
+                                    {candidates.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                                </select>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Job Title</label>
+                            <input
+                                required
+                                value={formData.jobTitle}
+                                onChange={e => setFormData({ ...formData, jobTitle: e.target.value })}
+                                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none font-bold"
+                                placeholder="e.g. Senior Developer"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Annual Salary (CTC)</label>
+                                <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
+                                    <input
+                                        type="number"
+                                        required
+                                        value={formData.amount}
+                                        onChange={e => setFormData({ ...formData, amount: Number(e.target.value) })}
+                                        className="w-full pl-8 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none font-mono"
+                                        placeholder="0.00"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Joining Date</label>
+                                <input
+                                    type="date"
+                                    required
+                                    value={formData.joiningDate}
+                                    onChange={e => setFormData({ ...formData, joiningDate: e.target.value })}
+                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Offer Expiry Date</label>
+                            <input
+                                type="date"
+                                required
+                                value={formData.expiryDate}
+                                onChange={e => setFormData({ ...formData, expiryDate: e.target.value })}
+                                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none"
+                            />
+                        </div>
+                    </div>
+                </form>
+
+                <div className="p-8 bg-slate-50/50 border-t border-slate-100 flex gap-4">
+                    <button onClick={onClose} className="flex-1 py-3 px-6 bg-white border border-slate-200 text-slate-600 rounded-2xl text-xs font-black hover:bg-slate-50 transition-all">Cancel</button>
+                    <button
+                        onClick={handleSubmit}
+                        disabled={submitting}
+                        className="flex-1 py-3 px-6 bg-indigo-600 text-white rounded-2xl text-xs font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
+                    >
+                        {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Generate & Send Offer"}
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

@@ -291,12 +291,89 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE employee (soft delete by changing status)
+// PATCH - Partial update (used for status toggle)
+export async function PATCH(request, { params }) {
+  try {
+    await dbConnect();
+    const { id } = await params;
+    const body = await request.json();
+
+    if (!body.status) {
+      return NextResponse.json({ error: 'Status is required' }, { status: 400 });
+    }
+
+    console.log(`🔄 Patching employee status to ${body.status}:`, id);
+
+    const employee = await Employee.findByIdAndUpdate(
+      id,
+      {
+        status: body.status,
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
+
+    if (!employee) {
+      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    }
+
+    console.log("✅ Employee status updated:", employee.status);
+
+    await logActivity({
+      action: "updated",
+      entity: "Employee",
+      entityId: employee.employeeId,
+      description: `Updated employee status to ${body.status}: ${employee.personalDetails.firstName} ${employee.personalDetails.lastName}`,
+      performedBy: {
+        userId: body.updatedBy
+      },
+      details: {
+        status: body.status
+      },
+      req: request
+    });
+
+    return NextResponse.json(employee);
+
+  } catch (error) {
+    console.error('❌ Error in PATCH /api/payroll/employees/[id]:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+// DELETE employee (soft delete or permanent delete)
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
     const { id } = await params;
-    // Soft delete by changing status to "Inactive"
+    const { searchParams } = new URL(request.url);
+    const isPermanent = searchParams.get('permanent') === 'true';
+
+    // Permanent Delete
+    if (isPermanent) {
+      const employee = await Employee.findByIdAndDelete(id);
+
+      if (!employee) {
+        return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+      }
+
+      console.log("✅ Employee permanently deleted:", employee.employeeId);
+
+      await logActivity({
+        action: "deleted",
+        entity: "Employee",
+        entityId: employee.employeeId,
+        description: `Permanently deleted employee: ${employee.personalDetails.firstName} ${employee.personalDetails.lastName} (${employee.employeeId})`,
+        req: request
+      });
+
+      return NextResponse.json({
+        message: 'Employee permanently deleted successfully',
+        id: employee._id
+      });
+    }
+
+    // Soft Delete (Default)
     const employee = await Employee.findByIdAndUpdate(
       id,
       {
@@ -338,7 +415,7 @@ export async function OPTIONS() {
   return NextResponse.json({}, {
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     }
   });

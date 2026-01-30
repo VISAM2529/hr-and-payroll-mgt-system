@@ -123,7 +123,7 @@ export default function ODTDashboard() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex items-center space-x-3">
-          <Loader2 className="w-8 h-8 animate-spin text-yellow-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
           <span className="text-slate-600 font-medium">
             Loading dashboard data...
           </span>
@@ -139,7 +139,7 @@ export default function ODTDashboard() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
                 <FileText className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -160,7 +160,7 @@ export default function ODTDashboard() {
                 <Upload className="w-4 h-4" />
                 Import
               </button>
-              <button className="inline-flex items-center gap-2 px-4 py-2.5 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg transition-colors font-medium">
+              <button className="inline-flex items-center gap-2 px-4 py-2.5 text-white bg-indigo-500 hover:bg-indigo-600 rounded-lg transition-colors font-medium">
                 <Plus className="w-4 h-4" />
                 New Order
               </button>
@@ -194,7 +194,7 @@ export default function ODTDashboard() {
                   <span className="text-slate-600">Priority:</span>
                   <div className="flex space-x-2">
                     <span className="text-red-600 font-medium">{dashboardData.priorityBreakdown.high} High</span>
-                    <span className="text-yellow-600 font-medium">{dashboardData.priorityBreakdown.medium} Med</span>
+                    <span className="text-indigo-600 font-medium">{dashboardData.priorityBreakdown.medium} Med</span>
                     <span className="text-green-600 font-medium">{dashboardData.priorityBreakdown.low} Low</span>
                   </div>
                 </div>
@@ -229,10 +229,10 @@ export default function ODTDashboard() {
                   </span>
                 </div>
                 <div className="w-full bg-slate-200 rounded-full h-2">
-                  <div 
-                    className="bg-green-500 h-2 rounded-full transition-all duration-500" 
-                    style={{ 
-                      width: `${(dashboardData.performance.currentProgress / dashboardData.performance.dailyTarget) * 100}%` 
+                  <div
+                    className="bg-green-500 h-2 rounded-full transition-all duration-500"
+                    style={{
+                      width: `${(dashboardData.performance.currentProgress / dashboardData.performance.dailyTarget) * 100}%`
                     }}
                   ></div>
                 </div>
@@ -304,7 +304,7 @@ export default function ODTDashboard() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                   <BarChart3 className="w-4 h-4 text-blue-600" />
                 </div>
                 Performance Overview
@@ -323,15 +323,15 @@ export default function ODTDashboard() {
                   placeholder="Search orders..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-64 pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                  className="w-64 pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                 />
               </div>
 
               {/* Time Range Selector */}
-              <select 
+              <select
                 value={timeRange}
                 onChange={(e) => setTimeRange(e.target.value)}
-                className="px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                className="px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
               >
                 <option value="today">Today</option>
                 <option value="week">This Week</option>
@@ -370,7 +370,7 @@ export default function ODTDashboard() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                    <div className="w-3 h-3 bg-slate-500 rounded-full mr-3"></div>
                     <span className="text-sm font-medium text-slate-700">Info Requests</span>
                   </div>
                   <div className="text-right">
@@ -389,7 +389,7 @@ export default function ODTDashboard() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Progress Chart */}
               <div className="mt-6">
                 <div className="flex justify-between text-sm text-slate-600 mb-2">
@@ -397,10 +397,10 @@ export default function ODTDashboard() {
                   <span>{dashboardData.performance.currentProgress}/{dashboardData.performance.dailyTarget}</span>
                 </div>
                 <div className="w-full bg-slate-200 rounded-full h-3">
-                  <div 
+                  <div
                     className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500"
-                    style={{ 
-                      width: `${(dashboardData.performance.currentProgress / dashboardData.performance.dailyTarget) * 100}%` 
+                    style={{
+                      width: `${(dashboardData.performance.currentProgress / dashboardData.performance.dailyTarget) * 100}%`
                     }}
                   ></div>
                 </div>
@@ -450,8 +450,8 @@ export default function ODTDashboard() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
           <div className="p-6 border-b border-slate-200">
             <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-              <div className="w-6 h-6 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <Target className="w-3 h-3 text-yellow-600" />
+              <div className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <Target className="w-3 h-3 text-indigo-600" />
               </div>
               Quick Actions
             </h3>
@@ -461,7 +461,7 @@ export default function ODTDashboard() {
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <button className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all group">
+              <button className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-blue-300 hover:bg-slate-50 transition-all group">
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
                   <FileText className="w-6 h-6 text-blue-600" />
                 </div>
@@ -472,7 +472,7 @@ export default function ODTDashboard() {
                   {dashboardData.overview.pendingVerification} orders waiting
                 </span>
               </button>
-              
+
               <button className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-all group">
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-green-200 transition-colors">
                   <CheckCircle className="w-6 h-6 text-green-600" />
@@ -484,7 +484,7 @@ export default function ODTDashboard() {
                   {dashboardData.todayStats.verified} today
                 </span>
               </button>
-              
+
               <button className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-red-300 hover:bg-red-50 transition-all group">
                 <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-red-200 transition-colors">
                   <XCircle className="w-6 h-6 text-red-600" />
@@ -496,7 +496,7 @@ export default function ODTDashboard() {
                   {dashboardData.todayStats.rejected} today
                 </span>
               </button>
-              
+
               <button className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-purple-300 hover:bg-purple-50 transition-all group">
                 <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-purple-200 transition-colors">
                   <BarChart3 className="w-6 h-6 text-purple-600" />

@@ -10,22 +10,31 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 
+import VendorModal from "./vendor-modal";
+
 export default function VendorManager() {
     const [vendors, setVendors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        // Fetch vendors - for now simulated
-        setTimeout(() => {
-            setVendors([
-                { _id: '1', name: 'Synture Tech Solutions', category: 'IT Services', email: 'sales@synture.com', status: 'Active', gstin: '27AAAAA0000A1Z5' },
-                { _id: '2', name: 'Cloud Provider Inc', category: 'Software', email: 'billing@cloud.io', status: 'Active', gstin: '27BBBBB0000B1Z5' },
-                { _id: '3', name: 'Office Depot', category: 'Office Supplies', email: 'orders@depot.com', status: 'Inactive', gstin: '27CCCCC0000C1Z5' },
-            ]);
-            setLoading(false);
-        }, 800);
+        fetchVendors();
     }, []);
+
+    const fetchVendors = async () => {
+        try {
+            const res = await fetch('/api/finance/vendors');
+            const data = await res.json();
+            if (data.vendors) {
+                setVendors(data.vendors);
+            }
+        } catch (error) {
+            toast.error("Failed to load vendors");
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="space-y-6">
@@ -47,6 +56,11 @@ export default function VendorManager() {
                     Array(3).fill(0).map((_, i) => (
                         <div key={i} className="bg-slate-50 rounded-[2rem] h-64 animate-pulse border border-slate-100"></div>
                     ))
+                ) : vendors.length === 0 ? (
+                    <div className="col-span-full py-20 text-center text-slate-400 border-2 border-dashed border-slate-200 rounded-[2rem]">
+                        <Users className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                        <p className="font-bold">No vendors found. Add your first vendor!</p>
+                    </div>
                 ) : (
                     vendors.map((vendor) => (
                         <div key={vendor._id} className="bg-white border border-slate-200 rounded-[2rem] p-6 hover:shadow-xl transition-all group relative overflow-hidden">
@@ -68,11 +82,13 @@ export default function VendorManager() {
 
                                 <div className="space-y-2 mb-6">
                                     <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                                        <Mail className="w-3 h-3 text-slate-400" /> {vendor.email}
+                                        <Mail className="w-3 h-3 text-slate-400" /> {vendor.email || "No email"}
                                     </div>
-                                    <div className="flex items-center gap-2 text-[10px] text-slate-400 font-black uppercase tracking-widest">
-                                        GSTIN: <span className="text-slate-600">{vendor.gstin}</span>
-                                    </div>
+                                    {vendor.gstin && (
+                                        <div className="flex items-center gap-2 text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                                            GSTIN: <span className="text-slate-600">{vendor.gstin}</span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center justify-between pt-4 border-t border-slate-50">
@@ -89,6 +105,12 @@ export default function VendorManager() {
                     ))
                 )}
             </div>
+
+            <VendorModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onVendorSaved={fetchVendors}
+            />
         </div>
     );
 }

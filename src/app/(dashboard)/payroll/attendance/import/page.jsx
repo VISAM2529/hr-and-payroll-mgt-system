@@ -573,7 +573,7 @@ export default function ImportAttendance() {
         </div>
 
         {/* Instructions */}
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
+        <div className="bg-slate-50 border border-blue-200 rounded-xl p-6 mb-8">
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
             <div>
@@ -644,7 +644,7 @@ export default function ImportAttendance() {
               </h2>
               <button
                 onClick={handleDownloadTemplate}
-                className="inline-flex items-center gap-2 px-4 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors text-sm font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2 text-blue-600 bg-slate-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors text-sm font-medium"
               >
                 <Download className="w-4 h-4" />
                 Download Template
@@ -686,7 +686,7 @@ export default function ImportAttendance() {
                       </p>
                     </div>
                     <label className="cursor-pointer">
-                      <span className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
+                      <span className="inline-flex items-center gap-2 px-6 py-2.5 bg-slate-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
                         <Upload className="w-4 h-4" />
                         Choose File
                       </span>
@@ -719,7 +719,7 @@ export default function ImportAttendance() {
                 <button
                   onClick={handleUpload}
                   disabled={processing}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg font-medium transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 text-white bg-indigo-500 hover:bg-indigo-600 rounded-lg font-medium transition-colors disabled:opacity-50"
                 >
                   {processing ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -760,7 +760,7 @@ export default function ImportAttendance() {
               </div>
               <div className="w-full bg-slate-200 rounded-full h-2 mt-4">
                 <div
-                  className="bg-yellow-500 h-2 rounded-full transition-all duration-300"
+                  className="bg-indigo-500 h-2 rounded-full transition-all duration-300"
                   style={{
                     width: `${((uploadProgress.completed + uploadProgress.failed) /
                       uploadProgress.total) *
@@ -819,7 +819,7 @@ export default function ImportAttendance() {
                   <span className="flex items-center gap-2">
                     <FileSpreadsheet className="w-3.5 h-3.5" />
                     {sheet}
-                    <span className={`ml-1 text-xs px-1.5 py-0.5 rounded-full ${activeSheet === sheet ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                    <span className={`ml-1 text-xs px-1.5 py-0.5 rounded-full ${activeSheet === sheet ? 'bg-slate-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
                       {preview.filter(p => p.sheetName === sheet).length}
                     </span>
                   </span>
@@ -832,7 +832,7 @@ export default function ImportAttendance() {
                 <div className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
                   <div className="bg-slate-50 px-4 py-3 border-b border-slate-200 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-6 bg-blue-500 rounded-full"></div>
+                      <div className="w-2 h-6 bg-slate-500 rounded-full"></div>
                       <h4 className="font-bold text-slate-800">
                         Sheet Content: <span className="text-blue-600">{activeSheet}</span>
                       </h4>

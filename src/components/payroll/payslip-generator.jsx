@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { calculateProfessionalTax } from "@/utils/validation";
+import { useSession } from "@/context/SessionContext";
 
 // Function to calculate total days in a month
 const getMonthDetails = (month, year) => {
@@ -36,6 +37,7 @@ const getMonthDetails = (month, year) => {
 
 export default function PayslipGenerator() {
   const router = useRouter();
+  const { user } = useSession();
   const [loading, setLoading] = useState(false);
   const [checkingDuplicate, setCheckingDuplicate] = useState(false);
   const [loadingLeaves, setLoadingLeaves] = useState(false);
@@ -639,6 +641,14 @@ export default function PayslipGenerator() {
       newErrors.presentDays = "Present days cannot exceed total days";
     if (formData.presentDays < 0)
       newErrors.presentDays = "Present days cannot be negative";
+
+    // Validate Organization from employee data
+    const orgName = employeeData?.jobDetails?.organization || employeeData?.jobDetails?.organizationId?.name;
+    if (employeeData && !orgName) {
+      newErrors.employee = "Selected employee does not have an Organization assigned.";
+      toast.error("Employee must have an Organization assigned to generate a payslip");
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -651,7 +661,7 @@ export default function PayslipGenerator() {
       if (!emp.jobDetails) return;
       console.log("emp.jobDetails", emp.jobDetails);
 
-      const org = emp.jobDetails?.organization || "Unassigned Organization";
+      const org = emp.jobDetails?.organization || emp.jobDetails?.organizationId?.name || "Unassigned Organization";
       const dept = emp.jobDetails?.department || "Unassigned Department";
       const empType = emp.jobDetails?.employeeType || "Unassigned Type";
       if (!grouped[org]) grouped[org] = {};
@@ -702,7 +712,7 @@ export default function PayslipGenerator() {
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white text-left flex items-center justify-between ${errors.employee ? "border-red-300" : "border-slate-300"
+          className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white text-left flex items-center justify-between ${errors.employee ? "border-red-300" : "border-slate-300"
             }`}
         >
           <span
@@ -727,7 +737,7 @@ export default function PayslipGenerator() {
                   placeholder="Search employees..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   autoFocus
                 />
               </div>
@@ -744,7 +754,7 @@ export default function PayslipGenerator() {
                     type="button"
                     onClick={() => handleSelectEmployee(emp._id)}
                     className={`w-full px-4 py-2 text-left text-sm transition-colors border-l-2 ${formData.employee === emp._id
-                      ? "bg-yellow-50 border-yellow-500 text-yellow-700 font-medium"
+                      ? "bg-indigo-50 border-indigo-500 text-indigo-700 font-medium"
                       : "hover:bg-slate-50 border-transparent"
                       }`}
                   >
@@ -760,7 +770,7 @@ export default function PayslipGenerator() {
                         </p>
                       </div>
                       {formData.employee === emp._id && (
-                        <CheckCircle className="w-4 h-4 text-yellow-600" />
+                        <CheckCircle className="w-4 h-4 text-indigo-600" />
                       )}
                     </div>
                   </button>
@@ -807,8 +817,9 @@ export default function PayslipGenerator() {
         overtimeAmount: calculatedValues.overtimeAmount,
         status: "Generated",
         notes: formData.notes,
-        organizationName: employeeData?.jobDetails?.organization || "",
+        organizationName: employeeData?.jobDetails?.organization || employeeData?.jobDetails?.organizationId?.name || "",
         salaryType: employeeData?.payslipStructure?.salaryType || "monthly",
+        generatedBy: user?.id, // Add the current user ID
       };
       const response = await fetch("/api/payroll/payslip", {
         method: "POST",
@@ -898,7 +909,7 @@ export default function PayslipGenerator() {
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
-              <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                 <Calculator className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -922,7 +933,7 @@ export default function PayslipGenerator() {
       </div>
       <div className="max-w-7xl mx-auto px-6 py-8">
         {employeeData && formData.basicSalary > 0 && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="bg-slate-50 border border-blue-200 rounded-lg p-4 mb-6">
             <div className="flex items-start space-x-3">
               <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
               <div className="text-sm text-blue-800">
@@ -1105,7 +1116,7 @@ export default function PayslipGenerator() {
           </div>
           <div className="w-full bg-slate-200 rounded-full h-2">
             <div
-              className="bg-yellow-500 h-2 rounded-full transition-all duration-300"
+              className="bg-indigo-500 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -1172,7 +1183,7 @@ export default function PayslipGenerator() {
             </div>
           )}
           {leaveData && (
-            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="mt-4 p-4 bg-slate-50 border border-blue-200 rounded-lg">
               <div className="flex items-start space-x-3">
                 <CalendarDays className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
@@ -1238,8 +1249,8 @@ export default function PayslipGenerator() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center border border-yellow-100">
-                    <User className="w-4 h-4 text-yellow-600" />
+                  <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                    <User className="w-4 h-4 text-indigo-600" />
                   </div>
                   Employee Details
                 </h2>
@@ -1257,7 +1268,7 @@ export default function PayslipGenerator() {
                       setSelectedEmpType("");
                       setFormData((prev) => ({ ...prev, employee: "" }));
                     }}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                   >
                     <option value="">Select Organization...</option>
                     {Object.keys(getGroupedEmployees()).map((org) => (
@@ -1280,7 +1291,7 @@ export default function PayslipGenerator() {
                       setFormData((prev) => ({ ...prev, employee: "" }));
                     }}
                     disabled={!selectedOrg}
-                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white ${selectedOrg
+                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white ${selectedOrg
                       ? "border-slate-300"
                       : "border-slate-200 bg-slate-50"
                       }`}
@@ -1308,7 +1319,7 @@ export default function PayslipGenerator() {
                       setFormData((prev) => ({ ...prev, employee: "" }));
                     }}
                     disabled={!selectedDept}
-                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white ${selectedDept
+                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white ${selectedDept
                       ? "border-slate-300"
                       : "border-slate-200 bg-slate-50"
                       }`}
@@ -1344,9 +1355,9 @@ export default function PayslipGenerator() {
                   )}
                 </div>
                 {selectedEmployee && (
-                  <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-200">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
                         <User className="w-5 h-5 text-white" />
                       </div>
                       <div>
@@ -1373,7 +1384,7 @@ export default function PayslipGenerator() {
                       name="month"
                       value={formData.month}
                       onChange={handleChange}
-                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                     >
                       {months.map((month, index) => (
                         <option key={month} value={index + 1}>
@@ -1391,7 +1402,7 @@ export default function PayslipGenerator() {
                       type="number"
                       value={formData.year}
                       onChange={handleChange}
-                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -1483,7 +1494,7 @@ export default function PayslipGenerator() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                  <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                     <CreditCard className="w-4 h-4 text-blue-600" />
                   </div>
                   Basic Salary & Attendance
@@ -1575,7 +1586,7 @@ export default function PayslipGenerator() {
                   </div>
                 </div>
                 {employeeData && formData.basicSalary > 0 && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <div className="bg-slate-50 border border-blue-200 rounded-lg p-3">
                     <p className="text-xs text-blue-800">
                       <strong>Calculation Flow:</strong>{" "}
                       {employeeData.payslipStructure?.salaryType === "monthly"
@@ -1976,7 +1987,7 @@ export default function PayslipGenerator() {
               </div>
             )}
             {employeeData?.payslipStructure?.salaryType === "perday" && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-slate-50 border border-blue-200 rounded-lg p-4">
                 <div className="flex items-start space-x-3">
                   <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                   <div>

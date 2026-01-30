@@ -11,9 +11,11 @@ import {
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import VendorManager from "./vendor-manager";
+import JournalEntryModal from "./journal-entry-modal"; // Import Modal
 
 export default function FinanceDashboard({ initialTab = "overview" }) {
     const [activeTab, setActiveTab] = useState(initialTab);
+    const [isEntryModalOpen, setIsEntryModalOpen] = useState(false); // Modal state
     const [stats, setStats] = useState({
         totalRevenue: 0,
         totalExpenses: 0,
@@ -26,6 +28,47 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
         // Fetch financial overview stats
         setTimeout(() => setLoading(false), 1000); // Demo loading
     }, []);
+
+    const handleExport = async () => {
+        try {
+            const res = await fetch('/api/finance/ledger');
+            const data = await res.json();
+
+            if (!data.entries || data.entries.length === 0) {
+                toast.error("No data to export");
+                return;
+            }
+
+            // Convert to CSV
+            const headers = ["Date", "Reference", "Description", "Source", "TotalDebit", "TotalCredit"];
+            const csvRows = [headers.join(',')];
+
+            data.entries.forEach(entry => {
+                const row = [
+                    format(new Date(entry.date), 'yyyy-MM-dd'),
+                    entry.referenceNumber,
+                    `"${entry.description.replace(/"/g, '""')}"`, // Escape quotes
+                    entry.source,
+                    entry.totalDebit,
+                    entry.totalCredit
+                ];
+                csvRows.push(row.join(','));
+            });
+
+            const csvContent = csvRows.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ledger-export-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            toast.success("Report Exported Successfully");
+        } catch (error) {
+            console.error(error);
+            toast.error("Export Failed");
+        }
+    };
 
     const tabs = [
         { id: "overview", label: "Overview", icon: Activity },
@@ -53,10 +96,16 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
                     <p className="text-slate-500 text-sm font-medium mt-1">Real-time financial visibility and payroll-accounting integration.</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm">
+                    <button
+                        onClick={handleExport}
+                        className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm"
+                    >
                         <Download className="w-4 h-4" /> Export Report
                     </button>
-                    <button className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+                    <button
+                        onClick={() => setIsEntryModalOpen(true)}
+                        className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+                    >
                         <DollarSign className="w-4 h-4" /> New Entry
                     </button>
                 </div>
@@ -84,29 +133,73 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
                         <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
                             {/* Financial Overview stats - only in overview */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                {[
-                                    { label: "Total Payroll Cost", value: "₹42,50,000", change: "+12%", up: true, icon: Users, color: "indigo" },
-                                    { label: "Operating Expenses", value: "₹8,25,000", change: "+5%", up: true, icon: Activity, color: "orange" },
-                                    { label: "Current Liabilities", value: "₹1,40,000", change: "-2%", up: false, icon: FileText, color: "emerald" },
-                                    { label: "Tax Reserves", value: "₹4,12,000", change: "+8%", up: true, icon: Landmark, color: "blue" },
-                                ].map((stat, i) => (
-                                    <div key={i} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
-                                        <div className={`absolute top-0 right-0 w-24 h-24 bg-${stat.color}-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700`}></div>
-                                        <div className="relative z-10">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <div className={`w-10 h-10 bg-${stat.color}-100 rounded-[1rem] flex items-center justify-center`}>
-                                                    <stat.icon className={`w-5 h-5 text-${stat.color}-600`} />
-                                                </div>
-                                                <span className={`flex items-center text-[10px] font-black ${stat.up ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                                    {stat.up ? <ArrowUpRight className="w-3 h-3 mr-1" /> : <ArrowDownRight className="w-3 h-3 mr-1" />}
-                                                    {stat.change}
-                                                </span>
+                                <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden border-l-4 border-l-indigo-500">
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                                    <div className="relative z-10">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="w-10 h-10 bg-indigo-100 rounded-[1rem] flex items-center justify-center">
+                                                <Users className="w-5 h-5 text-indigo-600" />
                                             </div>
-                                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{stat.label}</p>
-                                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stat.value}</h3>
+                                            <span className="flex items-center text-[10px] font-black text-emerald-500">
+                                                <ArrowUpRight className="w-3 h-3 mr-1" />
+                                                +12%
+                                            </span>
                                         </div>
+                                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Total Payroll Cost</p>
+                                        <h3 className="text-2xl font-black text-slate-900 mt-1">₹42,50,000</h3>
                                     </div>
-                                ))}
+                                </div>
+
+                                <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden border-l-4 border-l-orange-500">
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                                    <div className="relative z-10">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="w-10 h-10 bg-orange-100 rounded-[1rem] flex items-center justify-center">
+                                                <Activity className="w-5 h-5 text-orange-600" />
+                                            </div>
+                                            <span className="flex items-center text-[10px] font-black text-emerald-500">
+                                                <ArrowUpRight className="w-3 h-3 mr-1" />
+                                                +5%
+                                            </span>
+                                        </div>
+                                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Operating Expenses</p>
+                                        <h3 className="text-2xl font-black text-slate-900 mt-1">₹8,25,000</h3>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden border-l-4 border-l-emerald-500">
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                                    <div className="relative z-10">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="w-10 h-10 bg-emerald-100 rounded-[1rem] flex items-center justify-center">
+                                                <FileText className="w-5 h-5 text-emerald-600" />
+                                            </div>
+                                            <span className="flex items-center text-[10px] font-black text-rose-500">
+                                                <ArrowDownRight className="w-3 h-3 mr-1" />
+                                                -2%
+                                            </span>
+                                        </div>
+                                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Current Liabilities</p>
+                                        <h3 className="text-2xl font-black text-slate-900 mt-1">₹1,40,000</h3>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden border-l-4 border-l-blue-500">
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                                    <div className="relative z-10">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="w-10 h-10 bg-blue-100 rounded-[1rem] flex items-center justify-center">
+                                                <Landmark className="w-5 h-5 text-blue-600" />
+                                            </div>
+                                            <span className="flex items-center text-[10px] font-black text-emerald-500">
+                                                <ArrowUpRight className="w-3 h-3 mr-1" />
+                                                +8%
+                                            </span>
+                                        </div>
+                                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Tax Reserves</p>
+                                        <h3 className="text-2xl font-black text-slate-900 mt-1">₹4,12,000</h3>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -135,6 +228,17 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
                     {activeTab === "reports" && <div className="text-center py-20 text-slate-400 font-bold uppercase tracking-widest text-lg animate-pulse italic">Compiling advanced financial analytics...</div>}
                 </div>
             </div>
+
+            <JournalEntryModal
+                isOpen={isEntryModalOpen}
+                onClose={() => setIsEntryModalOpen(false)}
+                onEntrySaved={() => {
+                    if (activeTab === "ledger") {
+                        setActiveTab("overview");
+                        setTimeout(() => setActiveTab("ledger"), 50);
+                    }
+                }}
+            />
         </div>
     );
 }

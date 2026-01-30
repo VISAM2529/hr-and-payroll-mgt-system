@@ -223,7 +223,7 @@ export default function OrgSettingsPage() {
                             <tr key={item._id} className="hover:bg-slate-50 transition-colors group">
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center border shadow-sm ${activeTab === 'business-units' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center border shadow-sm ${activeTab === 'business-units' ? 'bg-slate-50 text-blue-600 border-blue-100' :
                                             activeTab === 'teams' ? 'bg-amber-50 text-amber-600 border-amber-100' :
                                                 'bg-emerald-50 text-emerald-600 border-emerald-100'
                                             }`}>

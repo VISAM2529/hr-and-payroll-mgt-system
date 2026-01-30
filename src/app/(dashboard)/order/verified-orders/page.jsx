@@ -180,7 +180,7 @@ export default function VerifiedOrders() {
     const awaitingART = ordersList.filter(order => order.nextStep.includes('Awaiting ART')).length;
     const underReview = ordersList.filter(order => order.nextStep.includes('Under ART Review')).length;
     const artApproved = ordersList.filter(order => order.nextStep.includes('ART Approved') || order.nextStep.includes('Ready for SCM')).length;
-    
+
     setStats({
       total: ordersList.length,
       awaitingART,
@@ -191,37 +191,37 @@ export default function VerifiedOrders() {
 
   const filterOrders = () => {
     let filtered = [...verifiedOrders];
-    
+
     // Filter by status
     if (filters.status !== 'all') {
       filtered = filtered.filter(order => order.status === filters.status);
     }
-    
+
     // Filter by verified by
     if (filters.verifiedBy !== 'all') {
       filtered = filtered.filter(order => order.verifiedBy === (filters.verifiedBy === 'you' ? 'You' : filters.verifiedBy));
     }
-    
+
     // Filter by time range
     if (filters.timeRange === 'today') {
       filtered = filtered.filter(order => order.verifiedDate === '2025-01-15');
     } else if (filters.timeRange === 'yesterday') {
       filtered = filtered.filter(order => order.verifiedDate === '2025-01-14');
     }
-    
+
     setFilteredOrders(filtered);
   };
 
   const getStatusBadge = (status) => {
     const statusConfig = {
       verified: { color: 'bg-blue-100 text-blue-700 border-blue-200', text: 'ODT Verified', icon: CheckCircle },
-      in_review: { color: 'bg-yellow-100 text-yellow-700 border-yellow-200', text: 'Under ART Review', icon: Clock },
+      in_review: { color: 'bg-indigo-100 text-indigo-700 border-indigo-200', text: 'Under ART Review', icon: Clock },
       art_approved: { color: 'bg-green-100 text-green-700 border-green-200', text: 'ART Approved', icon: CheckCircle }
     };
-    
+
     const config = statusConfig[status] || statusConfig.verified;
     const IconComponent = config.icon;
-    
+
     return (
       <span className={`inline-flex items-center gap-2 px-3 py-1 text-sm font-semibold rounded-lg border ${config.color}`}>
         <IconComponent className="w-4 h-4" />
@@ -233,14 +233,14 @@ export default function VerifiedOrders() {
   const getNextStepBadge = (nextStep) => {
     const stepConfig = {
       'Awaiting ART Verification': { color: 'bg-orange-100 text-orange-700 border-orange-200', icon: Clock },
-      'Under ART Review': { color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: AlertCircle },
+      'Under ART Review': { color: 'bg-indigo-100 text-indigo-700 border-indigo-200', icon: AlertCircle },
       'ART Verified - Ready for SCM': { color: 'bg-green-100 text-green-700 border-green-200', icon: CheckCircle },
       'ART Approved': { color: 'bg-green-100 text-green-700 border-green-200', icon: CheckCircle }
     };
-    
+
     const config = stepConfig[nextStep] || stepConfig['Awaiting ART Verification'];
     const IconComponent = config.icon;
-    
+
     return (
       <span className={`inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border ${config.color}`}>
         <IconComponent className="w-4 h-4" />
@@ -252,10 +252,10 @@ export default function VerifiedOrders() {
   const getPriorityBadge = (priority) => {
     const styles = {
       high: 'bg-red-100 text-red-700 border-red-200',
-      medium: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+      medium: 'bg-indigo-100 text-indigo-700 border-indigo-200',
       low: 'bg-green-100 text-green-700 border-green-200'
     };
-    
+
     return (
       <span className={`inline-flex items-center px-3 py-1 text-sm font-semibold rounded-lg border ${styles[priority]}`}>
         {priority.charAt(0).toUpperCase() + priority.slice(1)} Priority
@@ -277,7 +277,7 @@ export default function VerifiedOrders() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex items-center space-x-3">
-          <Loader2 className="w-8 h-8 animate-spin text-yellow-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
           <span className="text-slate-600 font-medium">
             Loading verified orders...
           </span>
@@ -293,7 +293,7 @@ export default function VerifiedOrders() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
                 <CheckCircle className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -347,11 +347,11 @@ export default function VerifiedOrders() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-600">Under ART Review</p>
-                  <p className="text-2xl font-bold text-yellow-600">{stats.underReview}</p>
+                  <p className="text-2xl font-bold text-indigo-600">{stats.underReview}</p>
                   <p className="text-xs text-slate-500 mt-1">In progress</p>
                 </div>
-                <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                  <AlertCircle className="w-6 h-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                  <AlertCircle className="w-6 h-6 text-indigo-600" />
                 </div>
               </div>
             </div>
@@ -377,7 +377,7 @@ export default function VerifiedOrders() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                   <Filter className="w-4 h-4 text-blue-600" />
                 </div>
                 Filter Verified Orders
@@ -389,7 +389,7 @@ export default function VerifiedOrders() {
 
             <div className="flex items-center gap-4">
               <select
-                className="px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                className="px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                 value={filters.status}
                 onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
               >
@@ -398,9 +398,9 @@ export default function VerifiedOrders() {
                 <option value="in_review">Under ART Review</option>
                 <option value="art_approved">ART Approved</option>
               </select>
-              
+
               <select
-                className="px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                className="px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                 value={filters.verifiedBy}
                 onChange={(e) => setFilters(prev => ({ ...prev, verifiedBy: e.target.value }))}
               >
@@ -415,7 +415,7 @@ export default function VerifiedOrders() {
               </select>
 
               <select
-                className="px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                className="px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                 value={filters.timeRange}
                 onChange={(e) => setFilters(prev => ({ ...prev, timeRange: e.target.value }))}
               >
@@ -445,7 +445,7 @@ export default function VerifiedOrders() {
               </span>
             </div>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200">
               <thead className="bg-slate-50">
@@ -469,9 +469,9 @@ export default function VerifiedOrders() {
               </thead>
               <tbody className="bg-white divide-y divide-slate-200">
                 {filteredOrders.map((order) => (
-                  <tr 
-                    key={order.id} 
-                    className="hover:bg-slate-50 cursor-pointer transition-colors" 
+                  <tr
+                    key={order.id}
+                    className="hover:bg-slate-50 cursor-pointer transition-colors"
                     onClick={() => openOrderDetails(order)}
                   >
                     <td className="px-6 py-4">
@@ -494,7 +494,7 @@ export default function VerifiedOrders() {
                         </div>
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4">
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 text-sm font-medium text-slate-900">
@@ -511,7 +511,7 @@ export default function VerifiedOrders() {
                         </div>
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4">
                       <div className="space-y-2">
                         <div className="text-sm font-semibold text-slate-900">${order.total.toFixed(2)}</div>
@@ -524,11 +524,11 @@ export default function VerifiedOrders() {
                         </div>
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4">
                       {getStatusBadge(order.status)}
                     </td>
-                    
+
                     <td className="px-6 py-4">
                       {getNextStepBadge(order.nextStep)}
                     </td>
@@ -536,7 +536,7 @@ export default function VerifiedOrders() {
                 ))}
               </tbody>
             </table>
-            
+
             {filteredOrders.length === 0 && (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -544,8 +544,8 @@ export default function VerifiedOrders() {
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">No verified orders found</h3>
                 <p className="text-slate-500">
-                  {verifiedOrders.length === 0 
-                    ? "No orders have been verified yet." 
+                  {verifiedOrders.length === 0
+                    ? "No orders have been verified yet."
                     : "No orders match your current filters."}
                 </p>
               </div>
@@ -571,7 +571,7 @@ export default function VerifiedOrders() {
                   </button>
                 </div>
               </div>
-              
+
               <div className="p-6 space-y-6">
                 {/* Order Summary */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -599,7 +599,7 @@ export default function VerifiedOrders() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-slate-50 rounded-xl p-4">
                     <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
                       <CheckCircle className="w-5 h-5 text-blue-600" />
@@ -627,7 +627,7 @@ export default function VerifiedOrders() {
                 </div>
 
                 {/* Next Step */}
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <div className="bg-slate-50 border border-blue-200 rounded-xl p-4">
                   <h4 className="text-lg font-semibold text-blue-900 mb-4 flex items-center gap-2">
                     <ArrowRight className="w-5 h-5" />
                     Next Step in Workflow
@@ -640,11 +640,11 @@ export default function VerifiedOrders() {
                       <div>
                         <div className="text-blue-900 font-medium">{selectedOrder.nextStep}</div>
                         <div className="text-blue-700 text-sm">
-                          {selectedOrder.nextStep.includes('Awaiting') 
-                            ? 'Waiting for ART team to process this order' 
+                          {selectedOrder.nextStep.includes('Awaiting')
+                            ? 'Waiting for ART team to process this order'
                             : selectedOrder.nextStep.includes('Under Review')
-                            ? 'Currently being reviewed by ART team'
-                            : 'Ready for next processing stage'}
+                              ? 'Currently being reviewed by ART team'
+                              : 'Ready for next processing stage'}
                         </div>
                       </div>
                     </div>
@@ -690,16 +690,16 @@ export default function VerifiedOrders() {
 
                 {/* Notes */}
                 {selectedOrder.notes && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                  <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
                     <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <AlertCircle className="w-5 h-5 text-yellow-600" />
+                      <AlertCircle className="w-5 h-5 text-indigo-600" />
                       Verification Notes
                     </h4>
-                    <p className="text-sm text-yellow-800">{selectedOrder.notes}</p>
+                    <p className="text-sm text-indigo-800">{selectedOrder.notes}</p>
                   </div>
                 )}
               </div>
-              
+
               <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end space-x-3 rounded-b-xl">
                 <button
                   onClick={() => setIsDetailModalOpen(false)}

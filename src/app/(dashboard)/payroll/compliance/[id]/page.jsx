@@ -157,9 +157,9 @@ export default function ComplianceReportDetailPage() {
     const statusConfig = {
       Compliant: { color: 'bg-green-50 text-green-700 border-green-200', icon: CheckCircle },
       'Non-Compliant': { color: 'bg-red-50 text-red-700 border-red-200', icon: AlertCircle },
-      'In Progress': { color: 'bg-yellow-50 text-yellow-700 border-yellow-200', icon: FileText },
+      'In Progress': { color: 'bg-indigo-50 text-indigo-700 border-indigo-200', icon: FileText },
       'Not Applicable': { color: 'bg-gray-50 text-gray-700 border-gray-200', icon: FileText },
-      Draft: { color: 'bg-slate-50 text-slate-700 border-slate-200', icon: FileText },
+      Draft: { color: 'bg-blue-50 text-slate-700 border-slate-200', icon: FileText },
       Submitted: { color: 'bg-blue-50 text-blue-700 border-blue-200', icon: FileText },
       Approved: { color: 'bg-green-50 text-green-700 border-green-200', icon: CheckCircle },
       Rejected: { color: 'bg-red-50 text-red-700 border-red-200', icon: AlertCircle },
@@ -180,7 +180,7 @@ export default function ComplianceReportDetailPage() {
     const progressConfig = {
       Compliant: { percentage: 100, color: 'bg-green-500' },
       'Non-Compliant': { percentage: 0, color: 'bg-red-500' },
-      'In Progress': { percentage: 50, color: 'bg-yellow-500' },
+      'In Progress': { percentage: 50, color: 'bg-indigo-500' },
       'Not Applicable': { percentage: 0, color: 'bg-gray-500' },
     };
 
@@ -622,9 +622,9 @@ export default function ComplianceReportDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-blue-50 flex items-center justify-center">
         <div className="flex items-center space-x-3">
-          <Loader2 className="w-8 h-8 animate-spin text-yellow-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
           <span className="text-slate-600 font-medium">Loading compliance report...</span>
         </div>
       </div>
@@ -633,7 +633,7 @@ export default function ComplianceReportDetailPage() {
 
   if (error || !complianceReport) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <FileText className="w-8 h-8 text-slate-500" />
@@ -642,7 +642,7 @@ export default function ComplianceReportDetailPage() {
           <p className="text-slate-600 mb-6">{error || 'The requested compliance report could not be found.'}</p>
           <Link
             href="/payroll/compliance"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Compliance Reports
@@ -653,7 +653,7 @@ export default function ComplianceReportDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-blue-50">
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
@@ -666,7 +666,7 @@ export default function ComplianceReportDetailPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
                   <Receipt className="w-8 h-8 text-white" />
                 </div>
                 <div>
@@ -679,7 +679,7 @@ export default function ComplianceReportDetailPage() {
               <button
                 onClick={handleDownloadPDF}
                 disabled={generatingPdf}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {generatingPdf ? (
                   <>
@@ -695,14 +695,14 @@ export default function ComplianceReportDetailPage() {
               </button>
               <button
                 onClick={handlePrint}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
               >
                 <Printer className="w-4 h-4" />
                 Print
               </button>
               <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
               >
                 <Edit2 className="w-4 h-4" />
                 {isEditing ? 'Cancel Edit' : 'Edit'}
@@ -730,7 +730,7 @@ export default function ComplianceReportDetailPage() {
                   name="reportType"
                   value={formData.reportType || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="e.g., Monthly"
                 />
               </div>
@@ -741,7 +741,7 @@ export default function ComplianceReportDetailPage() {
                   name="from"
                   value={formData.period?.from || ''}
                   onChange={handlePeriodChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
               <div>
@@ -751,7 +751,7 @@ export default function ComplianceReportDetailPage() {
                   name="to"
                   value={formData.period?.to || ''}
                   onChange={handlePeriodChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
               <div>
@@ -760,7 +760,7 @@ export default function ComplianceReportDetailPage() {
                   name="overallStatus"
                   value={formData.overallStatus || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="Compliant">Compliant</option>
                   <option value="Non-Compliant">Non-Compliant</option>
@@ -779,7 +779,7 @@ export default function ComplianceReportDetailPage() {
                   name="notes"
                   value={formData.notes || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   rows="4"
                 />
               </div>
@@ -794,7 +794,7 @@ export default function ComplianceReportDetailPage() {
                           type="text"
                           value={item.regulation || ''}
                           onChange={(e) => handleComplianceItemChange(index, 'regulation', e.target.value)}
-                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                           placeholder="e.g., PF Compliance"
                         />
                       </div>
@@ -804,7 +804,7 @@ export default function ComplianceReportDetailPage() {
                           type="text"
                           value={item.requirement || ''}
                           onChange={(e) => handleComplianceItemChange(index, 'requirement', e.target.value)}
-                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                           placeholder="e.g., Monthly PF filing"
                         />
                       </div>
@@ -813,7 +813,7 @@ export default function ComplianceReportDetailPage() {
                         <select
                           value={item.status || ''}
                           onChange={(e) => handleComplianceItemChange(index, 'status', e.target.value)}
-                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                         >
                           <option value="Compliant">Compliant</option>
                           <option value="Non-Compliant">Non-Compliant</option>
@@ -827,7 +827,7 @@ export default function ComplianceReportDetailPage() {
                           type="date"
                           value={item.dueDate ? new Date(item.dueDate).toISOString().split('T')[0] : ''}
                           onChange={(e) => handleComplianceItemChange(index, 'dueDate', e.target.value)}
-                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
                       <div className="md:col-span-2">
@@ -836,7 +836,7 @@ export default function ComplianceReportDetailPage() {
                           type="text"
                           value={item.notes || ''}
                           onChange={(e) => handleComplianceItemChange(index, 'notes', e.target.value)}
-                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                          className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
                     </div>
@@ -861,7 +861,7 @@ export default function ComplianceReportDetailPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
@@ -878,7 +878,7 @@ export default function ComplianceReportDetailPage() {
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
                 >
                   Cancel
                 </button>
@@ -915,7 +915,7 @@ export default function ComplianceReportDetailPage() {
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
                 >
                   Cancel
                 </button>
@@ -997,8 +997,8 @@ export default function ComplianceReportDetailPage() {
           {/* Compliance Breakdown */}
           <div className="p-6 border-b border-slate-200">
             <h3 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-              <div className="w-6 h-6 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <Shield className="w-3 h-3 text-yellow-600" />
+              <div className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <Shield className="w-3 h-3 text-indigo-600" />
               </div>
               Compliance Breakdown
             </h3>
@@ -1036,11 +1036,11 @@ export default function ComplianceReportDetailPage() {
                     )}
                   </div>
                 )) || (
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-700">No compliance details</span>
-                    {getProgressBar('In Progress')}
-                  </div>
-                )}
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-700">No compliance details</span>
+                      {getProgressBar('In Progress')}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -1050,7 +1050,7 @@ export default function ComplianceReportDetailPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div>
                 <h4 className="font-semibold text-slate-900 mb-3">Notes</h4>
-                <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                <div className="p-4 bg-blue-50 rounded-lg border border-slate-200">
                   <p className="text-sm text-slate-600">
                     {complianceReport.notes || 'This is a computer-generated compliance report and does not require signature.'}
                   </p>
@@ -1078,7 +1078,7 @@ export default function ComplianceReportDetailPage() {
               <button
                 onClick={handleDownloadPDF}
                 disabled={generatingPdf}
-                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-yellow-300 hover:bg-yellow-50 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
                   {generatingPdf ? (
@@ -1094,7 +1094,7 @@ export default function ComplianceReportDetailPage() {
               </button>
               <button
                 onClick={handlePrint}
-                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-yellow-300 hover:bg-yellow-50 transition-all group"
+                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group"
               >
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-green-200 transition-colors">
                   <Printer className="w-6 h-6 text-green-600" />
@@ -1104,10 +1104,10 @@ export default function ComplianceReportDetailPage() {
               </button>
               <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-yellow-300 hover:bg-yellow-50 transition-all group"
+                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group"
               >
-                <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-yellow-200 transition-colors">
-                  <Edit2 className="w-6 h-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-indigo-200 transition-colors">
+                  <Edit2 className="w-6 h-6 text-indigo-600" />
                 </div>
                 <span className="font-medium text-slate-900">{isEditing ? 'Cancel Edit' : 'Edit Compliance Report'}</span>
                 <span className="text-sm text-slate-600 mt-1">Modify compliance report details</span>

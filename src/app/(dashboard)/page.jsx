@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import {
-  CheckSquare, TrendingUp, Target, Zap, Activity, Bell, Calendar, FileText, ArrowUp, ArrowDown,
+  CheckSquare, TrendingUp, Target, Zap, Activity, Calendar, FileText, ArrowUp, ArrowDown,
   ChevronRight, Plus, RefreshCw, Settings, PieChart, LineChart, Building2, Container, Timer,
   Boxes, CheckCircle2, AlertCircle, Star, Award, List, Users, Truck, Package, AlertTriangle,
   Clock, ShoppingCart, DollarSign, Globe, MapPin, Shield, Factory, Warehouse, BarChart3,
@@ -52,7 +52,7 @@ export default function DashboardPage() {
         change: '+2',
         trend: 'up',
         color: 'text-blue-600',
-        bgColor: 'bg-blue-50',
+        bgColor: 'bg-slate-50',
         borderColor: 'border-blue-200',
         href: '/tasks'
       },
@@ -81,9 +81,9 @@ export default function DashboardPage() {
         value: '8',
         change: '+4',
         trend: 'up',
-        color: 'text-yellow-600',
-        bgColor: 'bg-yellow-50',
-        borderColor: 'border-yellow-200',
+        color: 'text-indigo-600',
+        bgColor: 'bg-indigo-50',
+        borderColor: 'border-indigo-200',
         href: '/tasks/calendar'
       }
     ];
@@ -107,7 +107,7 @@ export default function DashboardPage() {
         time: '15 minutes ago',
         status: 'warning',
         icon: AlertCircle,
-        color: 'text-yellow-600'
+        color: 'text-indigo-600'
       },
       {
         id: 3,
@@ -144,7 +144,7 @@ export default function DashboardPage() {
           <div className="max-w-7xl mx-auto px-6 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+                <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                   <CheckSquare className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -154,10 +154,10 @@ export default function DashboardPage() {
               </div>
 
               <div className="flex items-center space-x-3">
-                <button className="p-2.5 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors">
+                <button className="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                   <RefreshCw className="h-5 w-5" />
                 </button>
-                <button className="p-2.5 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors">
+                <button className="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                   <Settings className="h-5 w-5" />
                 </button>
               </div>
@@ -194,7 +194,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
             <div className="p-6 border-b border-slate-200">
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                   <TrendingUp className="w-4 h-4 text-blue-600" />
                 </div>
                 Task Performance Indicators
@@ -223,7 +223,7 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-slate-600 mb-1">{stat.title}</p>
-                        <p className="text-2xl font-bold text-slate-900 group-hover:text-yellow-600 transition-colors">
+                        <p className="text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
                           {stat.value}
                         </p>
                       </div>
@@ -256,7 +256,7 @@ export default function DashboardPage() {
                             <action.icon className="h-5 w-5 text-slate-600" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-slate-900 group-hover:text-yellow-600 transition-colors">
+                            <h3 className="font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
                               {action.title}
                             </h3>
                             <p className="text-sm text-slate-600 mt-1">{action.description}</p>
@@ -273,7 +273,7 @@ export default function DashboardPage() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-yellow-600" />
+                  <Activity className="w-5 h-5 text-indigo-600" />
                   Recent Activity
                 </h2>
               </div>
@@ -311,7 +311,7 @@ export default function DashboardPage() {
         trend: 'up',
         icon: Users2,
         color: 'text-blue-600',
-        bgColor: 'bg-blue-50',
+        bgColor: 'bg-slate-50',
         borderColor: 'border-blue-200',
         href: '/team'
       },
@@ -321,9 +321,9 @@ export default function DashboardPage() {
         change: '+3',
         trend: 'up',
         icon: ClipboardList,
-        color: 'text-yellow-600',
-        bgColor: 'bg-yellow-50',
-        borderColor: 'border-yellow-200',
+        color: 'text-indigo-600',
+        bgColor: 'bg-indigo-50',
+        borderColor: 'border-indigo-200',
         href: '/approvals'
       },
       {
@@ -416,7 +416,7 @@ export default function DashboardPage() {
         time: '1 hour ago',
         status: 'warning',
         icon: Clock,
-        color: 'text-yellow-600'
+        color: 'text-indigo-600'
       },
       {
         id: 3,
@@ -446,7 +446,7 @@ export default function DashboardPage() {
         description: 'View team metrics and productivity reports',
         icon: BarChart,
         href: '/analytics/team',
-        color: 'bg-blue-50 hover:bg-blue-100 border-blue-200'
+        color: 'bg-slate-50 hover:bg-blue-100 border-blue-200'
       },
       {
         title: 'Task Assignment',
@@ -537,12 +537,7 @@ export default function DashboardPage() {
                 <button className="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                   <Settings className="h-5 w-5" />
                 </button>
-                <button className="relative p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-                  <Bell className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    8
-                  </span>
-                </button>
+
               </div>
             </div>
           </div>
@@ -573,7 +568,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
             <div className="p-6 border-b border-slate-200">
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                   <Users2 className="w-4 h-4 text-blue-600" />
                 </div>
                 Team Overview
@@ -664,11 +659,11 @@ export default function DashboardPage() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center border border-yellow-100">
-                    <AlertCircle className="w-4 h-4 text-yellow-600" />
+                  <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                    <AlertCircle className="w-4 h-4 text-indigo-600" />
                   </div>
                   Team Alerts
-                  <Badge className="bg-yellow-100 text-yellow-700 border-yellow-300">{teamAlerts.length}</Badge>
+                  <Badge className="bg-indigo-100 text-indigo-700 border-indigo-300">{teamAlerts.length}</Badge>
                 </h2>
                 <p className="text-slate-600 text-sm mt-1">Attention required for these team matters</p>
               </div>
@@ -676,7 +671,7 @@ export default function DashboardPage() {
               <div className="p-6">
                 <div className="space-y-4">
                   {teamAlerts.map((alert, index) => (
-                    <div key={index} className={`p-4 rounded-lg border-l-4 ${alert.severity === 'medium' ? 'bg-yellow-50 border-yellow-400' : 'bg-blue-50 border-blue-400'
+                    <div key={index} className={`p-4 rounded-lg border-l-4 ${alert.severity === 'medium' ? 'bg-indigo-50 border-indigo-400' : 'bg-slate-50 border-blue-400'
                       }`}>
                       <div className="flex items-center justify-between">
                         <div>
@@ -684,7 +679,7 @@ export default function DashboardPage() {
                           <p className="text-sm text-slate-600 mt-1">{alert.message}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700'
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${alert.severity === 'medium' ? 'bg-indigo-100 text-indigo-700' : 'bg-blue-100 text-blue-700'
                             }`}>
                             {alert.count} items
                           </span>
@@ -803,7 +798,7 @@ export default function DashboardPage() {
                 {teamActivities.map((activity) => (
                   <div key={activity.id} className="flex items-start gap-4 p-4 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${activity.status === 'success' ? 'bg-green-100 text-green-600' :
-                      activity.status === 'warning' ? 'bg-yellow-100 text-yellow-600' :
+                      activity.status === 'warning' ? 'bg-indigo-100 text-indigo-600' :
                         activity.status === 'error' ? 'bg-red-100 text-red-600' :
                           'bg-blue-100 text-blue-600'
                       }`}>
@@ -834,7 +829,7 @@ export default function DashboardPage() {
         trend: 'up',
         icon: Users,
         color: 'text-blue-600',
-        bgColor: 'bg-blue-50',
+        bgColor: 'bg-slate-50',
         borderColor: 'border-blue-200',
         href: '/payroll/employees'
       },
@@ -855,9 +850,9 @@ export default function DashboardPage() {
         change: '-5%',
         trend: 'down',
         icon: ShoppingCart,
-        color: 'text-yellow-600',
-        bgColor: 'bg-yellow-50',
-        borderColor: 'border-yellow-200',
+        color: 'text-indigo-600',
+        bgColor: 'bg-indigo-50',
+        borderColor: 'border-indigo-200',
         href: '/'
       },
       {
@@ -936,7 +931,7 @@ export default function DashboardPage() {
         time: '15 minutes ago',
         status: 'warning',
         icon: AlertTriangle,
-        color: 'text-yellow-600'
+        color: 'text-indigo-600'
       },
       {
         id: 3,
@@ -977,7 +972,7 @@ export default function DashboardPage() {
         icon: FileText,
         // href: '/orders/create',
         href: '/',
-        color: 'bg-blue-50 hover:bg-blue-100 border-blue-200'
+        color: 'bg-slate-50 hover:bg-blue-100 border-blue-200'
       },
       {
         title: 'Track Shipment',
@@ -1076,7 +1071,7 @@ export default function DashboardPage() {
           <div className="max-w-7xl mx-auto px-6 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+                <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                   <BarChart3 className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -1086,7 +1081,7 @@ export default function DashboardPage() {
               </div>
 
               <div className="flex items-center space-x-3">
-                <button className="p-2.5 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors">
+                <button className="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                   <RefreshCw className="h-5 w-5" />
                 </button>
               </div>
@@ -1099,7 +1094,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
             <div className="p-6 border-b border-slate-200">
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                   <TrendingUp className="w-4 h-4 text-blue-600" />
                 </div>
                 Key Performance Indicators
@@ -1129,7 +1124,7 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-slate-600 mb-1">{stat.title}</p>
-                        <p className="text-2xl font-bold text-slate-900 group-hover:text-yellow-600 transition-colors">
+                        <p className="text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
                           {stat.value}
                         </p>
                       </div>
@@ -1160,7 +1155,7 @@ export default function DashboardPage() {
               <div className="p-6">
                 <div className="space-y-4">
                   {criticalAlerts.map((alert, index) => (
-                    <div key={index} className={`p-4 rounded-lg border-l-4 ${alert.severity === 'high' ? 'bg-red-50 border-red-400' : 'bg-yellow-50 border-yellow-400'
+                    <div key={index} className={`p-4 rounded-lg border-l-4 ${alert.severity === 'high' ? 'bg-red-50 border-red-400' : 'bg-indigo-50 border-indigo-400'
                       }`}>
                       <div className="flex items-center justify-between">
                         <div>
@@ -1168,12 +1163,12 @@ export default function DashboardPage() {
                           <p className="text-sm text-slate-600 mt-1">{alert.message}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${alert.severity === 'high' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${alert.severity === 'high' ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
                             }`}>
                             {alert.count} items
                           </span>
                           <Link href={alert.href}>
-                            <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition-colors">
+                            <button className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors">
                               {alert.action}
                             </button>
                           </Link>
@@ -1209,7 +1204,7 @@ export default function DashboardPage() {
                             <action.icon className="h-5 w-5 text-slate-600" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-slate-900 group-hover:text-yellow-600 transition-colors">
+                            <h3 className="font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
                               {action.title}
                             </h3>
                             <p className="text-sm text-slate-600 mt-1">{action.description}</p>
@@ -1227,7 +1222,7 @@ export default function DashboardPage() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-yellow-600" />
+                  <Calendar className="w-5 h-5 text-indigo-600" />
                   Upcoming Deadlines
                 </h2>
               </div>
@@ -1236,7 +1231,7 @@ export default function DashboardPage() {
                 <div className="space-y-4">
                   {upcomingDeadlines.map((deadline, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                      <div className={`w-2 h-2 rounded-full mt-2 ${deadline.priority === 'high' ? 'bg-red-500' : 'bg-yellow-500'
+                      <div className={`w-2 h-2 rounded-full mt-2 ${deadline.priority === 'high' ? 'bg-red-500' : 'bg-indigo-500'
                         }`}></div>
                       <div className="flex-1">
                         <h4 className="font-medium text-slate-900 text-sm">{deadline.title}</h4>
@@ -1255,7 +1250,7 @@ export default function DashboardPage() {
                 </div>
 
                 <Link href="/tasks/calendar">
-                  <button className="w-full mt-4 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition-colors">
+                  <button className="w-full mt-4 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors">
                     View Full Calendar
                   </button>
                 </Link>
@@ -1273,7 +1268,7 @@ export default function DashboardPage() {
                   </div>
                   Recent Activity
                 </h2>
-                <Link href="/" className="text-sm text-yellow-600 hover:text-yellow-700 font-medium">
+                <Link href="/" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
                   View All Activity
                 </Link>
               </div>
@@ -1285,7 +1280,7 @@ export default function DashboardPage() {
                 {recentActivities.map((activity) => (
                   <div key={activity.id} className="flex items-start gap-4 p-4 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${activity.status === 'success' ? 'bg-green-100 text-green-600' :
-                      activity.status === 'warning' ? 'bg-yellow-100 text-yellow-600' :
+                      activity.status === 'warning' ? 'bg-indigo-100 text-indigo-600' :
                         activity.status === 'error' ? 'bg-red-100 text-red-600' :
                           'bg-blue-100 text-blue-600'
                       }`}>
@@ -1297,9 +1292,9 @@ export default function DashboardPage() {
                       <span className="text-xs text-slate-500">{activity.time}</span>
                     </div>
                     <div className={`w-2 h-2 rounded-full ${activity.status === 'success' ? 'bg-green-500' :
-                      activity.status === 'warning' ? 'bg-yellow-500' :
+                      activity.status === 'warning' ? 'bg-indigo-500' :
                         activity.status === 'error' ? 'bg-red-500' :
-                          'bg-blue-500'
+                          'bg-slate-500'
                       }`}></div>
                   </div>
                 ))}
@@ -1331,7 +1326,7 @@ export default function DashboardPage() {
                     <span className="font-semibold text-slate-900">87.2%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-yellow-500 h-2 rounded-full" style={{ width: '87.2%' }}></div>
+                    <div className="bg-indigo-500 h-2 rounded-full" style={{ width: '87.2%' }}></div>
                   </div>
 
                   <div className="flex justify-between items-center">
@@ -1339,7 +1334,7 @@ export default function DashboardPage() {
                     <span className="font-semibold text-slate-900">91.8%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-blue-500 h-2 rounded-full" style={{ width: '91.8%' }}></div>
+                    <div className="bg-slate-500 h-2 rounded-full" style={{ width: '91.8%' }}></div>
                   </div>
                 </div>
               </div>
@@ -1348,15 +1343,15 @@ export default function DashboardPage() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200">
                 <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                  <Award className="w-5 h-5 text-yellow-600" />
+                  <Award className="w-5 h-5 text-indigo-600" />
                   Top Performers
                 </h3>
               </div>
               <div className="p-6">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-lg border border-yellow-200">
+                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-indigo-50 to-amber-50 rounded-lg border border-indigo-200">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center">
                         <Star className="w-4 h-4 text-white" />
                       </div>
                       <div>
@@ -1364,7 +1359,7 @@ export default function DashboardPage() {
                         <p className="text-sm text-slate-600">98.5% efficiency rating</p>
                       </div>
                     </div>
-                    <TrendingUp className="w-5 h-5 text-yellow-600" />
+                    <TrendingUp className="w-5 h-5 text-indigo-600" />
                   </div>
 
                   <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">

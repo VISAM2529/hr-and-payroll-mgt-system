@@ -195,7 +195,7 @@ export default function OrgChartPage() {
                                     <span className="text-[10px] font-medium text-slate-600 uppercase tracking-wider">Company</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded bg-blue-500 border border-blue-600 shadow-sm" />
+                                    <div className="w-3 h-3 rounded bg-slate-500 border border-blue-600 shadow-sm" />
                                     <span className="text-[10px] font-medium text-slate-600 uppercase tracking-wider">Business Unit</span>
                                 </div>
                                 <div className="flex items-center gap-2">

@@ -14,8 +14,7 @@ import {
   Award,
   ChevronDown,
   Home,
-  Bell,
-  Search,
+
   User,
   Shield,
   Calculator,
@@ -44,19 +43,26 @@ import {
   GitGraph,
   Settings2,
   Briefcase,
-  Speaker,
-  MessageSquare,
+  Bell,
 } from "lucide-react";
 import "../globals.css";
 import { useSession } from "@/context/SessionContext";
 import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
   const [role, setRole] = useState(null);
   const [loadingRole, setLoadingRole] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+
 
   const { user, isLoading, logout } = useSession();
   const pathname = usePathname();
@@ -81,17 +87,34 @@ export default function DashboardLayout({ children }) {
 
   const isActive = (href) => {
     if (!pathname) return false;
-    return pathname === href || pathname.startsWith(href + "/");
+    // Exact match
+    if (pathname === href) return true;
+    // For child routes, only match if there's a trailing slash after the href
+    // This prevents /finance from matching /finance/expenses
+    if (pathname.startsWith(href + "/")) {
+      // Additional check: if href is a base route like /finance, 
+      // only return true if we're checking a child item, not the parent
+      return true;
+    }
+    return false;
+  };
+
+  // Helper to check if any child route is active (for parent menu highlighting)
+  const isParentActive = (item) => {
+    if (!pathname || !item.children) return false;
+    // Check if any child is active
+    return item.children.some(child => isActive(child.href));
   };
 
   const adminNavigation = [
     // { name: "Dashboard", href: "/", icon: Home },
+    { name: "Employee Directory", href: "/payroll/employees", icon: Users },
     {
       name: "Payroll Management",
       href: "/dashboard/payroll",
       icon: CreditCard,
       children: [
-        { name: "Employee Directory", href: "/payroll/employees", icon: Users },
+
         {
           name: "Attendance Directory",
           href: "/payroll/attendance",
@@ -159,8 +182,6 @@ export default function DashboardLayout({ children }) {
         },
         { name: "Org Chart", href: "/crm/org-chart", icon: GitGraph },
         { name: "Org Settings", href: "/crm/org-settings", icon: Settings2 },
-        // { name: "Permissions", href: "/crm/permissions", icon: Shield },
-        // { name: 'Payslip Structure', href: '/crm/payslip-structure', icon: FileText },
       ],
     },
     {
@@ -184,31 +205,14 @@ export default function DashboardLayout({ children }) {
       ],
     },
     {
-      name: "Communication Hub",
-      href: "/communication",
-      icon: MessageSquare, // Ensure MessageSquare is imported
-      children: [
-        { name: "Announcements", href: "/communication/announcements", icon: Speaker },
-        { name: "Surveys", href: "/communication/surveys", icon: FileText },
-      ]
+      name: "Notifications",
+      href: "/notifications",
+      icon: Bell,
     },
     {
       name: "Activity Logs",
       href: "/logs",
       icon: Clock,
-    },
-    {
-      name: "Notifications",
-      href: "/dashboard/notifications",
-      icon: Bell,
-      children: [
-        { name: "Notifications", href: "/notifications", icon: Bell },
-        // {
-        //   name: "Notification Settings",
-        //   href: "/notifications/notification-settings",
-        //   icon: Bell,
-        // },
-      ],
     },
   ];
 
@@ -306,30 +310,39 @@ export default function DashboardLayout({ children }) {
       >
         <div className="flex-shrink-0 p-6 border-b border-indigo-50 bg-white">
           <div className="flex items-center space-x-3 justify-center">
-            <div className="flex items-center gap-2">
+            <Link
+              href={
+                role === 'admin' ? '/payroll/employees' :
+                  role === 'employee' ? '/payroll/my-payslip' :
+                    role === 'supervisor' ? '/payroll/attendance' :
+                      role === 'attendance_only' ? '/payroll/attendance' :
+                        '/'
+              }
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
                 <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
               </div>
               <span className="text-xl font-bold text-slate-900 tracking-tight">HRPayroll</span>
-            </div>
+            </Link>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto no-scrollbar">
           {navigation?.map((item) => (
             <div key={item.name} className="space-y-1">
               {item.children ? (
                 <div>
                   <button
                     onClick={() => toggleMenu(item.name)}
-                    className={`flex items-center w-full p-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${pathname?.startsWith(item.href)
+                    className={`flex items-center w-full p-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${isParentActive(item)
                       ? "bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-200"
                       : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
                       }`}
                     aria-expanded={openMenu === item.name}
                   >
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-colors ${pathname?.startsWith(item.href)
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-colors ${isParentActive(item)
                         ? "bg-indigo-100 text-indigo-600"
                         : "bg-slate-100/50 text-slate-500 group-hover:bg-indigo-50 group-hover:text-indigo-600"
                         }`}
@@ -341,7 +354,7 @@ export default function DashboardLayout({ children }) {
                       className={`transition-transform duration-200 ${openMenu === item.name ? "rotate-180" : ""
                         }`}
                     >
-                      <ChevronDown className="h-4 w-4 text-slate-400" />
+                      <ChevronDown className={`h-4 w-4 ${isParentActive(item) ? "text-indigo-600" : "text-slate-400 group-hover:text-indigo-500"}`} />
                     </div>
                   </button>
 
@@ -439,55 +452,66 @@ export default function DashboardLayout({ children }) {
                   )}
                 </button>
 
-                <div className="hidden md:block">
-                  <div className="relative group">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
-                    <input
-                      type="text"
-                      placeholder="Search employees, reports, tasks..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-80 pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
-                      aria-label="Search employees, reports, or tasks"
-                    />
-                  </div>
-                </div>
-                <button
-                  className="md:hidden p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                  aria-label="Open search"
-                  onClick={() => {
-                    /* Implement mobile search modal */
-                  }}
-                >
-                  <Search className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <button
-                  className="relative p-2.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
-                  aria-label="Notifications"
-                >
-                  <Bell className="h-5 w-5" />
-                  <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
-                </button>
-
-                <div className="flex items-center space-x-3 pl-4 border-l border-slate-200">
-                  <div className="text-right hidden sm:block">
-                    <p className="text-sm font-semibold text-slate-900">
-                      Welcome,{" "}
-                      {user?.personalDetails?.firstName ||
-                        (role === "admin" ? "Admin" : "Employee")}
-                    </p>
-                    <p className="text-xs text-slate-500 capitalize">{role}</p>
-                  </div>
-                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-md shadow-indigo-200 ring-2 ring-white">
-                    <span className="text-white font-bold text-sm">
-                      {user?.personalDetails?.firstName
-                        ?.charAt(0)
-                        ?.toUpperCase() || role?.charAt(0)?.toUpperCase()}
+                <div className="hidden md:flex flex-col items-start gap-1 ml-2">
+                  <h2 className="text-xl font-bold text-slate-800 leading-none">
+                    {{
+                      '/': 'Dashboard',
+                      '/payroll/employees': 'Employee Management'
+                    }[pathname] || (pathname || "").split('/').filter(Boolean).slice(-1)[0]?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') || "Overview"}
+                  </h2>
+                  <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                    <Calendar className="w-3.5 h-3.5" />
+                    <span suppressHydrationWarning>
+                      {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                     </span>
                   </div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+
+
+                <div className="flex items-center space-x-3 pl-4 border-l border-slate-200">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center space-x-3 outline-none group">
+                      <div className="text-right hidden sm:block">
+                        <p className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                          Welcome,{" "}
+                          {user?.personalDetails?.firstName ||
+                            (role === "admin" ? "Admin" : "Employee")}
+                        </p>
+                        <p className="text-xs text-slate-500 capitalize">{role}</p>
+                      </div>
+                      <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-md shadow-indigo-200 ring-2 ring-white group-hover:ring-indigo-100 transition-all">
+                        <span className="text-white font-bold text-sm">
+                          {user?.personalDetails?.firstName
+                            ?.charAt(0)
+                            ?.toUpperCase() || role?.charAt(0)?.toUpperCase()}
+                        </span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 bg-white border border-slate-200 shadow-xl rounded-xl p-1 mt-2">
+                      <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        My Account
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator className="-mx-1 my-1 border-t border-slate-100" />
+
+                      <DropdownMenuItem onClick={() => router.push("/ess")}>
+                        <User className="w-4 h-4 mr-2 text-slate-500" />
+                        My Portal
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => router.push("/change-password")}>
+                        <Lock className="w-4 h-4 mr-2 text-slate-500" />
+                        Change Password
+                      </DropdownMenuItem>
+
+                      <DropdownMenuSeparator className="-mx-1 my-1 border-t border-slate-100" />
+                      <DropdownMenuItem onClick={() => { logout(); router.push("/auth/login"); }} className="text-red-600 hover:bg-red-50 hover:text-red-700">
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Log Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             </div>

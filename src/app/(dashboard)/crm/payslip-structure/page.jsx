@@ -157,8 +157,8 @@ const PayslipTemplate = () => {
       { name: "Working Days", enabled: true },
     ],
     styling: {
-      primaryColor: "#f59e0b",
-      secondaryColor: "#fffbeb",
+      primaryColor: "#6366f1",
+      secondaryColor: "#eef2ff",
       fontFamily: "Inter",
       showWatermark: true,
       showOrganizationLogo: true,
@@ -551,19 +551,18 @@ const PayslipTemplate = () => {
           {templates.map((template) => (
             <div
               key={template._id}
-              className={`p-4 border rounded-lg flex items-center justify-between ${
-                template._id === currentTemplateId
-                  ? "border-yellow-500 bg-yellow-50"
-                  : "border-slate-200"
-              }`}
+              className={`p-4 border rounded-lg flex items-center justify-between ${template._id === currentTemplateId
+                ? "border-indigo-500 bg-indigo-50"
+                : "border-slate-200"
+                }`}
             >
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setDefaultTemplate(template._id)}
-                  className="text-yellow-500 hover:text-yellow-600"
+                  className="text-indigo-500 hover:text-indigo-600"
                 >
                   {template.isDefault ? (
-                    <Star className="w-5 h-5 fill-yellow-500" />
+                    <Star className="w-5 h-5 fill-indigo-500" />
                   ) : (
                     <StarIcon className="w-5 h-5" />
                   )}
@@ -576,7 +575,7 @@ const PayslipTemplate = () => {
                   </p>
                 </div>
                 {template.isDefault && (
-                  <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                  <span className="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">
                     Default
                   </span>
                 )}
@@ -587,7 +586,7 @@ const PayslipTemplate = () => {
                     setCurrentTemplateId(template._id);
                     setShowTemplateManager(false);
                   }}
-                  className="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50"
+                  className="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-slate-50"
                   title="Open"
                 >
                   <FolderOpen className="w-5 h-5" />
@@ -615,7 +614,7 @@ const PayslipTemplate = () => {
         <div className="flex gap-3">
           <button
             onClick={createNewTemplate}
-            className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+            className="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
           >
             <PlusCircle className="w-5 h-5" />
             New Template
@@ -635,7 +634,7 @@ const PayslipTemplate = () => {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto"></div>
           <p className="text-slate-600">Loading templates...</p>
         </div>
       </div>
@@ -646,12 +645,12 @@ const PayslipTemplate = () => {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center space-y-4">
-          <AlertCircle className="w-12 h-12 text-yellow-500 mx-auto" />
+          <AlertCircle className="w-12 h-12 text-indigo-500 mx-auto" />
           <h2 className="text-2xl font-bold text-slate-900">No Templates Found</h2>
           <p className="text-slate-600 mb-4">Create your first payslip template to get started</p>
           <button
             onClick={createNewTemplate}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 mx-auto transition-colors"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 mx-auto transition-colors"
           >
             <PlusCircle className="w-5 h-5" />
             Create Template
@@ -683,7 +682,7 @@ const PayslipTemplate = () => {
                   setCurrentTemplateId(e.target.value);
                   setIsNewTemplate(false);
                 }}
-                className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
+                className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
               >
                 {templates.map((template) => (
                   <option key={template._id} value={template._id}>
@@ -704,7 +703,7 @@ const PayslipTemplate = () => {
             <div className="flex items-center gap-3">
               {/* <button
                 onClick={() => setShowTemplateManager(true)}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
               >
                 <FolderOpen className="w-5 h-5" />
                 Manage Templates
@@ -725,7 +724,7 @@ const PayslipTemplate = () => {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 max-h-[800px] overflow-y-auto">
             <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-                <Edit3 className="w-6 h-6 text-yellow-600" />
+                <Edit3 className="w-6 h-6 text-indigo-600" />
                 Template Configuration
               </h2>
               <div className="flex items-center gap-3">
@@ -749,7 +748,7 @@ const PayslipTemplate = () => {
                       }
                     }}
                     disabled={saving}
-                    className="bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                    className="bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
                   >
                     {isEditing ? (
                       <>
@@ -777,7 +776,7 @@ const PayslipTemplate = () => {
                   type="text"
                   value={currentTemplate.name}
                   onChange={(e) => updateCurrentTemplate({ name: e.target.value })}
-                  className="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Template Name"
                   disabled={!isEditing}
                 />
@@ -796,7 +795,7 @@ const PayslipTemplate = () => {
                       value="monthly"
                       checked={currentTemplate.salaryType === "monthly"}
                       onChange={(e) => updateCurrentTemplate({ salaryType: e.target.value })}
-                      className="w-4 h-4 text-yellow-600 focus:ring-yellow-500"
+                      className="w-4 h-4 text-indigo-600 focus:ring-indigo-500"
                       disabled={!isEditing}
                     />
                     <span className="text-slate-700">Monthly Salary</span>
@@ -808,7 +807,7 @@ const PayslipTemplate = () => {
                       value="perday"
                       checked={currentTemplate.salaryType === "perday"}
                       onChange={(e) => updateCurrentTemplate({ salaryType: e.target.value })}
-                      className="w-4 h-4 text-yellow-600 focus:ring-yellow-500"
+                      className="w-4 h-4 text-indigo-600 focus:ring-indigo-500"
                       disabled={!isEditing}
                     />
                     <span className="text-slate-700">Per Day Salary</span>
@@ -819,7 +818,7 @@ const PayslipTemplate = () => {
               {/* Organization Details */}
               <div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-yellow-600" />
+                  <Building2 className="w-5 h-5 text-indigo-600" />
                   Organization Details
                 </h3>
                 <div className="space-y-4">
@@ -827,7 +826,7 @@ const PayslipTemplate = () => {
                     type="text"
                     value={currentTemplate.organizationName}
                     onChange={(e) => updateCurrentTemplate({ organizationName: e.target.value })}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Organization Name"
                     disabled={!isEditing}
                   />
@@ -835,7 +834,7 @@ const PayslipTemplate = () => {
                     value={currentTemplate.address}
                     onChange={(e) => updateCurrentTemplate({ address: e.target.value })}
                     rows={3}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Organization Address"
                     disabled={!isEditing}
                   />
@@ -843,7 +842,7 @@ const PayslipTemplate = () => {
                     type="text"
                     value={currentTemplate.contact}
                     onChange={(e) => updateCurrentTemplate({ contact: e.target.value })}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Contact Information"
                     disabled={!isEditing}
                   />
@@ -853,21 +852,21 @@ const PayslipTemplate = () => {
               {/* Earnings Configuration */}
               <div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <BadgeDollarSign className="w-5 h-5 text-yellow-600" />
+                  <BadgeDollarSign className="w-5 h-5 text-indigo-600" />
                   Earnings Components
                 </h3>
                 <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
                   {currentTemplate.earnings.map((earning, index) => (
                     <div
                       key={index}
-                      className="p-3 bg-yellow-50 border border-slate-200 rounded-lg flex items-center justify-between"
+                      className="p-3 bg-indigo-50 border border-slate-200 rounded-lg flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         <input
                           type="checkbox"
                           checked={earning.enabled}
                           onChange={() => toggleEarning(index)}
-                          className="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
+                          className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
                           disabled={!isEditing}
                         />
                         <span
@@ -939,7 +938,7 @@ const PayslipTemplate = () => {
                         setNewEarning({ ...newEarning, name: e.target.value })
                       }
                       placeholder="Add custom earning..."
-                      className="flex-1 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className="flex-1 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                     <select
                       value={newEarning.calculationType}
@@ -969,7 +968,7 @@ const PayslipTemplate = () => {
                     />
                     <button
                       onClick={addEarning}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-lg flex items-center gap-2 transition-colors"
+                      className="bg-indigo-500 hover:bg-indigo-600 text-white p-3 rounded-lg flex items-center gap-2 transition-colors"
                     >
                       <Plus className="w-5 h-5" />
                     </button>
@@ -980,21 +979,21 @@ const PayslipTemplate = () => {
               {/* Deductions Configuration */}
               <div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <Calculator className="w-5 h-5 text-yellow-600" />
+                  <Calculator className="w-5 h-5 text-indigo-600" />
                   Deductions Components
                 </h3>
                 <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
                   {currentTemplate.deductions.map((deduction, index) => (
                     <div
                       key={index}
-                      className="p-3 bg-yellow-50 border border-slate-200 rounded-lg flex items-center justify-between"
+                      className="p-3 bg-indigo-50 border border-slate-200 rounded-lg flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         <input
                           type="checkbox"
                           checked={deduction.enabled}
                           onChange={() => toggleDeduction(index)}
-                          className="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
+                          className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
                           disabled={!isEditing}
                         />
                         <span
@@ -1066,7 +1065,7 @@ const PayslipTemplate = () => {
                         setNewDeduction({ ...newDeduction, name: e.target.value })
                       }
                       placeholder="Add custom deduction..."
-                      className="flex-1 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className="flex-1 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                     <select
                       value={newDeduction.calculationType}
@@ -1096,7 +1095,7 @@ const PayslipTemplate = () => {
                     />
                     <button
                       onClick={addDeduction}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-lg flex items-center gap-2 transition-colors"
+                      className="bg-indigo-500 hover:bg-indigo-600 text-white p-3 rounded-lg flex items-center gap-2 transition-colors"
                     >
                       <Plus className="w-5 h-5" />
                     </button>
@@ -1107,21 +1106,21 @@ const PayslipTemplate = () => {
               {/* Additional Fields */}
               <div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-yellow-600" />
+                  <FileText className="w-5 h-5 text-indigo-600" />
                   Additional Fields
                 </h3>
                 <div className="space-y-3 mb-4 max-h-40 overflow-y-auto">
                   {currentTemplate.additionalFields.map((field, index) => (
                     <div
                       key={index}
-                      className="p-3 bg-yellow-50 border border-slate-200 rounded-lg flex items-center justify-between"
+                      className="p-3 bg-indigo-50 border border-slate-200 rounded-lg flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         <input
                           type="checkbox"
                           checked={field.enabled}
                           onChange={() => toggleField(index)}
-                          className="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
+                          className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
                           disabled={!isEditing}
                         />
                         <span
@@ -1148,12 +1147,12 @@ const PayslipTemplate = () => {
                       value={newField}
                       onChange={(e) => setNewField(e.target.value)}
                       placeholder="Add custom field..."
-                      className="flex-1 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className="flex-1 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       onKeyPress={(e) => e.key === "Enter" && addField()}
                     />
                     <button
                       onClick={addField}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-lg flex items-center gap-2 transition-colors"
+                      className="bg-indigo-500 hover:bg-indigo-600 text-white p-3 rounded-lg flex items-center gap-2 transition-colors"
                     >
                       <Plus className="w-5 h-5" />
                       Add
@@ -1168,7 +1167,7 @@ const PayslipTemplate = () => {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-                <FileText className="w-6 h-6 text-yellow-600" />
+                <FileText className="w-6 h-6 text-indigo-600" />
                 Payslip Preview
               </h2>
               <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
@@ -1187,7 +1186,7 @@ const PayslipTemplate = () => {
                 </p>
                 <p className="text-sm text-slate-600">{currentTemplate.contact}</p>
                 <div className="border-t border-slate-300 my-4"></div>
-                <h2 className="text-lg font-semibold text-yellow-600">SALARY SLIP</h2>
+                <h2 className="text-lg font-semibold text-indigo-600">SALARY SLIP</h2>
                 <p className="text-sm text-slate-600 mt-1">
                   ({currentTemplate.salaryType === "monthly" ? "Monthly Salary" : "Per Day Salary"})
                 </p>
@@ -1197,24 +1196,24 @@ const PayslipTemplate = () => {
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-yellow-600" />
+                    <User className="w-4 h-4 text-indigo-600" />
                     <span className="font-medium text-slate-700">Employee Name:</span>
                   </div>
                   <p className="text-sm">{sampleEmployee.name}</p>
                   <div className="flex items-center gap-2">
-                    <BadgeDollarSign className="w-4 h-4 text-yellow-600" />
+                    <BadgeDollarSign className="w-4 h-4 text-indigo-600" />
                     <span className="font-medium text-slate-700">Employee ID:</span>
                   </div>
                   <p className="text-sm">{sampleEmployee.employeeId}</p>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-yellow-600" />
+                    <Calendar className="w-4 h-4 text-indigo-600" />
                     <span className="font-medium text-slate-700">Pay Period:</span>
                   </div>
                   <p className="text-sm">{sampleEmployee.payPeriod}</p>
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-yellow-600" />
+                    <Calendar className="w-4 h-4 text-indigo-600" />
                     <span className="font-medium text-slate-700">Payment Date:</span>
                   </div>
                   <p className="text-sm">{sampleEmployee.paymentDate}</p>
@@ -1223,14 +1222,14 @@ const PayslipTemplate = () => {
 
               {/* Working Days Info */}
               {currentTemplate.salaryType === "perday" && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mb-4">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="font-medium text-yellow-700">Total Days:</span>{" "}
+                      <span className="font-medium text-indigo-700">Total Days:</span>{" "}
                       {sampleEmployee.totalDays}
                     </div>
                     <div>
-                      <span className="font-medium text-yellow-700">Working Days:</span>{" "}
+                      <span className="font-medium text-indigo-700">Working Days:</span>{" "}
                       {sampleEmployee.workingDays}
                     </div>
                   </div>
@@ -1241,7 +1240,7 @@ const PayslipTemplate = () => {
               <div className="grid grid-cols-2 gap-6 mb-6">
                 {/* Earnings */}
                 <div>
-                  <h3 className="font-semibold text-yellow-700 mb-3 border-b border-yellow-300 pb-2">
+                  <h3 className="font-semibold text-indigo-700 mb-3 border-b border-indigo-300 pb-2">
                     EARNINGS
                   </h3>
                   <div className="space-y-2">
@@ -1270,7 +1269,7 @@ const PayslipTemplate = () => {
                           </div>
                         );
                       })}
-                    <div className="flex justify-between border-t border-yellow-300 pt-2 font-bold text-yellow-700">
+                    <div className="flex justify-between border-t border-indigo-300 pt-2 font-bold text-indigo-700">
                       <span>Total Earnings:</span>
                       <span>
                         ₹{calculateTotalEarnings().toLocaleString("en-IN", {
@@ -1283,7 +1282,7 @@ const PayslipTemplate = () => {
 
                 {/* Deductions */}
                 <div>
-                  <h3 className="font-semibold text-yellow-700 mb-3 border-b border-yellow-300 pb-2">
+                  <h3 className="font-semibold text-indigo-700 mb-3 border-b border-indigo-300 pb-2">
                     DEDUCTIONS
                   </h3>
                   <div className="space-y-2">
@@ -1311,7 +1310,7 @@ const PayslipTemplate = () => {
                           </div>
                         );
                       })}
-                    <div className="flex justify-between border-t border-yellow-300 pt-2 font-bold text-yellow-700">
+                    <div className="flex justify-between border-t border-indigo-300 pt-2 font-bold text-indigo-700">
                       <span>Total Deductions:</span>
                       <span>
                         ₹{calculateTotalDeductions().toLocaleString("en-IN", {
@@ -1324,10 +1323,10 @@ const PayslipTemplate = () => {
               </div>
 
               {/* Net Salary */}
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
+              <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-center">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold text-yellow-700">NET SALARY:</span>
-                  <span className="text-xl font-bold text-yellow-700">
+                  <span className="text-lg font-semibold text-indigo-700">NET SALARY:</span>
+                  <span className="text-xl font-bold text-indigo-700">
                     ₹{calculateNetSalary().toLocaleString("en-IN", { maximumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -1335,7 +1334,7 @@ const PayslipTemplate = () => {
 
               {/* Additional Fields */}
               <div className="mt-6">
-                <h3 className="font-semibold text-yellow-700 mb-3 border-b border-yellow-300 pb-2">
+                <h3 className="font-semibold text-indigo-700 mb-3 border-b border-indigo-300 pb-2">
                   ADDITIONAL INFORMATION
                 </h3>
                 <div className="space-y-2">

@@ -1138,7 +1138,7 @@ export default function CreateCategoryModal({
                                       </span>
                                     )}
                                     {doc.fileType && (
-                                      <span className="inline-block text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                                      <span className="inline-block text-xs text-blue-600 bg-slate-50 px-2 py-0.5 rounded">
                                         {doc.fileType}
                                       </span>
                                     )}

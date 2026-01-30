@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
 import {
-  Save, X, FileText, Calendar, CheckCircle, AlertCircle, Plus, Minus, 
-  Upload, ArrowLeft, TrendingUp, Shield, Settings, Bell, Clock, User
+  Save, X, FileText, Calendar, CheckCircle, AlertCircle, Plus, Minus,
+  Upload, ArrowLeft, TrendingUp, Shield, Settings, Clock, User
 } from 'lucide-react';
 
 export default function ComplianceGenerator() {
@@ -55,12 +55,12 @@ export default function ComplianceGenerator() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
-    
+
     if (name.startsWith('period.')) {
       const field = name.split('.')[1];
       setFormData(prev => ({
@@ -130,7 +130,7 @@ export default function ComplianceGenerator() {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.reportType) newErrors.reportType = 'Report type is required';
     if (!formData.period.from) newErrors['period.from'] = 'Start date is required';
     if (!formData.period.to) newErrors['period.to'] = 'End date is required';
@@ -140,18 +140,18 @@ export default function ComplianceGenerator() {
     if (formData.complianceItems.length === 0) {
       newErrors.complianceItems = 'At least one compliance item is required';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setLoading(true);
 
     try {
@@ -198,7 +198,7 @@ export default function ComplianceGenerator() {
       formData.period.to,
       formData.complianceItems.length > 0
     ];
-    
+
     const completedFields = requiredFields.filter(field => field).length;
     return Math.round((completedFields / requiredFields.length) * 100);
   };
@@ -242,11 +242,9 @@ export default function ComplianceGenerator() {
                 <p className="text-slate-600 text-sm mt-0.5">Create comprehensive regulatory compliance reports</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
-                <Bell className="w-5 h-5" />
-              </button>
+
               <button
                 onClick={handleBack}
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
@@ -267,7 +265,7 @@ export default function ComplianceGenerator() {
             <span className="text-sm font-medium text-slate-600">{progress}% Complete</span>
           </div>
           <div className="w-full bg-slate-200 rounded-full h-2">
-            <div 
+            <div
               className="bg-yellow-500 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             ></div>
@@ -305,7 +303,7 @@ export default function ComplianceGenerator() {
                 </h2>
                 <p className="text-slate-600 text-sm mt-1">Set report type and period</p>
               </div>
-              
+
               <div className="p-6 space-y-6">
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-slate-700">
@@ -315,9 +313,8 @@ export default function ComplianceGenerator() {
                     name="reportType"
                     value={formData.reportType}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white ${
-                      errors.reportType ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-slate-300'
-                    }`}
+                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white ${errors.reportType ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-slate-300'
+                      }`}
                   >
                     {reportTypes.map(type => (
                       <option key={type} value={type}>{type}</option>
@@ -343,9 +340,8 @@ export default function ComplianceGenerator() {
                         type="date"
                         value={formData.period.from}
                         onChange={handleChange}
-                        className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${
-                          errors['period.from'] ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-slate-300'
-                        }`}
+                        className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors['period.from'] ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-slate-300'
+                          }`}
                       />
                     </div>
                     {errors['period.from'] && (
@@ -367,9 +363,8 @@ export default function ComplianceGenerator() {
                         type="date"
                         value={formData.period.to}
                         onChange={handleChange}
-                        className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${
-                          errors['period.to'] ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-slate-300'
-                        }`}
+                        className={`w-full pl-10 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${errors['period.to'] ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-slate-300'
+                          }`}
                       />
                     </div>
                     {errors['period.to'] && (
@@ -391,7 +386,7 @@ export default function ComplianceGenerator() {
                   Compliance Status
                 </h3>
               </div>
-              
+
               <div className="p-6">
                 <div className={`p-4 rounded-lg border-2 ${getStatusColor(overallStatus)}`}>
                   <div className="flex items-center gap-3 mb-2">
@@ -399,15 +394,15 @@ export default function ComplianceGenerator() {
                     <span className="font-semibold">{overallStatus}</span>
                   </div>
                   <p className="text-sm">
-                    {overallStatus === 'Compliant' 
-                      ? 'All compliance items are completed successfully' 
+                    {overallStatus === 'Compliant'
+                      ? 'All compliance items are completed successfully'
                       : overallStatus === 'Non-Compliant'
-                      ? 'Critical compliance items are pending or failed'
-                      : 'Some compliance items require attention'
+                        ? 'Critical compliance items are pending or failed'
+                        : 'Some compliance items require attention'
                     }
                   </p>
                 </div>
-                
+
                 <div className="mt-4 space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-slate-600">Total Items:</span>
@@ -444,7 +439,7 @@ export default function ComplianceGenerator() {
                 <div className="flex justify-between items-center">
                   <div>
                     <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                      <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                         <CheckCircle className="w-4 h-4 text-blue-600" />
                       </div>
                       Compliance Requirements
@@ -461,7 +456,7 @@ export default function ComplianceGenerator() {
                   </button>
                 </div>
               </div>
-              
+
               <div className="p-6 space-y-6">
                 {formData.complianceItems.map((item, index) => (
                   <div key={index} className="p-4 border border-slate-200 rounded-lg bg-slate-50 space-y-4">
@@ -489,7 +484,7 @@ export default function ComplianceGenerator() {
                           className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
                         />
                       </div>
-                      
+
                       <div className="space-y-2">
                         <label className="block text-xs font-medium text-slate-600">Requirement</label>
                         <input
@@ -501,7 +496,7 @@ export default function ComplianceGenerator() {
                         />
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="block text-xs font-medium text-slate-600">Status</label>
@@ -515,7 +510,7 @@ export default function ComplianceGenerator() {
                           ))}
                         </select>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <label className="block text-xs font-medium text-slate-600">Due Date</label>
                         <input
@@ -526,7 +521,7 @@ export default function ComplianceGenerator() {
                         />
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <label className="block text-xs font-medium text-slate-600">Notes (Optional)</label>
                       <input
@@ -539,7 +534,7 @@ export default function ComplianceGenerator() {
                     </div>
                   </div>
                 ))}
-                
+
                 {errors.complianceItems && (
                   <div className="flex items-center space-x-1 text-red-600 text-xs">
                     <AlertCircle className="w-3 h-3" />
@@ -560,7 +555,7 @@ export default function ComplianceGenerator() {
                 </h2>
                 <p className="text-slate-600 text-sm mt-1">Add supporting documents and additional notes</p>
               </div>
-              
+
               <div className="p-6 space-y-6">
                 {/* File Upload */}
                 <div className="space-y-4">
@@ -626,7 +621,7 @@ export default function ComplianceGenerator() {
 
             {/* Action Buttons */}
             <div className="flex items-center justify-between">
-             <button
+              <button
                 type="button"
                 onClick={handleBack}
                 className="inline-flex items-center gap-2 px-6 py-3 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"

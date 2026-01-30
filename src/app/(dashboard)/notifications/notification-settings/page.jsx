@@ -117,7 +117,7 @@ export default function NotificationSettings() {
       <div className="min-h-screen bg-slate-50">
         <div className="flex items-center justify-center h-screen">
           <div className="text-center space-y-4">
-            <div className="w-12 h-12 border-4 border-slate-200 border-t-yellow-500 rounded-full animate-spin mx-auto"></div>
+            <div className="w-12 h-12 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin mx-auto"></div>
             <div>
               <h3 className="text-lg font-semibold text-slate-900">Loading Notification Settings</h3>
               <p className="text-sm text-slate-600 mt-1">Please wait while we fetch configuration data...</p>
@@ -137,7 +137,7 @@ export default function NotificationSettings() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
                 <Settings className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -145,9 +145,9 @@ export default function NotificationSettings() {
                 <p className="text-slate-600 text-sm mt-0.5">Configure email notifications and system settings</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <button 
+              <button
                 onClick={fetchSettings}
                 className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border-2 border-slate-200 transition-colors font-medium"
               >
@@ -169,7 +169,7 @@ export default function NotificationSettings() {
           <div className="bg-white rounded-xl border-2 border-slate-200 shadow-sm">
             <div className="p-6 border-b-2 border-slate-200 bg-gradient-to-r from-blue-50 to-indigo-50">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 bg-slate-500 rounded-lg flex items-center justify-center shadow-md">
                   <Mail className="h-5 w-5 text-white" />
                 </div>
                 <div>
@@ -189,7 +189,7 @@ export default function NotificationSettings() {
                     type="email"
                     value={settings.attendanceReportEmail}
                     onChange={(e) => handleInputChange('attendanceReportEmail', e.target.value)}
-                    className="flex-1 px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="flex-1 px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     placeholder="attendance@example.com"
                   />
                   <button
@@ -221,7 +221,7 @@ export default function NotificationSettings() {
                     type="email"
                     value={settings.attendanceThresholdEmail}
                     onChange={(e) => handleInputChange('attendanceThresholdEmail', e.target.value)}
-                    className="flex-1 px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="flex-1 px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     placeholder="alerts@example.com"
                   />
                   <button
@@ -253,7 +253,7 @@ export default function NotificationSettings() {
                     type="email"
                     value={settings.documentReminderEmail}
                     onChange={(e) => handleInputChange('documentReminderEmail', e.target.value)}
-                    className="flex-1 px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="flex-1 px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     placeholder="hr@example.com"
                   />
                   <button
@@ -302,7 +302,7 @@ export default function NotificationSettings() {
                     type={showCronSecret ? "text" : "password"}
                     value={settings.cronSecret}
                     onChange={(e) => handleInputChange('cronSecret', e.target.value)}
-                    className="w-full px-4 py-2.5 pr-12 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-4 py-2.5 pr-12 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     placeholder="your-secret-key"
                   />
                   <button
@@ -329,7 +329,7 @@ export default function NotificationSettings() {
                   id="enableCron"
                   checked={settings.enableCron}
                   onChange={(e) => handleInputChange('enableCron', e.target.checked)}
-                  className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-slate-300 rounded"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded"
                 />
                 <label htmlFor="enableCron" className="ml-3 text-sm font-medium text-slate-700">
                   Enable automated cron jobs
@@ -362,7 +362,7 @@ export default function NotificationSettings() {
                     type="text"
                     value={settings.smtpHost}
                     onChange={(e) => handleInputChange('smtpHost', e.target.value)}
-                    className="w-full px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     placeholder="smtp.gmail.com"
                   />
                 </div>
@@ -375,7 +375,7 @@ export default function NotificationSettings() {
                     type="number"
                     value={settings.smtpPort}
                     onChange={(e) => handleInputChange('smtpPort', e.target.value)}
-                    className="w-full px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     placeholder="587"
                   />
                 </div>
@@ -389,7 +389,7 @@ export default function NotificationSettings() {
                   type="text"
                   value={settings.smtpUser}
                   onChange={(e) => handleInputChange('smtpUser', e.target.value)}
-                  className="w-full px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                  className="w-full px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                   placeholder="your-email@gmail.com"
                 />
               </div>
@@ -403,7 +403,7 @@ export default function NotificationSettings() {
                     type={showPassword ? "text" : "password"}
                     value={settings.smtpPass}
                     onChange={(e) => handleInputChange('smtpPass', e.target.value)}
-                    className="w-full px-4 py-2.5 pr-12 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-4 py-2.5 pr-12 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     placeholder="your-app-password"
                   />
                   <button
@@ -431,7 +431,7 @@ export default function NotificationSettings() {
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-orange-500 hover:from-indigo-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? (
                 <>
@@ -451,7 +451,7 @@ export default function NotificationSettings() {
         {/* Info Section */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6">
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+            <div className="w-10 h-10 bg-slate-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
               <Info className="h-5 w-5 text-white" />
             </div>
             <div className="flex-1">

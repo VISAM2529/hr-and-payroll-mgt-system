@@ -319,7 +319,7 @@ export default function OrderVerificationQueue() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                   <Filter className="w-4 h-4 text-blue-600" />
                 </div>
                 Filter Orders

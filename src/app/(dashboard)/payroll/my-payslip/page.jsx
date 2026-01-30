@@ -42,6 +42,8 @@ import {
 import { Doughnut, Bar } from 'react-chartjs-2';
 import { toast } from "react-hot-toast";
 import { format } from "date-fns";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -145,6 +147,72 @@ export default function MyPayslipPage() {
   const handleViewDetails = (ps) => {
     setSelectedPayslip(ps);
     setShowModal(true);
+  };
+
+  const handleDownloadPDF = (slip) => {
+    try {
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.setTextColor(79, 70, 229);
+      doc.text("PAYROLL SYSTEM", 105, 15, { align: "center" });
+
+      doc.setFontSize(14);
+      doc.setTextColor(15, 23, 42);
+      doc.text(`Payslip for ${getMonthName(slip.month)} ${slip.year}`, 105, 25, { align: "center" });
+
+      // Info Table
+      autoTable(doc, {
+        startY: 35,
+        head: [['Payslip ID', 'Status', 'Working Days', 'Present']],
+        body: [
+          [slip.payslipId, slip.status, slip.workingDays || '-', slip.presentDays || '-']
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [79, 70, 229] }
+      });
+
+      // Breakdown Table preparation
+      const earnings = slip.earnings?.length ? slip.earnings : [{ type: 'Basic Salary', amount: slip.basicSalary }];
+      const deductions = slip.deductions || [];
+      const rows = [];
+      const len = Math.max(earnings.length, deductions.length);
+
+      for (let i = 0; i < len; i++) {
+        rows.push([
+          earnings[i]?.type || '',
+          earnings[i]?.amount ? `Rs. ${earnings[i].amount.toLocaleString()}` : '',
+          deductions[i]?.type || '',
+          deductions[i]?.amount ? `Rs. ${deductions[i].amount.toLocaleString()}` : ''
+        ]);
+      }
+
+      // Totals
+      rows.push(['Gross Salary', `Rs. ${slip.grossSalary?.toLocaleString()}`, 'Total Reductions', `Rs. ${slip.totalDeductions?.toLocaleString()}`]);
+
+      autoTable(doc, {
+        startY: doc.lastAutoTable.finalY + 10,
+        head: [['Earnings', 'Amount', 'Deductions', 'Amount']],
+        body: rows,
+        theme: 'striped',
+        headStyles: { fillColor: [79, 70, 229] },
+        columnStyles: { 1: { fontStyle: 'bold' }, 3: { fontStyle: 'bold', textColor: [225, 29, 72] } }
+      });
+
+      // Net Pay
+      const finalY = doc.lastAutoTable.finalY + 15;
+      doc.setFillColor(240, 253, 244);
+      doc.rect(14, finalY, 182, 15, 'F');
+      doc.setFontSize(12);
+      doc.setTextColor(21, 128, 61);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Net Payable: Rs. ${slip.netSalary?.toLocaleString()}`, 105, finalY + 10, { align: "center" });
+      doc.save(`Payslip_${slip.payslipId}.pdf`);
+      toast.success("Payslip PDF Downloaded");
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to generate PDF");
+    }
   };
 
   if (loading && payslips.length === 0) {
@@ -288,7 +356,7 @@ export default function MyPayslipPage() {
                     >
                       <Eye className="w-4 h-4" /> View Detail
                     </button>
-                    <button className="py-3 px-4 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-black hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center gap-2">
+                    <button onClick={() => handleDownloadPDF(ps)} className="py-3 px-4 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-black hover:bg-indigo-600 hover:text-white transition-all flex items-center justify-center gap-2">
                       <DownloadCloud className="w-4 h-4" /> Download
                     </button>
                   </div>
@@ -370,7 +438,7 @@ export default function MyPayslipPage() {
                           <button onClick={() => handleViewDetails(ps)} className="p-3 bg-white border border-slate-200 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
                             <Eye className="w-4 h-4" />
                           </button>
-                          <button className="p-3 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">
+                          <button onClick={() => handleDownloadPDF(ps)} className="p-3 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">
                             <DownloadCloud className="w-4 h-4" />
                           </button>
                         </div>
@@ -541,7 +609,7 @@ export default function MyPayslipPage() {
                 <button className="flex-1 py-4 bg-white border border-slate-200 rounded-[1.5rem] text-sm font-black text-slate-700 hover:bg-slate-100 transition-all flex items-center justify-center gap-2">
                   <ExternalLink className="w-4 h-4" /> Share Info
                 </button>
-                <button className="flex-[2] py-4 bg-indigo-600 text-white rounded-[1.5rem] text-sm font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                <button onClick={() => handleDownloadPDF(selectedPayslip)} className="flex-[2] py-4 bg-indigo-600 text-white rounded-[1.5rem] text-sm font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
                   <DownloadCloud className="w-5 h-5" /> Download PDF Report
                 </button>
               </div>

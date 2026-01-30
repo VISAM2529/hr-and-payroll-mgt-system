@@ -43,7 +43,7 @@
 //     const fetchDropdownData = async () => {
 //       try {
 //         console.log('Fetching dropdown data...');
-        
+
 //         // Fetch organizations
 //         const orgsRes = await fetch(`${ORGANIZATIONS_API}?page=1&limit=100`);
 //         if (orgsRes.ok) {
@@ -55,13 +55,13 @@
 //           console.error('Failed to fetch organizations:', orgsRes.status);
 //           setError('Failed to load organizations');
 //         }
-        
+
 //       } catch (err) {
 //         console.error('Error fetching dropdown data:', err);
 //         setError('Failed to load some dropdown data. Using available options.');
 //       }
 //     };
-    
+
 //     fetchDropdownData();
 //   }, []);
 
@@ -91,12 +91,12 @@
 //       }
 
 //       const data = await res.json();
-      
+
 //       // Handle different response structures
 //       const departmentsList = data.data || data.departments || [];
-      
+
 //       setDepartments(departmentsList);
-      
+
 //       setPagination(data.pagination || {
 //         page,
 //         total: data.total || departmentsList.length,
@@ -474,7 +474,7 @@
 //                   </p>
 //                   <p className="text-xs text-slate-500 mt-1">Active organizations</p>
 //                 </div>
-//                 <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+//                 <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
 //                   <Building2 className="w-6 h-6 text-blue-600" />
 //                 </div>
 //               </div>
@@ -649,7 +649,7 @@
 //                               <StatusPill status={dept.status} />
 //                             </div>
 
-                         
+
 
 //                             <div className="flex items-center justify-between pt-4 border-t border-slate-200">
 //                               <div className="flex items-center gap-1">
@@ -767,7 +767,7 @@
 //                                 <p className="font-medium">{getOrganizationName(selectedDepartment)}</p>
 //                               </div>
 //                             </div>
-                          
+
 //                             {/* Status */}
 //                             <div className="flex items-center gap-4 p-4 bg-slate-50 border rounded-xl">
 //                               <CheckCircle className="w-4 h-4 text-yellow-600" />
@@ -785,7 +785,7 @@
 //                               Additional Details
 //                             </h3>
 
-                           
+
 
 //                             {/* Created At */}
 //                             <div className="flex items-center gap-4 p-4 bg-slate-50 border rounded-xl">
@@ -1018,10 +1018,10 @@ export default function DepartmentsPage() {
       }
 
       const data = await res.json();
-      
+
       const departmentsList = data.data || data.departments || [];
       setDepartments(departmentsList);
-            
+
       setPagination(data.pagination || {
         page,
         total: data.total || departmentsList.length,
@@ -1248,8 +1248,8 @@ export default function DepartmentsPage() {
 
   const StatusPill = ({ status }) => (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border ${status === 'Active'
-        ? 'bg-green-50 text-green-700 border-green-200'
-        : 'bg-red-50 text-red-700 border-red-200'
+      ? 'bg-green-50 text-green-700 border-green-200'
+      : 'bg-red-50 text-red-700 border-red-200'
       }`}>
       <div className={`w-1.5 h-1.5 rounded-full ${status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></div>
       {status}
@@ -1320,8 +1320,8 @@ export default function DepartmentsPage() {
                   <button
                     onClick={() => handlePageChange(pageNum)}
                     className={`h-9 w-9 flex items-center justify-center text-sm font-medium border transition-colors rounded-md ${page === pageNum
-                        ? "bg-yellow-500 border-yellow-500 text-white hover:bg-yellow-600"
-                        : "border-slate-300 text-slate-600 hover:bg-slate-50"
+                      ? "bg-yellow-500 border-yellow-500 text-white hover:bg-yellow-600"
+                      : "border-slate-300 text-slate-600 hover:bg-slate-50"
                       }`}
                   >
                     {pageNum}
@@ -1380,36 +1380,36 @@ export default function DepartmentsPage() {
 
           {/* Controls Skeleton */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-             <div className="flex justify-between mb-6">
-                 <Skeleton className="h-8 w-48" />
-                 <Skeleton className="h-10 w-32" />
-             </div>
-             <div className="grid grid-cols-12 gap-4">
-                 <div className="col-span-6"><Skeleton className="h-10 w-full" /></div>
-                 <div className="col-span-4"><Skeleton className="h-10 w-full" /></div>
-                 <div className="col-span-2"><Skeleton className="h-10 w-full" /></div>
-             </div>
+            <div className="flex justify-between mb-6">
+              <Skeleton className="h-8 w-48" />
+              <Skeleton className="h-10 w-32" />
+            </div>
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-6"><Skeleton className="h-10 w-full" /></div>
+              <div className="col-span-4"><Skeleton className="h-10 w-full" /></div>
+              <div className="col-span-2"><Skeleton className="h-10 w-full" /></div>
+            </div>
           </div>
 
           {/* Grid Skeleton */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
-                 <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                        <Skeleton className="w-12 h-12 rounded-xl" />
-                        <div>
-                            <Skeleton className="h-4 w-32 mb-1" />
-                            <Skeleton className="h-3 w-24" />
-                        </div>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="w-12 h-12 rounded-xl" />
+                    <div>
+                      <Skeleton className="h-4 w-32 mb-1" />
+                      <Skeleton className="h-3 w-24" />
                     </div>
-                    <Skeleton className="h-6 w-16 rounded-md" />
-                 </div>
-                 <div className="pt-4 border-t border-slate-200 flex justify-end gap-2">
-                     <Skeleton className="w-8 h-8 rounded-lg" />
-                     <Skeleton className="w-8 h-8 rounded-lg" />
-                     <Skeleton className="w-8 h-8 rounded-lg" />
-                 </div>
+                  </div>
+                  <Skeleton className="h-6 w-16 rounded-md" />
+                </div>
+                <div className="pt-4 border-t border-slate-200 flex justify-end gap-2">
+                  <Skeleton className="w-8 h-8 rounded-lg" />
+                  <Skeleton className="w-8 h-8 rounded-lg" />
+                  <Skeleton className="w-8 h-8 rounded-lg" />
+                </div>
               </div>
             ))}
           </div>
@@ -1425,7 +1425,7 @@ export default function DepartmentsPage() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                 <Layers className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -1440,7 +1440,7 @@ export default function DepartmentsPage() {
                   resetForm();
                   setView('create');
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 Add Department
@@ -1461,8 +1461,8 @@ export default function DepartmentsPage() {
                   <p className="text-2xl font-bold text-slate-900 mt-2">{pagination.total}</p>
                   <p className="text-xs text-slate-500 mt-1">All departments</p>
                 </div>
-                <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center border border-yellow-100">
-                  <Layers className="w-6 h-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
+                  <Layers className="w-6 h-6 text-indigo-600" />
                 </div>
               </div>
             </div>
@@ -1491,7 +1491,7 @@ export default function DepartmentsPage() {
                   </p>
                   <p className="text-xs text-slate-500 mt-1">Active organizations</p>
                 </div>
-                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+                <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                   <Building2 className="w-6 h-6 text-blue-600" />
                 </div>
               </div>
@@ -1509,7 +1509,7 @@ export default function DepartmentsPage() {
                     Departments ({pagination.total})
                   </h2>
                   {hasActiveFilters && (
-                    <span className="inline-flex items-center px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full border border-yellow-200">
+                    <span className="inline-flex items-center px-2.5 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full border border-indigo-200">
                       Filtered Results
                     </span>
                   )}
@@ -1538,7 +1538,7 @@ export default function DepartmentsPage() {
                       placeholder="Search by department name"
                       value={searchTerm}
                       onChange={handleSearchChange}
-                      className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                      className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -1548,7 +1548,7 @@ export default function DepartmentsPage() {
                   <select
                     value={statusFilter}
                     onChange={handleStatusFilterChange}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                   >
                     <option value="all">All Status</option>
                     <option value="Active">Active</option>
@@ -1625,7 +1625,7 @@ export default function DepartmentsPage() {
                           setStatusFilter('all');
                           await fetchDepartments({ page: 1 });
                         }}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg hover:bg-yellow-100 border border-yellow-200 text-sm font-medium transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 border border-indigo-200 text-sm font-medium transition-colors"
                       >
                         <FilterX className="w-4 h-4" />
                         Clear All Filters
@@ -1636,7 +1636,7 @@ export default function DepartmentsPage() {
                           resetForm();
                           setView('create');
                         }}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors shadow-sm"
                       >
                         <Plus className="w-4 h-4" />
                         Add First Department
@@ -1651,7 +1651,7 @@ export default function DepartmentsPage() {
                           <div className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+                                <div className="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                                   <Layers className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="flex-1">
@@ -1677,7 +1677,7 @@ export default function DepartmentsPage() {
                                 </button>
                                 <button
                                   onClick={() => handleEdit(dept)}
-                                  className="p-2 hover:bg-slate-100 text-slate-400 hover:text-yellow-600 rounded-lg transition-colors"
+                                  className="p-2 hover:bg-slate-100 text-slate-400 hover:text-indigo-600 rounded-lg transition-colors"
                                   title="Edit"
                                 >
                                   <Edit2 className="w-4 h-4" />
@@ -1733,7 +1733,7 @@ export default function DepartmentsPage() {
                       resetForm();
                       setView('list');
                     }}
-                    className="flex items-center gap-2 text-slate-600 hover:text-yellow-600 transition-colors mb-6 group"
+                    className="flex items-center gap-2 text-slate-600 hover:text-indigo-600 transition-colors mb-6 group"
                   >
                     <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
                     <span className="font-medium">Back to List</span>
@@ -1746,7 +1746,7 @@ export default function DepartmentsPage() {
                       <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 px-8 py-6">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-5">
-                            <div className="w-16 h-16 bg-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
+                            <div className="w-16 h-16 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg">
                               <Layers className="w-7 h-7 text-white" />
                             </div>
                             <div>
@@ -1774,22 +1774,22 @@ export default function DepartmentsPage() {
                           {/* LEFT COLUMN – Basic Info */}
                           <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                              <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                               Basic Information
                             </h3>
 
                             {/* Organization */}
                             <div className="flex items-center gap-4 p-4 bg-slate-50 border rounded-xl">
-                              <Building2 className="w-4 h-4 text-yellow-600" />
+                              <Building2 className="w-4 h-4 text-indigo-600" />
                               <div>
                                 <p className="text-xs text-slate-500 uppercase">Organization</p>
                                 <p className="font-medium">{getOrganizationName(selectedDepartment)}</p>
                               </div>
                             </div>
-                          
+
                             {/* Status */}
                             <div className="flex items-center gap-4 p-4 bg-slate-50 border rounded-xl">
-                              <CheckCircle className="w-4 h-4 text-yellow-600" />
+                              <CheckCircle className="w-4 h-4 text-indigo-600" />
                               <div>
                                 <p className="text-xs text-slate-500 uppercase">Status</p>
                                 <p className="font-medium">{selectedDepartment?.status}</p>
@@ -1800,13 +1800,13 @@ export default function DepartmentsPage() {
                           {/* RIGHT COLUMN – Additional Details */}
                           <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                              <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                               Additional Details
                             </h3>
 
                             {/* Created At */}
                             <div className="flex items-center gap-4 p-4 bg-slate-50 border rounded-xl">
-                              <Calendar className="w-4 h-4 text-yellow-600" />
+                              <Calendar className="w-4 h-4 text-indigo-600" />
                               <div>
                                 <p className="text-xs text-slate-500 uppercase">Created At</p>
                                 <p className="font-medium">
@@ -1817,7 +1817,7 @@ export default function DepartmentsPage() {
 
                             {/* Updated At */}
                             <div className="flex items-center gap-4 p-4 bg-slate-50 border rounded-xl">
-                              <Calendar className="w-4 h-4 text-yellow-600" />
+                              <Calendar className="w-4 h-4 text-indigo-600" />
                               <div>
                                 <p className="text-xs text-slate-500 uppercase">Updated At</p>
                                 <p className="font-medium">
@@ -1826,7 +1826,7 @@ export default function DepartmentsPage() {
                               </div>
                             </div>
 
-                      
+
                           </div>
                         </div>
 
@@ -1834,25 +1834,25 @@ export default function DepartmentsPage() {
                         <div className="mt-8 pt-8 border-t border-slate-200">
                           <div className="col-span-full">
                             <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2 mb-4">
-                              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                              <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                               Permissions
                             </h3>
                             <div className="bg-slate-50 border rounded-xl p-6">
                               {selectedDepartment?.permissions?.length > 0 ? (
                                 <div className="flex flex-wrap gap-2">
                                   {selectedDepartment.permissions.map((permSlug, index) => {
-                                      // Find permission name from available permissions
-                                      const permObj = availablePermissions.find(p => p.slug === permSlug);
-                                      const permLabel = permObj ? permObj.name : permSlug.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                                      
-                                      return (
-                                        <span 
-                                          key={index}
-                                          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white border border-slate-200 text-slate-700 shadow-sm"
-                                        >
-                                          {permLabel}
-                                        </span>
-                                      );
+                                    // Find permission name from available permissions
+                                    const permObj = availablePermissions.find(p => p.slug === permSlug);
+                                    const permLabel = permObj ? permObj.name : permSlug.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+                                    return (
+                                      <span
+                                        key={index}
+                                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white border border-slate-200 text-slate-700 shadow-sm"
+                                      >
+                                        {permLabel}
+                                      </span>
+                                    );
                                   })}
                                 </div>
                               ) : (
@@ -1869,7 +1869,7 @@ export default function DepartmentsPage() {
                       {/* Header */}
                       <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 px-8 py-6">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
+                          <div className="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg">
                             <Layers className="w-6 h-6 text-white" />
                           </div>
                           <div>
@@ -1889,7 +1889,7 @@ export default function DepartmentsPage() {
                         {/* Basic Information */}
                         <div className="space-y-6">
                           <h3 className="text-lg font-semibold flex items-center gap-2">
-                            <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                            <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                             Basic Information
                           </h3>
 
@@ -1924,7 +1924,7 @@ export default function DepartmentsPage() {
                                 name="departmentName"
                                 value={formData.departmentName}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors"
+                                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
                                 placeholder="Enter department name"
                               />
                             </div>
@@ -1935,7 +1935,7 @@ export default function DepartmentsPage() {
                                 name="status"
                                 value={formData.status}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-colors"
+                                className="w-full px-4 py-3 border border-slate-300 rounded-xl bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
                               >
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -1947,45 +1947,44 @@ export default function DepartmentsPage() {
                         {/* Permissions Selection */}
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold flex items-center gap-2">
-                            <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                            <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                             Permissions
                           </h3>
-                          
+
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             {availablePermissions.map((permission) => (
-                              <label 
+                              <label
                                 key={permission.slug}
                                 className={`
                                   relative flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all
                                   ${formData.permissions?.includes(permission.slug)
-                                    ? 'border-yellow-500 bg-yellow-50'
+                                    ? 'border-indigo-500 bg-indigo-50'
                                     : 'border-slate-200 bg-white hover:border-slate-300'
                                   }
                                 `}
                               >
                                 <input
                                   type="checkbox"
-                                  className="w-4 h-4 text-yellow-600 border-slate-300 rounded focus:ring-yellow-500 mr-3"
+                                  className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 mr-3"
                                   checked={formData.permissions?.includes(permission.slug) || false}
                                   onChange={() => handlePermissionChange(permission.slug)}
                                 />
                                 <div className="flex flex-col">
-                                    <span className={`text-sm font-medium ${
-                                    formData.permissions?.includes(permission.slug) ? 'text-slate-900' : 'text-slate-600'
+                                  <span className={`text-sm font-medium ${formData.permissions?.includes(permission.slug) ? 'text-slate-900' : 'text-slate-600'
                                     }`}>
                                     {permission.name}
-                                    </span>
-                                    {permission.description && (
-                                        <span className="text-xs text-slate-400">{permission.description}</span>
-                                    )}
+                                  </span>
+                                  {permission.description && (
+                                    <span className="text-xs text-slate-400">{permission.description}</span>
+                                  )}
                                 </div>
                               </label>
                             ))}
                             {availablePermissions.length === 0 && (
-                                <div className="col-span-full py-8 text-center bg-slate-50 border border-slate-200 border-dashed rounded-xl">
-                                    <p className="text-slate-500">No permissions found.</p>
-                                    <a href="/crm/permissions" className="text-indigo-600 font-medium hover:underline mt-1 inline-block">Manage Permissions</a>
-                                </div>
+                              <div className="col-span-full py-8 text-center bg-slate-50 border border-slate-200 border-dashed rounded-xl">
+                                <p className="text-slate-500">No permissions found.</p>
+                                <a href="/crm/permissions" className="text-indigo-600 font-medium hover:underline mt-1 inline-block">Manage Permissions</a>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -2005,7 +2004,7 @@ export default function DepartmentsPage() {
                           <button
                             onClick={view === "create" ? handleCreate : handleUpdate}
                             disabled={isSubmitting || !formData.organizationId || !formData.departmentName.trim()}
-                            className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-2 font-medium"
+                            className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-2 font-medium"
                           >
                             <Save className="w-4 h-4" />
                             {isSubmitting ? 'Saving...' : view === "create" ? "Create Department" : "Save Changes"}

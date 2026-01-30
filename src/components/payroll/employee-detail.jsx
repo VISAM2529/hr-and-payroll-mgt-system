@@ -147,7 +147,7 @@ const calculateTenure = (joinDate) => {
 
 const getCategoryColor = (category) => {
   const colors = {
-    'Aadhar Card': 'bg-blue-50 text-blue-700 border-blue-200',
+    'Aadhar Card': 'bg-slate-50 text-blue-700 border-blue-200',
     'PAN Card': 'bg-green-50 text-green-700 border-green-200',
     'Bank Statement': 'bg-purple-50 text-purple-700 border-purple-200',
     'Salary Slip': 'bg-yellow-50 text-yellow-700 border-yellow-200',
@@ -201,7 +201,7 @@ const TaskProgressBar = ({ tasks }) => {
   const statusColors = {
     Completed: "bg-green-500",
     "In Progress": "bg-yellow-500",
-    Pending: "bg-blue-500",
+    Pending: "bg-slate-500",
     Blocked: "bg-red-500",
     Deferred: "bg-slate-500",
   };
@@ -262,7 +262,7 @@ const AttendanceStatusBadge = ({ status }) => {
       icon: Clock,
     },
     Leave: {
-      color: "bg-blue-50 text-blue-700 border-blue-200",
+      color: "bg-slate-50 text-blue-700 border-blue-200",
       icon: Calendar,
     },
     Holiday: {
@@ -305,7 +305,7 @@ const AttendanceStatsCards = ({ attendance }) => {
         <div className="text-sm text-yellow-600">Half Day</div>
         <div className="text-xs text-yellow-500 mt-1">{stats.halfDayRate}%</div>
       </div>
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+      <div className="bg-slate-50 border border-blue-200 rounded-lg p-4 text-center">
         <div className="text-2xl font-bold text-blue-700">{stats.attendanceRate}%</div>
         <div className="text-sm text-blue-600">Overall Rate</div>
         <div
@@ -806,7 +806,7 @@ function DocumentUploadSection({
         </div>
       )}
       {employeeCategory && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-slate-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm font-medium text-blue-800">
             Document requirements for: <span className="font-semibold">{employeeCategory}</span>
           </p>
@@ -1090,7 +1090,7 @@ function PayslipStructureSection({
   }, [pfApplicable]);
   return (
     <div className="space-y-8">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+      <div className="bg-slate-50 border border-blue-200 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
           <Calendar className="w-5 h-5 text-blue-600" />
           Month Selection for Professional Tax
@@ -1733,7 +1733,7 @@ function PayslipStructureSection({
               : "Needs adjustment - Deductions exceed earnings"}
           </div>
           {payslipStructure.salaryType === "perday" && (
-            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="mt-4 bg-slate-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm font-semibold text-blue-800">
                 Per Day Salary Configuration
               </p>
@@ -2099,7 +2099,7 @@ function OverviewTab({ employee, attendanceStats }) {
           <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Quick Info</h3>
           <div className="space-y-4">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center shrink-0">
                 <MapPin className="w-4 h-4 text-blue-600" />
               </div>
               <div>
@@ -2152,7 +2152,7 @@ function OverviewTab({ employee, attendanceStats }) {
               <p className="text-sm text-yellow-600 mb-1">Half Days</p>
               <p className="text-2xl font-bold text-yellow-700">{attendanceStats.halfDay}</p>
             </div>
-            <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
+            <div className="p-4 bg-slate-50 rounded-xl border border-blue-100">
               <p className="text-sm text-blue-600 mb-1">Leaves Taken</p>
               <p className="text-2xl font-bold text-blue-700">{attendanceStats.leave}</p>
             </div>

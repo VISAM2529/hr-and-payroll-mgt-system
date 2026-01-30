@@ -6,7 +6,7 @@ import {
   ChevronLeft, ChevronRight, Calendar, Plus, ArrowLeft,
   CheckCircle, Clock, AlertCircle, User, Activity,
   Zap, Timer, Target, TrendingUp, Filter, RefreshCw,
-  Eye, Edit, Bookmark, Star, Bell, Settings,
+  Eye, Edit, Bookmark, Star, Settings,
   ChevronDown, Grid3X3, List, BarChart3
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,7 @@ export default function TaskCalendar() {
   const [showFilters, setShowFilters] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const {user} = useSession();
+  const { user } = useSession();
 
   useEffect(() => {
     fetchTasks();
@@ -35,13 +35,13 @@ export default function TaskCalendar() {
       setLoading(true);
       // For employees, fetch only their assigned tasks
       // For other roles, fetch all tasks
-      const endpoint = user?.role === "Employee" 
-        ? '/api/tasks?myTasks=true' 
+      const endpoint = user?.role === "Employee"
+        ? '/api/tasks?myTasks=true'
         : '/api/tasks';
-      
+
       const response = await fetch(endpoint);
       const data = await response.json();
-      
+
       if (response.ok) {
         setTasks(data.data);
       } else {
@@ -58,7 +58,7 @@ export default function TaskCalendar() {
   // Add this function to filter tasks based on user role
   const getFilteredTasks = (tasks) => {
     if (!tasks || !user) return [];
-    
+
     // If user is an employee, only show tasks assigned to them
     if (user.role === "Employee") {
       return tasks.filter(task => {
@@ -66,7 +66,7 @@ export default function TaskCalendar() {
         return task.assignedTo && task.assignedTo._id === user.id;
       });
     }
-    
+
     // For other roles (Admin, Manager, etc.), show all tasks
     return tasks;
   };
@@ -97,7 +97,7 @@ export default function TaskCalendar() {
   const getTasksForDate = (date) => {
     // Use the filtered tasks based on user role
     const filteredTasks = getFilteredTasks(tasks);
-    
+
     let dateFilteredTasks = filteredTasks.filter(task => {
       const taskDate = new Date(task.dueDate);
       return taskDate.toDateString() === date.toDateString();
@@ -116,13 +116,13 @@ export default function TaskCalendar() {
   const getStatusBadge = (status) => {
     const statusConfig = {
       Pending: { color: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock },
-      'In Progress': { color: 'bg-blue-50 text-blue-700 border-blue-200', icon: Activity },
+      'In Progress': { color: 'bg-slate-50 text-blue-700 border-blue-200', icon: Activity },
       Completed: { color: 'bg-green-50 text-green-700 border-green-200', icon: CheckCircle },
       Blocked: { color: 'bg-red-50 text-red-700 border-red-200', icon: AlertCircle },
     };
-    
+
     const { color, icon: Icon } = statusConfig[status] || statusConfig.Pending;
-    
+
     return (
       <Badge className={`${color} border flex items-center gap-1 font-medium text-xs`}>
         <Icon className="h-2 w-2" />
@@ -183,35 +183,33 @@ export default function TaskCalendar() {
 
     for (let i = 0; i < 6; i++) {
       const week = [];
-      
+
       for (let j = 0; j < 7; j++) {
         if ((i === 0 && j < firstDay) || day > daysInMonth) {
           week.push(<div key={j} className="h-28 p-1 border border-slate-100"></div>);
         } else {
           const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
           const dateTasks = getTasksForDate(date);
-          const hasOverdue = dateTasks?.some(task => 
+          const hasOverdue = dateTasks?.some(task =>
             task.status !== 'Completed' && isOverdue(new Date(task.dueDate))
           );
-          
+
           week.push(
             <div
               key={j}
-              className={`h-28 p-2 border cursor-pointer transition-all duration-200 hover:shadow-sm ${
-                isToday(date) ? 'bg-yellow-50 border-yellow-300 shadow-sm' : 
-                isSelected(date) ? 'bg-blue-50 border-blue-300 shadow-sm' : 
-                hasOverdue ? 'bg-red-50 border-red-200' :
-                'border-slate-200 hover:bg-slate-50'
-              }`}
+              className={`h-28 p-2 border cursor-pointer transition-all duration-200 hover:shadow-sm ${isToday(date) ? 'bg-yellow-50 border-yellow-300 shadow-sm' :
+                isSelected(date) ? 'bg-slate-50 border-blue-300 shadow-sm' :
+                  hasOverdue ? 'bg-red-50 border-red-200' :
+                    'border-slate-200 hover:bg-slate-50'
+                }`}
               onClick={() => setSelectedDate(date)}
             >
               <div className="flex justify-between items-center mb-2">
-                <span className={`text-sm font-semibold ${
-                  isToday(date) ? 'text-yellow-700' :
+                <span className={`text-sm font-semibold ${isToday(date) ? 'text-yellow-700' :
                   isSelected(date) ? 'text-blue-700' :
-                  hasOverdue ? 'text-red-700' :
-                  'text-slate-700'
-                }`}>
+                    hasOverdue ? 'text-red-700' :
+                      'text-slate-700'
+                  }`}>
                   {day}
                 </span>
                 <div className="flex items-center gap-1">
@@ -225,7 +223,7 @@ export default function TaskCalendar() {
                   )}
                 </div>
               </div>
-              
+
               <div className="space-y-1 max-h-16 overflow-y-auto">
                 {dateTasks?.slice(0, 2).map((task) => (
                   <div
@@ -248,13 +246,13 @@ export default function TaskCalendar() {
           day++;
         }
       }
-      
+
       weeks.push(
         <div key={i} className="grid grid-cols-7 gap-1">
           {week}
         </div>
       );
-      
+
       if (day > daysInMonth) break;
     }
 
@@ -277,19 +275,19 @@ export default function TaskCalendar() {
   const getCalendarStats = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const filteredTasks = getFilteredTasks(tasks);
-    
+
     return {
       total: filteredTasks.length,
       completed: filteredTasks.filter(t => t.status === 'Completed').length,
-      overdue: filteredTasks.filter(t => 
+      overdue: filteredTasks.filter(t =>
         new Date(t.dueDate) < today && t.status !== 'Completed'
       ).length,
       thisMonth: filteredTasks.filter(t => {
         const taskDate = new Date(t.dueDate);
-        return taskDate.getMonth() === currentDate.getMonth() && 
-               taskDate.getFullYear() === currentDate.getFullYear();
+        return taskDate.getMonth() === currentDate.getMonth() &&
+          taskDate.getFullYear() === currentDate.getFullYear();
       }).length
     };
   };
@@ -313,7 +311,7 @@ export default function TaskCalendar() {
             </div>
           </div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex justify-center items-center h-64">
             <div className="flex flex-col items-center space-y-4">
@@ -341,7 +339,7 @@ export default function TaskCalendar() {
                 <p className="text-slate-600 text-sm mt-0.5">Visualize and manage your task timeline</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <button
                 onClick={handleRefresh}
@@ -351,7 +349,7 @@ export default function TaskCalendar() {
               >
                 <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />
               </button>
-              
+
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className="p-2.5 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
@@ -359,7 +357,7 @@ export default function TaskCalendar() {
               >
                 <Filter className="h-5 w-5" />
               </button>
-              
+
               {user?.role !== "Employee" && (
                 <Link href="/tasks/create">
                   <Button className="bg-yellow-500 hover:bg-yellow-600 text-white shadow-sm px-6 py-2.5 font-semibold">
@@ -380,7 +378,7 @@ export default function TaskCalendar() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                  <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                     <BarChart3 className="w-4 h-4 text-blue-600" />
                   </div>
                   Calendar Overview
@@ -392,7 +390,7 @@ export default function TaskCalendar() {
               </div>
             </div>
           </div>
-          
+
           <div className="p-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200">
@@ -424,9 +422,7 @@ export default function TaskCalendar() {
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <AlertCircle className="w-5 h-5 text-red-600" />
                   </div>
-                  {stats.overdue > 0 && (
-                    <Bell className="w-4 h-4 text-red-500 animate-pulse" />
-                  )}
+
                 </div>
                 <p className="text-red-600 text-sm font-medium">Overdue</p>
                 <p className="text-2xl font-bold text-red-700">{stats.overdue}</p>
@@ -456,7 +452,7 @@ export default function TaskCalendar() {
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900">Calendar Filters</h3>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Priority</label>
@@ -472,7 +468,7 @@ export default function TaskCalendar() {
                     <option value="Urgent">Urgent</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Status</label>
                   <select
@@ -488,7 +484,7 @@ export default function TaskCalendar() {
                   </select>
                 </div>
               </div>
-              
+
               {(priorityFilter || statusFilter) && (
                 <div className="mt-4 pt-4 border-t border-slate-100">
                   <button
@@ -519,11 +515,11 @@ export default function TaskCalendar() {
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                
+
                 <h2 className="text-2xl font-bold text-slate-900">
                   {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                 </h2>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -533,7 +529,7 @@ export default function TaskCalendar() {
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
@@ -607,7 +603,7 @@ export default function TaskCalendar() {
               )}
             </div>
           </div>
-          
+
           <div className="p-6">
             {getSelectedDateTasks()?.length === 0 ? (
               <div className="text-center py-12">
@@ -649,7 +645,7 @@ export default function TaskCalendar() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-2 ml-4">
                       {/* <button
                         className="p-2 text-slate-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"

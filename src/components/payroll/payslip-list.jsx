@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Download, FileText,
   Calendar, User, CreditCard, CheckCircle, Clock, AlertCircle, ChevronDown,
-  RefreshCw, Settings, Bell, BarChart3, TrendingUp, DollarSign, FilterX,
+  RefreshCw, Settings, BarChart3, TrendingUp, DollarSign, FilterX,
   ChevronLeft, ChevronRight, MoreHorizontal, Loader2, Building2, Layers,
   ChevronUp, Package
 } from 'lucide-react';
@@ -520,15 +520,15 @@ export default function PayslipList() {
                 </div>
               ) : employeeTypes.length === 0 ? (
                 <div className="space-y-3 py-4">
-                  <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
-                    <p className="text-sm text-yellow-800">
+                  <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4">
+                    <p className="text-sm text-indigo-800">
                       No employee type information available in the payslips. Exporting all employees in the organization.
                     </p>
                   </div>
                   <button
                     onClick={() => setSelectedEmployeeType('all')}
                     className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-colors font-medium text-sm ${selectedEmployeeType === 'all'
-                      ? 'bg-yellow-50 border-yellow-500 text-yellow-700'
+                      ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
                       : 'border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                   >
@@ -545,7 +545,7 @@ export default function PayslipList() {
                   <button
                     onClick={() => setSelectedEmployeeType('all')}
                     className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-colors font-medium text-sm ${selectedEmployeeType === 'all'
-                      ? 'bg-yellow-50 border-yellow-500 text-yellow-700'
+                      ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
                       : 'border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                   >
@@ -584,13 +584,13 @@ export default function PayslipList() {
                         key={type}
                         onClick={() => setSelectedEmployeeType(type)}
                         className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-colors ${selectedEmployeeType === type
-                          ? 'bg-yellow-50 border-yellow-500'
+                          ? 'bg-indigo-50 border-indigo-500'
                           : 'border-slate-200 hover:bg-slate-50'
                           }`}
                       >
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className={`font-medium text-sm ${selectedEmployeeType === type ? 'text-yellow-700' : 'text-slate-700'
+                            <p className={`font-medium text-sm ${selectedEmployeeType === type ? 'text-indigo-700' : 'text-slate-700'
                               }`}>
                               {type}
                             </p>
@@ -607,7 +607,7 @@ export default function PayslipList() {
             </div>
 
             {/* Summary */}
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+            <div className="bg-slate-50 border-2 border-blue-200 rounded-lg p-4">
               <p className="text-xs text-slate-600 mb-2">Export Summary:</p>
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
@@ -668,7 +668,7 @@ export default function PayslipList() {
                 setShowExportModal(false);
               }}
               disabled={exportLoading || loadingEmployeeTypes}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white rounded-lg font-semibold transition-all disabled:opacity-50"
             >
               {exportLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -704,7 +704,7 @@ export default function PayslipList() {
             <select
               value={itemsPerPage}
               onChange={(e) => handleItemsPerPageChange(e.target.value)}
-              className="border border-slate-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
+              className="border border-slate-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
@@ -733,7 +733,7 @@ export default function PayslipList() {
                   <button
                     onClick={() => handlePageChange(page)}
                     className={`h-9 w-9 flex items-center justify-center text-sm font-medium border transition-colors rounded-md ${currentPage === page
-                      ? "bg-yellow-500 border-yellow-500 text-white hover:bg-yellow-600"
+                      ? "bg-indigo-500 border-indigo-500 text-white hover:bg-indigo-600"
                       : "border-slate-300 text-slate-600 hover:bg-slate-50"
                       }`}
                   >
@@ -766,11 +766,11 @@ export default function PayslipList() {
         dot: 'bg-slate-500'
       },
       Generated: {
-        bg: 'bg-blue-50',
+        bg: 'bg-slate-50',
         text: 'text-blue-700',
         border: 'border-blue-200',
         icon: FileText,
-        dot: 'bg-blue-500'
+        dot: 'bg-slate-500'
       },
       Approved: {
         bg: 'bg-green-50',
@@ -838,7 +838,7 @@ export default function PayslipList() {
       <div className="min-h-screen bg-slate-50">
         <div className="flex items-center justify-center h-screen">
           <div className="text-center space-y-4">
-            <div className="w-12 h-12 border-4 border-slate-200 border-t-yellow-500 rounded-full animate-spin mx-auto"></div>
+            <div className="w-12 h-12 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin mx-auto"></div>
             <div>
               <h3 className="text-lg font-semibold text-slate-900">Loading Payslip Records</h3>
               <p className="text-sm text-slate-600 mt-1">Please wait while we fetch payroll data...</p>
@@ -859,7 +859,7 @@ export default function PayslipList() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                 <CreditCard className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -869,9 +869,7 @@ export default function PayslipList() {
             </div>
 
             <div className="flex items-center space-x-2">
-              <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
-                <Bell className="w-5 h-5" />
-              </button>
+
               <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
                 <Settings className="w-5 h-5" />
               </button>
@@ -890,8 +888,8 @@ export default function PayslipList() {
                 <p className="text-2xl font-bold text-slate-900 mt-2">{totalPayslips}</p>
                 <p className="text-xs text-slate-500 mt-1">All records</p>
               </div>
-              <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center border border-yellow-100">
-                <FileText className="w-6 h-6 text-yellow-600" />
+              <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
+                <FileText className="w-6 h-6 text-indigo-600" />
               </div>
             </div>
           </div>
@@ -931,7 +929,7 @@ export default function PayslipList() {
                 </p>
                 <p className="text-xs text-slate-500 mt-1">Payroll value</p>
               </div>
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                 <DollarSign className="w-6 h-6 text-blue-600" />
               </div>
             </div>
@@ -958,13 +956,13 @@ export default function PayslipList() {
                 <>
                   <button
                     onClick={expandAllOrgs}
-                    className="text-xs px-3 py-1.5 bg-white border-2 border-blue-200 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                    className="text-xs px-3 py-1.5 bg-white border-2 border-blue-200 text-blue-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
                   >
                     Expand All
                   </button>
                   <button
                     onClick={collapseAllOrgs}
-                    className="text-xs px-3 py-1.5 bg-white border-2 border-blue-200 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                    className="text-xs px-3 py-1.5 bg-white border-2 border-blue-200 text-blue-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
                   >
                     Collapse All
                   </button>
@@ -993,7 +991,7 @@ export default function PayslipList() {
                   {groupByOrganization ? 'Organizations' : `Payslip Records (${paginationData.totalItems})`}
                 </h2>
                 {hasActiveFilters && (
-                  <span className="inline-flex items-center px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full border border-yellow-200">
+                  <span className="inline-flex items-center px-2.5 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full border border-indigo-200">
                     Filtered Results
                   </span>
                 )}
@@ -1011,7 +1009,7 @@ export default function PayslipList() {
 
                 <Link
                   href="/payroll/payslip/generate"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
                 >
                   <Plus className="w-4 h-4" />
                   Generate Payslip
@@ -1030,7 +1028,7 @@ export default function PayslipList() {
                     placeholder="Search by employee name, ID, or payslip number..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                   />
                 </div>
               </div>
@@ -1040,7 +1038,7 @@ export default function PayslipList() {
                 <select
                   value={organizationFilter}
                   onChange={(e) => setOrganizationFilter(e.target.value)}
-                  className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                  className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                 >
                   <option value="">All Organizations</option>
                   {organizations.map(org => (
@@ -1054,7 +1052,7 @@ export default function PayslipList() {
                 <select
                   value={monthFilter}
                   onChange={(e) => setMonthFilter(e.target.value)}
-                  className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                  className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                 >
                   <option value="">All Months</option>
                   {months.map((month, index) => (
@@ -1070,7 +1068,7 @@ export default function PayslipList() {
                 <select
                   value={yearFilter}
                   onChange={(e) => setYearFilter(e.target.value)}
-                  className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                  className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                 >
                   <option value="">All Years</option>
                   {years.map(year => (
@@ -1086,7 +1084,7 @@ export default function PayslipList() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                  className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                 >
                   <option value="">All Status</option>
                   <option value="Draft">Draft</option>
@@ -1155,7 +1153,7 @@ export default function PayslipList() {
                       setStatusFilter('');
                       setOrganizationFilter('');
                     }}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg hover:bg-yellow-100 border-2 border-yellow-200 text-sm font-medium transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 border-2 border-indigo-200 text-sm font-medium transition-colors"
                   >
                     <FilterX className="w-4 h-4" />
                     Clear All Filters
@@ -1163,7 +1161,7 @@ export default function PayslipList() {
                 ) : (
                   <Link
                     href="/payroll/payslip/generate"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
                   >
                     <Plus className="w-4 h-4" />
                     Generate First Payslip
@@ -1190,7 +1188,7 @@ export default function PayslipList() {
                             )}
                           </div>
 
-                          <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                          <div className="w-10 h-10 bg-slate-500 rounded-lg flex items-center justify-center">
                             <Building2 className="w-5 h-5 text-white" />
                           </div>
 
@@ -1218,7 +1216,7 @@ export default function PayslipList() {
                             setShowExportModal(true);
                           }}
                           disabled={exportLoading}
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-lg border-2 border-blue-200 transition-colors font-medium disabled:opacity-50"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-50 text-blue-700 rounded-lg border-2 border-blue-200 transition-colors font-medium disabled:opacity-50"
                         >
                           {exportLoading ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -1254,7 +1252,7 @@ export default function PayslipList() {
                                 </td>
                                 <td className="py-4 px-6">
                                   <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                                    <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
                                       <User className="w-5 h-5 text-white" />
                                     </div>
                                     <div>
@@ -1287,7 +1285,7 @@ export default function PayslipList() {
                                   <div className="flex items-center justify-center space-x-1">
                                     <Link
                                       href={`/payroll/payslip/${payslip._id}`}
-                                      className="p-2 text-slate-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                                      className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                                       title="View Details"
                                     >
                                       <Eye className="w-4 h-4" />
@@ -1329,7 +1327,7 @@ export default function PayslipList() {
                           </td>
                           <td className="py-4 px-6">
                             <div className="flex items-center space-x-3">
-                              <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                              <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
                                 <User className="w-5 h-5 text-white" />
                               </div>
                               <div>
@@ -1365,7 +1363,7 @@ export default function PayslipList() {
                             <div className="flex items-center justify-center space-x-1">
                               <Link
                                 href={`/payroll/payslip/${payslip._id}`}
-                                className="p-2 text-slate-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                                className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                                 title="View Details"
                               >
                                 <Eye className="w-4 h-4" />

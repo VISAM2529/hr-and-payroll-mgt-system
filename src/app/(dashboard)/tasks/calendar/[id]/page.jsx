@@ -10,7 +10,7 @@ import {
 
 // --- Helper Components for better readability/reusability (not strictly necessary but good practice) ---
 const LoadingSkeleton = () => (
-  <div className="min-h-screen bg-slate-50 p-8">
+  <div className="min-h-screen bg-blue-50 p-8">
     <div className="max-w-7xl mx-auto">
       {/* Header Skeleton */}
       <div className="bg-white border-b border-slate-200 mb-8 p-6 rounded-xl animate-pulse">
@@ -171,9 +171,9 @@ export default function ViewTaskPage() {
     switch (priority?.toLowerCase()) {
       case 'urgent': return 'text-red-600 bg-red-50 border-red-200';
       case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-slate-600 bg-slate-50 border-slate-200';
-      default: return 'text-slate-600 bg-slate-50 border-slate-200';
+      case 'medium': return 'text-indigo-600 bg-indigo-50 border-indigo-200';
+      case 'low': return 'text-slate-600 bg-blue-50 border-slate-200';
+      default: return 'text-slate-600 bg-blue-50 border-slate-200';
     }
   };
 
@@ -183,8 +183,8 @@ export default function ViewTaskPage() {
       case 'in progress': return 'text-blue-600 bg-blue-50 border-blue-200';
       case 'pending': return 'text-amber-600 bg-amber-50 border-amber-200';
       case 'blocked': return 'text-red-600 bg-red-50 border-red-200';
-      case 'deferred': return 'text-slate-600 bg-slate-50 border-slate-200';
-      default: return 'text-slate-600 bg-slate-50 border-slate-200';
+      case 'deferred': return 'text-slate-600 bg-blue-50 border-slate-200';
+      default: return 'text-slate-600 bg-blue-50 border-slate-200';
     }
   };
 
@@ -219,13 +219,13 @@ export default function ViewTaskPage() {
   const isCompleted = task.status?.toLowerCase() === 'completed';
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-blue-50">
       {/* Header */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                 <Target className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -233,7 +233,7 @@ export default function ViewTaskPage() {
                 <p className="text-slate-600 text-sm mt-0.5 font-medium">Task ID: <span className="font-mono text-xs">{task._id || task.id}</span></p>
               </div>
             </div>
-            
+
             <div className="flex gap-2">
               <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(task.status)}`}>
                 <span className="capitalize">{task.status || 'No status'}</span>
@@ -254,24 +254,24 @@ export default function ViewTaskPage() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center border border-yellow-100">
-                    <FileText className="w-4 h-4 text-yellow-600" />
+                  <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                    <FileText className="w-4 h-4 text-indigo-600" />
                   </div>
                   Basic Information
                 </h2>
               </div>
-              
+
               <div className="p-6 space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Task Title</label>
-                  <div className="text-lg font-semibold text-slate-900 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <div className="text-lg font-semibold text-slate-900 p-3 bg-blue-50 rounded-lg border border-slate-200">
                     {task.title || 'No title'}
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
-                  <div className="text-slate-700 p-3 bg-slate-50 rounded-lg border border-slate-200 min-h-[100px] whitespace-pre-wrap">
+                  <div className="text-slate-700 p-3 bg-blue-50 rounded-lg border border-slate-200 min-h-[100px] whitespace-pre-wrap">
                     {task.description || <span className="text-slate-500">No description provided.</span>}
                   </div>
                 </div>
@@ -279,7 +279,7 @@ export default function ViewTaskPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Category</label>
-                    <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-slate-200">
                       <CategoryIcon className="w-4 h-4 text-slate-600" />
                       <span className="text-slate-700">{task.category || 'Other'}</span>
                     </div>
@@ -287,7 +287,7 @@ export default function ViewTaskPage() {
 
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Estimated Hours</label>
-                    <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-slate-200">
                       <Clock className="w-4 h-4 text-slate-600" />
                       <span className="text-slate-700">
                         {task.estimatedHours !== undefined && task.estimatedHours !== null ? task.estimatedHours : 0} hours
@@ -302,26 +302,26 @@ export default function ViewTaskPage() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center border border-yellow-100">
-                    <User className="w-4 h-4 text-yellow-600" />
+                  <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                    <User className="w-4 h-4 text-indigo-600" />
                   </div>
                   Assignment & Timeline
                 </h2>
               </div>
-              
+
               <div className="p-6 space-y-6">
                 {/* Assign To Field */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Assign To</label>
                   {employeesLoading ? (
-                    <div className="flex items-center space-x-2 py-3 px-4 border border-slate-300 rounded-lg bg-slate-50">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-500"></div>
+                    <div className="flex items-center space-x-2 py-3 px-4 border border-slate-300 rounded-lg bg-blue-50">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-500"></div>
                       <span className="text-slate-500 text-sm">Loading employee details...</span>
                     </div>
                   ) : assignedEmployee ? (
-                    <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-200">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
                           <User className="w-5 h-5 text-white" />
                         </div>
                         <div>
@@ -340,11 +340,11 @@ export default function ViewTaskPage() {
                     </div>
                   ) : employeeError ? ( // Handle explicit employee fetch error
                     <div className="p-3 bg-red-50 rounded-lg border border-red-200 text-red-700 flex items-center space-x-2">
-                        <XCircle className="w-4 h-4" />
-                        <span className="text-sm">{employeeError}</span>
+                      <XCircle className="w-4 h-4" />
+                      <span className="text-sm">{employeeError}</span>
                     </div>
                   ) : (
-                    <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-500">
+                    <div className="p-3 bg-blue-50 rounded-lg border border-slate-200 text-slate-500">
                       Not assigned to any employee
                     </div>
                   )}
@@ -369,7 +369,7 @@ export default function ViewTaskPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Created Date</label>
-                    <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-slate-200">
                       <Calendar className="w-4 h-4 text-slate-600" />
                       <span className="text-slate-700">{formatDate(task.createdAt)}</span>
                     </div>
@@ -377,16 +377,16 @@ export default function ViewTaskPage() {
 
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Due Date</label>
-                    <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-slate-200">
                       <Calendar className="w-4 h-4 text-slate-600" />
                       <span className="text-slate-700">{formatDate(task.dueDate)}</span>
                     </div>
                   </div>
-                  
+
                   {/* NEW: Completed Date */}
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Completed Date</label>
-                    <div className={`flex items-center gap-2 p-3 rounded-lg border ${isCompleted ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
+                    <div className={`flex items-center gap-2 p-3 rounded-lg border ${isCompleted ? 'bg-green-50 border-green-200' : 'bg-blue-50 border-slate-200'}`}>
                       <Calendar className={`w-4 h-4 ${isCompleted ? 'text-green-600' : 'text-slate-600'}`} />
                       <span className="text-slate-700">{isCompleted ? formatDate(task.completedAt) : 'N/A'}</span>
                     </div>
@@ -405,24 +405,24 @@ export default function ViewTaskPage() {
                   Tags & Additional Notes
                 </h2>
               </div>
-              
+
               <div className="p-6 space-y-6">
                 {/* Tags Section */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Tags</label>
                   {task.tags?.length > 0 ? (
-                    <div className="flex flex-wrap gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="flex flex-wrap gap-2 p-3 bg-blue-50 rounded-lg border border-slate-200">
                       {task.tags.map((tag, index) => (
                         <span
                           key={index}
-                          className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-yellow-50 text-yellow-700 border border-yellow-200"
+                          className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-indigo-50 text-indigo-700 border border-indigo-200"
                         >
                           #{tag}
                         </span>
                       ))}
                     </div>
                   ) : (
-                    <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-500">
+                    <div className="p-3 bg-blue-50 rounded-lg border border-slate-200 text-slate-500">
                       No tags applied.
                     </div>
                   )}
@@ -431,7 +431,7 @@ export default function ViewTaskPage() {
                 {/* Notes Section */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Additional Notes</label>
-                  <div className="text-slate-700 p-3 bg-slate-50 rounded-lg border border-slate-200 whitespace-pre-wrap min-h-[50px]">
+                  <div className="text-slate-700 p-3 bg-blue-50 rounded-lg border border-slate-200 whitespace-pre-wrap min-h-[50px]">
                     {task.notes || <span className="text-slate-500">No additional notes provided.</span>}
                   </div>
                 </div>
@@ -440,7 +440,7 @@ export default function ViewTaskPage() {
                 {task.dependencies?.length > 0 && (
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Dependencies</label>
-                    <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="p-3 bg-blue-50 rounded-lg border border-slate-200">
                       <ul className="list-disc list-inside space-y-1 text-slate-700">
                         {task.dependencies.map((dep, index) => (
                           <li key={index} className="pl-1">{dep}</li>
@@ -463,7 +463,7 @@ export default function ViewTaskPage() {
                   Task Summary
                 </h3>
               </div>
-              
+
               <div className="p-6 space-y-4 text-sm">
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-slate-600">Status:</span>
@@ -504,7 +504,7 @@ export default function ViewTaskPage() {
                   Metadata & Audit
                 </h3>
               </div>
-              
+
               <div className="p-6 space-y-4 text-sm">
                 <div className="flex justify-between">
                   <span className="text-slate-600">Created:</span>
@@ -513,7 +513,7 @@ export default function ViewTaskPage() {
                 <div className="flex justify-between">
                   <span className="text-slate-600">Last Updated:</span>
                   {/* Used formatDateTime for more precision on update time */}
-                  <span className="font-medium text-slate-900 text-right">{formatDateTime(task.updatedAt)}</span> 
+                  <span className="font-medium text-slate-900 text-right">{formatDateTime(task.updatedAt)}</span>
                 </div>
                 {isCompleted && (
                   <div className="flex justify-between">

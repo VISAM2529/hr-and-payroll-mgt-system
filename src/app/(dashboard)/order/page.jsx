@@ -284,7 +284,7 @@ export default function ODTDashboard() {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                <div className="w-3 h-3 bg-slate-500 rounded-full mr-3"></div>
                 <span className="text-sm font-medium text-gray-700">Info Requests</span>
               </div>
               <div className="text-right">
@@ -356,7 +356,7 @@ export default function ODTDashboard() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button className="flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors group">
+          <button className="flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:border-blue-500 hover:bg-slate-50 transition-colors group">
             <div className="text-center">
               <div className="text-blue-600 group-hover:text-blue-700 mb-2">
                 <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">

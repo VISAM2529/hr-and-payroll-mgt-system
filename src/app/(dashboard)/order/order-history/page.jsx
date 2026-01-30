@@ -194,29 +194,29 @@ export default function HistoryReports() {
 
   const filterHistory = () => {
     let filtered = [...history];
-    
+
     // Filter by verifier
     if (filters.verifier !== 'all') {
-      filtered = filtered.filter(item => 
+      filtered = filtered.filter(item =>
         filters.verifier === 'you' ? item.verifier === 'You' : item.verifier === filters.verifier
       );
     }
-    
+
     // Filter by action
     if (filters.action !== 'all') {
       filtered = filtered.filter(item => item.action === filters.action);
     }
-    
+
     // Filter by priority
     if (filters.priority !== 'all') {
       filtered = filtered.filter(item => item.priority === filters.priority);
     }
-    
+
     // Filter by date range (simplified)
     if (filters.dateRange === 'today') {
       filtered = filtered.filter(item => item.timestamp.includes('2025-01-15'));
     }
-    
+
     setFilteredHistory(filtered);
   };
 
@@ -262,10 +262,10 @@ export default function HistoryReports() {
   const getPriorityBadge = (priority) => {
     const styles = {
       high: 'bg-red-100 text-red-700 border-red-200',
-      medium: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+      medium: 'bg-indigo-100 text-indigo-700 border-indigo-200',
       low: 'bg-green-100 text-green-700 border-green-200'
     };
-    
+
     return (
       <span className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-lg border ${styles[priority]}`}>
         {priority.charAt(0).toUpperCase() + priority.slice(1)}
@@ -291,7 +291,7 @@ export default function HistoryReports() {
     const rejected = userHistory.filter(item => item.action === 'rejected').length;
     const infoRequests = userHistory.filter(item => item.action === 'info_requested').length;
     const total = userHistory.length;
-    
+
     return {
       verified,
       rejected,
@@ -305,7 +305,7 @@ export default function HistoryReports() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex items-center space-x-3">
-          <Loader2 className="w-8 h-8 animate-spin text-yellow-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
           <span className="text-slate-600 font-medium">
             Loading reports data...
           </span>
@@ -321,7 +321,7 @@ export default function HistoryReports() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
                 <BarChart3 className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -345,7 +345,7 @@ export default function HistoryReports() {
               <button
                 onClick={() => handleExportReport('PDF')}
                 disabled={isExporting}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg transition-colors font-medium disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-white bg-indigo-500 hover:bg-indigo-600 rounded-lg transition-colors font-medium disabled:opacity-50"
               >
                 <FileText className="w-4 h-4" />
                 {isExporting ? 'Exporting...' : 'Export PDF'}
@@ -366,11 +366,10 @@ export default function HistoryReports() {
                 <button
                   key={tab.id}
                   onClick={() => setSelectedReport(tab.id)}
-                  className={`flex items-center gap-2 py-4 px-1 border-b-2 text-sm font-medium transition-colors ${
-                    selectedReport === tab.id
-                      ? 'border-yellow-500 text-yellow-600'
+                  className={`flex items-center gap-2 py-4 px-1 border-b-2 text-sm font-medium transition-colors ${selectedReport === tab.id
+                      ? 'border-indigo-500 text-indigo-600'
                       : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
-                  }`}
+                    }`}
                 >
                   <tab.icon className="w-4 h-4" />
                   {tab.label}
@@ -388,7 +387,7 @@ export default function HistoryReports() {
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                    <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                       <Filter className="w-4 h-4 text-blue-600" />
                     </div>
                     Activity Filters
@@ -407,7 +406,7 @@ export default function HistoryReports() {
                       placeholder="Search orders..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-64 pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                      className="w-64 pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     />
                   </div>
 
@@ -424,7 +423,7 @@ export default function HistoryReports() {
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Verifier</label>
                   <select
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     value={filters.verifier}
                     onChange={(e) => setFilters(prev => ({ ...prev, verifier: e.target.value }))}
                   >
@@ -438,11 +437,11 @@ export default function HistoryReports() {
                     }
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Action</label>
                   <select
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     value={filters.action}
                     onChange={(e) => setFilters(prev => ({ ...prev, action: e.target.value }))}
                   >
@@ -452,11 +451,11 @@ export default function HistoryReports() {
                     <option value="info_requested">Info Requested</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Priority</label>
                   <select
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     value={filters.priority}
                     onChange={(e) => setFilters(prev => ({ ...prev, priority: e.target.value }))}
                   >
@@ -466,11 +465,11 @@ export default function HistoryReports() {
                     <option value="low">Low</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Date Range</label>
                   <select
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     value={filters.dateRange}
                     onChange={(e) => setFilters(prev => ({ ...prev, dateRange: e.target.value }))}
                   >
@@ -493,7 +492,7 @@ export default function HistoryReports() {
                   </span>
                 </div>
               </div>
-              
+
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-slate-200">
                   <thead className="bg-slate-50">
@@ -534,14 +533,14 @@ export default function HistoryReports() {
                               <div>{getPriorityBadge(activity.priority)}</div>
                             </div>
                           </td>
-                          
+
                           <td className="px-6 py-4">
                             <div className="text-sm font-medium text-slate-900">{activity.verifier}</div>
                             <div className="text-xs text-slate-500 mt-1">
                               {formatTimestamp(activity.timestamp)}
                             </div>
                           </td>
-                          
+
                           <td className="px-6 py-4">
                             <div className="text-sm font-medium text-slate-900">{activity.customer}</div>
                             <div className="text-sm text-slate-500">{activity.company}</div>
@@ -549,7 +548,7 @@ export default function HistoryReports() {
                               ${activity.total.toFixed(2)}
                             </div>
                           </td>
-                          
+
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
                               <Clock className="w-4 h-4 text-slate-400" />
@@ -559,7 +558,7 @@ export default function HistoryReports() {
                               </div>
                             </div>
                           </td>
-                          
+
                           <td className="px-6 py-4">
                             <div className="text-sm text-slate-600 max-w-xs">
                               {activity.notes}
@@ -570,7 +569,7 @@ export default function HistoryReports() {
                     })}
                   </tbody>
                 </table>
-                
+
                 {filteredHistory.length === 0 && (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -591,13 +590,13 @@ export default function HistoryReports() {
             {/* Personal Performance */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
               <h2 className="text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                   <User className="w-4 h-4 text-blue-600" />
                 </div>
                 Your Performance Metrics
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                <div className="bg-slate-50 rounded-xl p-4 border border-blue-200">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-blue-600">Verified Today</p>
@@ -696,8 +695,8 @@ export default function HistoryReports() {
             {/* Trends */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
               <h2 className="text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3">
-                <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center border border-yellow-100">
-                  <BarChart3 className="w-4 h-4 text-yellow-600" />
+                <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center border border-indigo-100">
+                  <BarChart3 className="w-4 h-4 text-indigo-600" />
                 </div>
                 Performance Trends
               </h2>
@@ -729,7 +728,7 @@ export default function HistoryReports() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="px-6 py-4 border-b border-slate-200">
                 <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                  <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                     <Users className="w-4 h-4 text-blue-600" />
                   </div>
                   Team Member Performance
@@ -759,7 +758,7 @@ export default function HistoryReports() {
                             <div className="font-bold text-red-600">{stats.rejected}</div>
                             <div className="text-red-700">Rejected</div>
                           </div>
-                          <div className="text-center p-2 bg-blue-50 rounded-lg border border-blue-200">
+                          <div className="text-center p-2 bg-slate-50 rounded-lg border border-blue-200">
                             <div className="font-bold text-blue-600">{stats.infoRequests}</div>
                             <div className="text-blue-700">Info Req</div>
                           </div>
