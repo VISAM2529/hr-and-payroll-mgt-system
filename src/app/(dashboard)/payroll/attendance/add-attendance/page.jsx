@@ -210,9 +210,9 @@
 //       alert("Error updating check-out time");
 //     }
 //   };
-  
+
 //   console.log(savedCheckIns);
-  
+
 //   return (
 //     <div className="min-h-screen bg-slate-50">
 //       <div className="max-w-7xl mx-auto px-6 py-8">
@@ -220,7 +220,7 @@
 //         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
 //           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 //             <div className="flex items-center gap-4">
-//               <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+//               <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
 //                 <Calendar className="w-8 h-8 text-white" />
 //               </div>
 //               <div>
@@ -255,7 +255,7 @@
 //             type="date"
 //             value={selectedDate}
 //             onChange={(e) => setSelectedDate(e.target.value)}
-//             className="w-full max-w-xs px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+//             className="w-full max-w-xs px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
 //           />
 //         </div>
 
@@ -320,7 +320,7 @@
 //                                   },
 //                                 }))
 //                               }
-//                               className="w-32 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+//                               className="w-32 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
 //                             >
 //                               <option value="Present">Present</option>
 //                               <option value="Absent">Absent</option>
@@ -352,7 +352,7 @@
 //                                     },
 //                                   }))
 //                                 }
-//                                 className="w-32 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+//                                 className="w-32 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
 //                                 disabled={
 //                                   attendanceData[emp.employeeId]?.status !==
 //                                   "Present"
@@ -378,7 +378,7 @@
 //                                   },
 //                                 }))
 //                               }
-//                               className="w-32 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+//                               className="w-32 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
 //                               disabled={
 //                                 attendanceData[emp.employeeId]?.status !==
 //                                 "Present"
@@ -391,7 +391,7 @@
 //                         {!savedCheckIns[emp.employeeId] && (
 //                           <button
 //                             type="submit"
-//                             className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors font-medium"
+//                             className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors font-medium"
 //                             disabled={
 //                               attendanceData[emp.employeeId]?.status !==
 //                               "Present"
@@ -404,7 +404,7 @@
 //                           <button
 //                             type="button"
 //                             onClick={() => handleCheckOut(emp.employeeId)}
-//                             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+//                             className="px-4 py-2 bg-slate-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
 //                             disabled={
 //                               attendanceData[emp.employeeId]?.status !==
 //                               "Present"
@@ -620,7 +620,7 @@
 //         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
 //           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 //             <div className="flex items-center gap-4">
-//               <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+//               <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
 //                 <Calendar className="w-8 h-8 text-white" />
 //               </div>
 //               <div>
@@ -653,7 +653,7 @@
 //             type="date"
 //             value={selectedDate}
 //             onChange={(e) => setSelectedDate(e.target.value)}
-//             className="w-full max-w-xs px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+//             className="w-full max-w-xs px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
 //           />
 //         </div>
 
@@ -723,7 +723,7 @@
 //                                   [empId]: { ...prev[empId], status: e.target.value },
 //                                 }))
 //                               }
-//                               className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+//                               className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
 //                             >
 //                               <option value="Present">Present</option>
 //                               <option value="Absent">Absent</option>
@@ -751,7 +751,7 @@
 //                                     [empId]: { ...prev[empId], checkIn: e.target.value },
 //                                   }))
 //                                 }
-//                                 className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+//                                 className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
 //                                 disabled={!isPresent}
 //                               />
 //                             )}
@@ -772,7 +772,7 @@
 //                                     [empId]: { ...prev[empId], checkOut: e.target.value },
 //                                   }))
 //                                 }
-//                                 className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+//                                 className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
 //                                 disabled={!isPresent}
 //                               />
 //                             ) : (
@@ -792,7 +792,7 @@
 //                             <button
 //                               type="submit"
 //                               disabled={!isPresent || !att.checkIn}
-//                               className="px-4 py-2 bg-yellow-500 text-white text-sm font-medium rounded-lg hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+//                               className="px-4 py-2 bg-indigo-500 text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 //                             >
 //                               Save Check-In
 //                             </button>
@@ -803,7 +803,7 @@
 //                           <button
 //                             onClick={() => handleCheckOut(empId)}
 //                             disabled={!isPresent || !att.checkOut}
-//                             className="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+//                             className="px-4 py-2 bg-slate-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 //                           >
 //                             Save Check-Out
 //                           </button>
@@ -845,7 +845,7 @@ export default function AddAttendance() {
     try {
       const res = await fetch("/api/payroll/employees");
       const data = await res.json();
-      
+
       if (user.role === "admin") {
         setEmployees(data.employees || []);
       } else if (user.role === "supervisor") {
@@ -893,18 +893,18 @@ export default function AddAttendance() {
 
         const checkIn = record?.checkIn
           ? new Date(record.checkIn).toLocaleTimeString("en-GB", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            })
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })
           : "";
 
         const checkOut = record?.checkOut
           ? new Date(record.checkOut).toLocaleTimeString("en-GB", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            })
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })
           : "";
 
         updatedAttendanceData[emp.employeeId] = {
@@ -1024,13 +1024,13 @@ export default function AddAttendance() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Toaster/>
+      <Toaster />
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
                 <Calendar className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -1063,7 +1063,7 @@ export default function AddAttendance() {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full max-w-xs px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            className="w-full max-w-xs px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
 
@@ -1134,7 +1134,7 @@ export default function AddAttendance() {
                                   [empId]: { ...prev[empId], status: e.target.value },
                                 }))
                               }
-                              className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                              className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                               disabled={isCheckOutSaved}
                             >
                               <option value="Present">Present</option>
@@ -1163,7 +1163,7 @@ export default function AddAttendance() {
                                     [empId]: { ...prev[empId], checkIn: e.target.value },
                                   }))
                                 }
-                                className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 disabled={!isPresent}
                               />
                             )}
@@ -1188,7 +1188,7 @@ export default function AddAttendance() {
                                     [empId]: { ...prev[empId], checkOut: e.target.value },
                                   }))
                                 }
-                                className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                className="mt-1 block w-32 px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 disabled={!isPresent}
                               />
                             ) : (
@@ -1206,7 +1206,7 @@ export default function AddAttendance() {
                             <button
                               type="submit"
                               disabled={!isPresent || !att.checkIn}
-                              className="px-4 py-2 bg-yellow-500 text-white text-sm font-medium rounded-lg hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="px-4 py-2 bg-indigo-500 text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Save Check-In
                             </button>
@@ -1218,7 +1218,7 @@ export default function AddAttendance() {
                           <button
                             onClick={() => handleCheckOut(empId)}
                             disabled={!isPresent || !att.checkOut}
-                            className="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-4 py-2 bg-slate-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Save Check-Out
                           </button>

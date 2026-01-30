@@ -27,15 +27,15 @@
 //       setLoading(!taxCalculations.length);
 //       setRefreshing(taxCalculations.length > 0);
 //       setError(null);
-      
+
 //       const params = new URLSearchParams();
 //       if (searchTerm) params.append('search', searchTerm);
 //       if (yearFilter) params.append('financialYear', yearFilter);
 //       if (statusFilter) params.append('status', statusFilter);
-      
+
 //       const response = await fetch(`/api/payroll/taxes?${params}`);
 //       const data = await response.json();
-      
+
 //       if (response.ok) {
 //         setTaxCalculations(data.taxCalculations || []);
 //       } else {
@@ -53,7 +53,7 @@
 //     const configs = {
 //       Calculated: { 
 //         color: 'text-blue-700', 
-//         bg: 'bg-blue-50', 
+//         bg: 'bg-slate-50', 
 //         border: 'border-blue-200',
 //         icon: Calculator
 //       },
@@ -82,7 +82,7 @@
 //   const StatusBadge = ({ status }) => {
 //     const config = getStatusConfig(status);
 //     const Icon = config.icon;
-    
+
 //     return (
 //       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${config.bg} ${config.color} ${config.border} border`}>
 //         <Icon className="w-3 h-3" />
@@ -140,7 +140,7 @@
 //                 <p className="text-slate-600 text-sm mt-0.5">Supply Chain Financial Management System</p>
 //               </div>
 //             </div>
-            
+
 //             <div className="flex items-center space-x-2">
 //               <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
 //                 <Bell className="w-5 h-5" />
@@ -168,7 +168,7 @@
 //               </div>
 //             </div>
 //           </div>
-          
+
 //           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
 //             <div className="flex items-center justify-between">
 //               <div>
@@ -178,7 +178,7 @@
 //                 </p>
 //                 <p className="text-xs text-slate-500 mt-1">Calculated liability</p>
 //               </div>
-//               <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+//               <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
 //                 <DollarSign className="w-6 h-6 text-blue-600" />
 //               </div>
 //             </div>
@@ -198,7 +198,7 @@
 //                   </span>
 //                 )}
 //               </div>
-              
+
 //               <div className="flex items-center space-x-3">
 //                 <button
 //                   onClick={fetchTaxCalculations}
@@ -208,12 +208,12 @@
 //                   <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
 //                   Refresh Data
 //                 </button>
-                
+
 //                 <button className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium">
 //                   <Download className="w-4 h-4" />
 //                   Export
 //                 </button>
-                
+
 //                 <Link
 //                   href="/payroll/tax-calculations/tax-calculator"
 //                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
@@ -239,7 +239,7 @@
 //                   />
 //                 </div>
 //               </div>
-              
+
 //               <div className="lg:col-span-2">
 //                 <label className="block text-sm font-medium text-slate-700 mb-2">Financial Year</label>
 //                 <select
@@ -253,7 +253,7 @@
 //                   ))}
 //                 </select>
 //               </div>
-              
+
 //               <div className="lg:col-span-2">
 //                 <label className="block text-sm font-medium text-slate-700 mb-2">Status Filter</label>
 //                 <select
@@ -268,7 +268,7 @@
 //                   <option value="Filed">Filed</option>
 //                 </select>
 //               </div>
-              
+
 //               <div className="lg:col-span-2 flex items-end">
 //                 {hasActiveFilters && (
 //                   <button
@@ -431,7 +431,7 @@ import Link from 'next/link';
 import {
   Plus, Search, Eye, Calculator, FileText, CheckCircle,
   Clock, AlertCircle, User, RefreshCw, DollarSign,
-  Download, Settings, Archive, Calendar, BarChart3, Bell, FilterX,
+  Download, Settings, Archive, Calendar, BarChart3, FilterX,
   ChevronLeft, ChevronRight, MoreHorizontal
 } from 'lucide-react';
 
@@ -457,15 +457,15 @@ export default function TaxCalculations() {
       setLoading(!taxCalculations.length);
       setRefreshing(taxCalculations.length > 0);
       setError(null);
-      
+
       const params = new URLSearchParams();
       if (searchTerm) params.append('search', searchTerm);
       if (yearFilter) params.append('financialYear', yearFilter);
       if (statusFilter) params.append('status', statusFilter);
-      
+
       const response = await fetch(`/api/payroll/taxes?${params}`);
       const data = await response.json();
-      
+
       if (response.ok) {
         setTaxCalculations(data.taxCalculations || []);
       } else {
@@ -483,7 +483,7 @@ export default function TaxCalculations() {
   const paginationData = (() => {
     const totalItems = taxCalculations.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
-    
+
     // Calculate current page items
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -550,7 +550,7 @@ export default function TaxCalculations() {
   // Pagination Component
   const Pagination = () => {
     const { totalPages, startIndex, endIndex, totalItems, hasPrevious, hasNext } = paginationData;
-    
+
     // Show pagination if there are any items, even just one page
     if (totalItems === 0) return null;
 
@@ -603,11 +603,10 @@ export default function TaxCalculations() {
                   ) : (
                     <button
                       onClick={() => handlePageChange(page)}
-                      className={`h-9 w-9 flex items-center justify-center text-sm font-medium border transition-colors rounded-md ${
-                        currentPage === page 
-                          ? "bg-yellow-500 border-yellow-500 text-white hover:bg-yellow-600" 
-                          : "border-slate-300 text-slate-600 hover:bg-slate-50"
-                      }`}
+                      className={`h-9 w-9 flex items-center justify-center text-sm font-medium border transition-colors rounded-md ${currentPage === page
+                        ? "bg-yellow-500 border-yellow-500 text-white hover:bg-yellow-600"
+                        : "border-slate-300 text-slate-600 hover:bg-slate-50"
+                        }`}
                     >
                       {page}
                     </button>
@@ -632,27 +631,27 @@ export default function TaxCalculations() {
 
   const getStatusConfig = (status) => {
     const configs = {
-      Calculated: { 
-        color: 'text-blue-700', 
-        bg: 'bg-blue-50', 
+      Calculated: {
+        color: 'text-blue-700',
+        bg: 'bg-slate-50',
         border: 'border-blue-200',
         icon: Calculator
       },
-      Reviewed: { 
-        color: 'text-amber-700', 
-        bg: 'bg-amber-50', 
+      Reviewed: {
+        color: 'text-amber-700',
+        bg: 'bg-amber-50',
         border: 'border-amber-200',
         icon: FileText
       },
-      Approved: { 
-        color: 'text-green-700', 
-        bg: 'bg-green-50', 
+      Approved: {
+        color: 'text-green-700',
+        bg: 'bg-green-50',
         border: 'border-green-200',
         icon: CheckCircle
       },
-      Filed: { 
-        color: 'text-purple-700', 
-        bg: 'bg-purple-50', 
+      Filed: {
+        color: 'text-purple-700',
+        bg: 'bg-purple-50',
         border: 'border-purple-200',
         icon: Archive
       },
@@ -663,7 +662,7 @@ export default function TaxCalculations() {
   const StatusBadge = ({ status }) => {
     const config = getStatusConfig(status);
     const Icon = config.icon;
-    
+
     return (
       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${config.bg} ${config.color} ${config.border} border`}>
         <Icon className="w-3 h-3" />
@@ -721,11 +720,9 @@ export default function TaxCalculations() {
                 <p className="text-slate-600 text-sm mt-0.5">Supply Chain Financial Management System</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
-                <Bell className="w-5 h-5" />
-              </button>
+
               <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
                 <Settings className="w-5 h-5" />
               </button>
@@ -749,7 +746,7 @@ export default function TaxCalculations() {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
@@ -759,7 +756,7 @@ export default function TaxCalculations() {
                 </p>
                 <p className="text-xs text-slate-500 mt-1">Calculated liability</p>
               </div>
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                 <DollarSign className="w-6 h-6 text-blue-600" />
               </div>
             </div>
@@ -782,7 +779,7 @@ export default function TaxCalculations() {
                   </span>
                 )}
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <button
                   onClick={fetchTaxCalculations}
@@ -792,12 +789,12 @@ export default function TaxCalculations() {
                   <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                   Refresh Data
                 </button>
-                
+
                 <button className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium">
                   <Download className="w-4 h-4" />
                   Export
                 </button>
-                
+
                 <Link
                   href="/payroll/tax-calculations/tax-calculator"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
@@ -823,7 +820,7 @@ export default function TaxCalculations() {
                   />
                 </div>
               </div>
-              
+
               <div className="lg:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-2">Financial Year</label>
                 <select
@@ -837,7 +834,7 @@ export default function TaxCalculations() {
                   ))}
                 </select>
               </div>
-              
+
               <div className="lg:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-2">Status Filter</label>
                 <select
@@ -852,7 +849,7 @@ export default function TaxCalculations() {
                   <option value="Filed">Filed</option>
                 </select>
               </div>
-              
+
               <div className="lg:col-span-2 flex items-end">
                 {hasActiveFilters && (
                   <button
@@ -923,7 +920,7 @@ export default function TaxCalculations() {
                             {hasActiveFilters ? 'No Records Match Your Criteria' : 'No Tax Calculations Found'}
                           </h3>
                           <p className="text-slate-500 text-sm mt-1 max-w-md">
-                            {hasActiveFilters 
+                            {hasActiveFilters
                               ? 'Try adjusting your search terms or filters to find the records you\'re looking for.'
                               : 'Get started by creating your first tax calculation for supply chain financial management.'
                             }

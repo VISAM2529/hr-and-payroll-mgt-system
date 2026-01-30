@@ -319,7 +319,7 @@ export default function CreateSubCategoryModal({
         <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 px-6 py-4 sticky top-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-slate-500 rounded-xl flex items-center justify-center">
                 <Layers className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -358,7 +358,7 @@ export default function CreateSubCategoryModal({
           {/* Organization Selection */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
               <h3 className="text-lg font-semibold text-slate-900">
                 Organization Details
               </h3>
@@ -393,7 +393,7 @@ export default function CreateSubCategoryModal({
           {/* Department & Employee Type */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
               <h3 className="text-lg font-semibold text-slate-900">
                 Department & Employee Type
               </h3>
@@ -465,7 +465,7 @@ export default function CreateSubCategoryModal({
           {/* Category Selection */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
               <h3 className="text-lg font-semibold text-slate-900">
                 Category Selection
               </h3>
@@ -511,7 +511,7 @@ export default function CreateSubCategoryModal({
           {/* Sub Category Details */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
               <h3 className="text-lg font-semibold text-slate-900">
                 Sub Category Details
               </h3>
@@ -550,7 +550,7 @@ export default function CreateSubCategoryModal({
           <button
             onClick={handleSubmit}
             disabled={submitDisabled}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-500 hover:bg-blue-600 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <>

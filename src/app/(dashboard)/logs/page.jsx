@@ -156,7 +156,7 @@ export default function EmployeeLogsPage() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -178,7 +178,7 @@ export default function EmployeeLogsPage() {
               </button>
               <button
                 onClick={exportLogs}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors font-medium"
               >
                 <Download className="w-4 h-4" />
                 Export CSV
@@ -201,9 +201,8 @@ export default function EmployeeLogsPage() {
                 <span className="font-semibold text-slate-900">Filters</span>
               </div>
               <ChevronDown
-                className={`w-5 h-5 text-slate-600 transition-transform ${
-                  showFilters ? "rotate-180" : ""
-                }`}
+                className={`w-5 h-5 text-slate-600 transition-transform ${showFilters ? "rotate-180" : ""
+                  }`}
               />
             </button>
           </div>
@@ -226,7 +225,7 @@ export default function EmployeeLogsPage() {
                         setCurrentPage(1);
                       }}
                       placeholder="Search description, user..."
-                      className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
                 </div>
@@ -242,7 +241,7 @@ export default function EmployeeLogsPage() {
                       setSelectedAction(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="all">All Actions</option>
                     <option value="created">Created</option>
@@ -262,10 +261,10 @@ export default function EmployeeLogsPage() {
                     type="date"
                     value={dateFrom}
                     onChange={(e) => {
-                        setDateFrom(e.target.value);
-                        setCurrentPage(1);
+                      setDateFrom(e.target.value);
+                      setCurrentPage(1);
                     }}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
 
@@ -278,10 +277,10 @@ export default function EmployeeLogsPage() {
                     type="date"
                     value={dateTo}
                     onChange={(e) => {
-                        setDateTo(e.target.value);
-                        setCurrentPage(1);
+                      setDateTo(e.target.value);
+                      setCurrentPage(1);
                     }}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
 
@@ -293,7 +292,7 @@ export default function EmployeeLogsPage() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="newest">Newest First</option>
                     <option value="oldest">Oldest First</option>
@@ -395,10 +394,10 @@ export default function EmployeeLogsPage() {
                             {log.description}
                           </div>
                           {log.details && Object.keys(log.details).length > 0 && (
-                             <details className="mt-1">
-                                <summary className="text-xs text-slate-500 cursor-pointer hover:text-slate-700">View Details</summary>
-                                <pre className="mt-1 text-xs bg-slate-100 p-2 rounded overflow-auto max-w-xs">{JSON.stringify(log.details, null, 2)}</pre>
-                             </details>
+                            <details className="mt-1">
+                              <summary className="text-xs text-slate-500 cursor-pointer hover:text-slate-700">View Details</summary>
+                              <pre className="mt-1 text-xs bg-slate-100 p-2 rounded overflow-auto max-w-xs">{JSON.stringify(log.details, null, 2)}</pre>
+                            </details>
                           )}
                         </td>
                         <td className="px-6 py-4">
@@ -448,12 +447,12 @@ export default function EmployeeLogsPage() {
                       </button>
                       <div className="flex items-center gap-1">
                         <span className="px-3 py-2 text-sm text-slate-600 font-medium">
-                            Page {currentPage} of {pagination.pages}
+                          Page {currentPage} of {pagination.pages}
                         </span>
                       </div>
                       <button
                         onClick={() =>
-                            setCurrentPage((prev) => Math.min(pagination.pages, prev + 1))
+                          setCurrentPage((prev) => Math.min(pagination.pages, prev + 1))
                         }
                         disabled={currentPage === pagination.pages}
                         className="px-3 py-2 text-sm text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"

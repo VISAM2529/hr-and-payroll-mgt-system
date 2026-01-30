@@ -152,7 +152,7 @@ export default function OrganizationsPage() {
         if (key !== 'logoFile') fd.append(key, formData[key]);
       }
       if (formData.logoFile) fd.append('logo', formData.logoFile);
-      
+
       console.log(fd);
       const res = await fetch(API_URL, {
         method: 'POST',
@@ -175,7 +175,7 @@ export default function OrganizationsPage() {
 
   const handleUpdate = async () => {
     if (!selectedOrganization?._id) return;
-    
+
     // Validate all fields
     let isValid = true;
     for (const key in validationSchema) {
@@ -306,11 +306,10 @@ export default function OrganizationsPage() {
   const hasActiveFilters = debouncedSearch || statusFilter !== 'all';
 
   const StatusPill = ({ status }) => (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border ${
-      status === 'Active'
-        ? 'bg-green-50 text-green-700 border-green-200'
-        : 'bg-red-50 text-red-700 border-red-200'
-    }`}>
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border ${status === 'Active'
+      ? 'bg-green-50 text-green-700 border-green-200'
+      : 'bg-red-50 text-red-700 border-red-200'
+      }`}>
       <div className={`w-1.5 h-1.5 rounded-full ${status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></div>
       {status}
     </span>
@@ -355,7 +354,7 @@ export default function OrganizationsPage() {
             <select
               value={limit}
               onChange={(e) => handleLimitChange(e.target.value)}
-              className="border border-slate-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
+              className="border border-slate-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
             >
               <option value={6}>6</option>
               <option value={9}>9</option>
@@ -381,11 +380,10 @@ export default function OrganizationsPage() {
                 ) : (
                   <button
                     onClick={() => handlePageChange(pageNum)}
-                    className={`h-9 w-9 flex items-center justify-center text-sm font-medium border transition-colors rounded-md ${
-                      page === pageNum
-                        ? "bg-yellow-500 border-yellow-500 text-white hover:bg-yellow-600"
-                        : "border-slate-300 text-slate-600 hover:bg-slate-50"
-                    }`}
+                    className={`h-9 w-9 flex items-center justify-center text-sm font-medium border transition-colors rounded-md ${page === pageNum
+                      ? "bg-indigo-500 border-indigo-500 text-white hover:bg-indigo-600"
+                      : "border-slate-300 text-slate-600 hover:bg-slate-50"
+                      }`}
                   >
                     {pageNum}
                   </button>
@@ -458,22 +456,22 @@ export default function OrganizationsPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* List Skeleton */}
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div key={i} className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
-                   <div className="flex items-center space-x-4">
-                      <Skeleton className="w-12 h-12 rounded-lg" />
-                      <div className="space-y-2">
-                        <Skeleton className="h-5 w-32" />
-                        <Skeleton className="h-4 w-24" />
-                      </div>
-                   </div>
-                   <div className="space-y-2">
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-3/4" />
-                   </div>
+                  <div className="flex items-center space-x-4">
+                    <Skeleton className="w-12 h-12 rounded-lg" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-5 w-32" />
+                      <Skeleton className="h-4 w-24" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                  </div>
                 </div>
               ))}
             </div>
@@ -490,7 +488,7 @@ export default function OrganizationsPage() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -504,7 +502,7 @@ export default function OrganizationsPage() {
                   resetForm();
                   setView('create');
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 Add Organization
@@ -524,8 +522,8 @@ export default function OrganizationsPage() {
                   <p className="text-2xl font-bold text-slate-900 mt-2">{pagination.total}</p>
                   <p className="text-xs text-slate-500 mt-1">All companies</p>
                 </div>
-                <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center border border-yellow-100">
-                  <Building2 className="w-6 h-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
+                  <Building2 className="w-6 h-6 text-indigo-600" />
                 </div>
               </div>
             </div>
@@ -552,7 +550,7 @@ export default function OrganizationsPage() {
                   </p>
                   <p className="text-xs text-slate-500 mt-1">Across all teams (page)</p>
                 </div>
-                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+                <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                   <TrendingUp className="w-6 h-6 text-blue-600" />
                 </div>
               </div>
@@ -567,7 +565,7 @@ export default function OrganizationsPage() {
                 <div className="flex items-center space-x-3">
                   <h2 className="text-xl font-semibold text-slate-900">Organizations ({pagination.total})</h2>
                   {hasActiveFilters && (
-                    <span className="inline-flex items-center px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full border border-yellow-200">
+                    <span className="inline-flex items-center px-2.5 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full border border-indigo-200">
                       Filtered Results
                     </span>
                   )}
@@ -594,7 +592,7 @@ export default function OrganizationsPage() {
                       placeholder="Search by name, email, or description..."
                       value={searchTerm}
                       onChange={handleSearchChange}
-                      className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                      className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -603,7 +601,7 @@ export default function OrganizationsPage() {
                   <select
                     value={statusFilter}
                     onChange={handleStatusFilterChange}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                   >
                     <option value="all">All Status</option>
                     <option value="Active">Active</option>
@@ -665,7 +663,7 @@ export default function OrganizationsPage() {
                           setStatusFilter('all');
                           await fetchOrganizations({ page: 1 });
                         }}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg hover:bg-yellow-100 border border-yellow-200 text-sm font-medium transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 border border-indigo-200 text-sm font-medium transition-colors"
                       >
                         <FilterX className="w-4 h-4" />
                         Clear All Filters
@@ -676,7 +674,7 @@ export default function OrganizationsPage() {
                           resetForm();
                           setView('create');
                         }}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors shadow-sm"
                       >
                         <Plus className="w-4 h-4" />
                         Add First Organization
@@ -691,7 +689,7 @@ export default function OrganizationsPage() {
                           <div className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+                                <div className="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                                   <Building2 className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="flex-1">
@@ -719,7 +717,7 @@ export default function OrganizationsPage() {
                               <div className="flex items-center gap-1">
                                 <button
                                   onClick={() => handleView(org)}
-                                  className="p-2 hover:bg-yellow-50 text-slate-400 hover:text-yellow-600 rounded-lg transition-colors"
+                                  className="p-2 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 rounded-lg transition-colors"
                                   title="View"
                                 >
                                   <Eye className="w-4 h-4" />
@@ -767,7 +765,7 @@ export default function OrganizationsPage() {
                       resetForm();
                       setView('list');
                     }}
-                    className="flex items-center gap-2 text-slate-600 hover:text-yellow-600 transition-colors mb-6 group"
+                    className="flex items-center gap-2 text-slate-600 hover:text-indigo-600 transition-colors mb-6 group"
                   >
                     <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
                     <span className="font-medium">Back to List</span>
@@ -784,7 +782,7 @@ export default function OrganizationsPage() {
                                 className="w-16 h-16 rounded-lg object-cover border"
                               />
                             ) : (
-                              <div className="w-16 h-16 bg-yellow-500 rounded-lg flex items-center justify-center shadow-sm">
+                              <div className="w-16 h-16 bg-indigo-500 rounded-lg flex items-center justify-center shadow-sm">
                                 <Building2 className="w-7 h-7 text-white" />
                               </div>
                             )}
@@ -899,7 +897,7 @@ export default function OrganizationsPage() {
                                   href={selectedOrganization.website.startsWith('http') ? selectedOrganization.website : `https://${selectedOrganization.website}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="font-medium text-sm text-yellow-600 hover:text-yellow-700"
+                                  className="font-medium text-sm text-indigo-600 hover:text-indigo-700"
                                 >
                                   {selectedOrganization.website}
                                 </a>
@@ -914,7 +912,7 @@ export default function OrganizationsPage() {
                       <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center shadow-sm">
+                            <div className="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center shadow-sm">
                               <Building2 className="w-6 h-6 text-white" />
                             </div>
                             <div>
@@ -950,9 +948,8 @@ export default function OrganizationsPage() {
                                   value={formData.name}
                                   onChange={handleInputChange}
                                   onBlur={(e) => handleBlur('name', e.target.value)}
-                                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                                    errors.name ? 'border-red-500 focus:ring-red-500 bg-red-50' : 'border-slate-300 focus:ring-yellow-500'
-                                  }`}
+                                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${errors.name ? 'border-red-500 focus:ring-red-500 bg-red-50' : 'border-slate-300 focus:ring-indigo-500'
+                                    }`}
                                   placeholder="Enter name"
                                 />
                                 {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
@@ -963,7 +960,7 @@ export default function OrganizationsPage() {
                                   name="status"
                                   value={formData.status}
                                   onChange={handleInputChange}
-                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
+                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
                                 >
                                   <option value="Active">Active</option>
                                   <option value="Inactive">Inactive</option>
@@ -981,9 +978,8 @@ export default function OrganizationsPage() {
                                   value={formData.email}
                                   onChange={handleInputChange}
                                   onBlur={(e) => handleBlur('email', e.target.value)}
-                                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                                    errors.email ? 'border-red-500 focus:ring-red-500 bg-red-50' : 'border-slate-300 focus:ring-yellow-500'
-                                  }`}
+                                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${errors.email ? 'border-red-500 focus:ring-red-500 bg-red-50' : 'border-slate-300 focus:ring-indigo-500'
+                                    }`}
                                 />
                                 {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
                               </div>
@@ -994,9 +990,8 @@ export default function OrganizationsPage() {
                                   value={formData.phone}
                                   onChange={handleInputChange}
                                   onBlur={(e) => handleBlur('phone', e.target.value)}
-                                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                                    errors.phone ? 'border-red-500 focus:ring-red-500 bg-red-50' : 'border-slate-300 focus:ring-yellow-500'
-                                  }`}
+                                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${errors.phone ? 'border-red-500 focus:ring-red-500 bg-red-50' : 'border-slate-300 focus:ring-indigo-500'
+                                    }`}
                                 />
                                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
                               </div>
@@ -1007,9 +1002,8 @@ export default function OrganizationsPage() {
                                   value={formData.website}
                                   onChange={handleInputChange}
                                   onBlur={(e) => handleBlur('website', e.target.value)}
-                                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                                    errors.website ? 'border-red-500 focus:ring-red-500 bg-red-50' : 'border-slate-300 focus:ring-yellow-500'
-                                  }`}
+                                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${errors.website ? 'border-red-500 focus:ring-red-500 bg-red-50' : 'border-slate-300 focus:ring-indigo-500'
+                                    }`}
                                   placeholder="example.com"
                                 />
                                 {errors.website && <p className="text-xs text-red-500 mt-1">{errors.website}</p>}
@@ -1020,7 +1014,7 @@ export default function OrganizationsPage() {
                                   name="address"
                                   value={formData.address}
                                   onChange={handleInputChange}
-                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 />
                               </div>
                             </div>
@@ -1036,7 +1030,7 @@ export default function OrganizationsPage() {
                                   name="memberCount"
                                   value={formData.memberCount}
                                   onChange={handleInputChange}
-                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                   type="number"
                                   min="0"
                                 />
@@ -1048,7 +1042,7 @@ export default function OrganizationsPage() {
                                   type="date"
                                   value={formData.established}
                                   onChange={handleInputChange}
-                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 />
                               </div>
                             </div>
@@ -1063,7 +1057,7 @@ export default function OrganizationsPage() {
                                 onChange={(e) =>
                                   setFormData(prev => ({ ...prev, logoFile: e.target.files[0] }))
                                 }
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                               />
                               {formData.logoFile && (
                                 <img
@@ -1095,7 +1089,7 @@ export default function OrganizationsPage() {
                           <button
                             onClick={view === "create" ? handleCreate : handleUpdate}
                             disabled={isSubmitting || !formData.name || !formData.email}
-                            className="px-4 py-2 bg-yellow-500 text-white rounded-lg disabled:opacity-50 hover:bg-yellow-600 transition-colors flex items-center gap-2"
+                            className="px-4 py-2 bg-indigo-500 text-white rounded-lg disabled:opacity-50 hover:bg-indigo-600 transition-colors flex items-center gap-2"
                           >
                             <Save className="w-4 h-4" />
                             {view === "create" ? "Create Organization" : "Save Changes"}

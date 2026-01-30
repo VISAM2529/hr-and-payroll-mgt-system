@@ -89,10 +89,10 @@
 //       if (organizationId) params.set("organizationId", organizationId);
 //       if (departmentId) params.set("departmentId", departmentId);
 //       params.set("limit", "1000");
-      
+
 //       const res = await fetch(`/api/crm/employeetype?${params.toString()}`);
 //       const data = await res.json();
-      
+
 //       if (res.ok) {
 //         setEmployeeTypes(data.data || []);
 //       }
@@ -108,10 +108,10 @@
 //       if (organizationId) params.set("organizationId", organizationId);
 //       if (departmentId) params.set("departmentId", departmentId);
 //       params.set("limit", "1000");
-      
+
 //       const res = await fetch(`/api/crm/employeecategory?${params.toString()}`);
 //       const data = await res.json();
-      
+
 //       if (res.ok) {
 //         setCategories(data.data || []);
 //       }
@@ -127,10 +127,10 @@
 //       if (organizationId) params.set("organizationId", organizationId);
 //       if (departmentId) params.set("departmentId", departmentId);
 //       params.set("limit", "1000");
-      
+
 //       const res = await fetch(`/api/crm/employeesubcategory?${params.toString()}`);
 //       const data = await res.json();
-      
+
 //       if (res.ok) {
 //         setSubCategories(data.data || []);
 //       }
@@ -144,10 +144,10 @@
 //     try {
 //       setLoading(true);
 //       setError("");
-      
+
 //       const selectedOrg = organizations.find(org => org.name === selectedOrganization);
 //       const orgId = selectedOrg?._id || "";
-      
+
 //       const selectedDept = departments.find(dept => dept.departmentName === selectedDepartment);
 //       const deptId = selectedDept?._id || "";
 
@@ -257,25 +257,25 @@
 //   // Filter hierarchy based on search
 //   const filteredHierarchy = hierarchy.filter(type => {
 //     if (!searchTerm) return true;
-    
+
 //     const searchLower = searchTerm.toLowerCase();
-    
+
 //     // Search in type name
 //     if (type.employeeType.toLowerCase().includes(searchLower)) return true;
-    
+
 //     // Search in categories
 //     const hasMatchingCategory = type.categories.some(cat => 
 //       cat.employeeCategory.toLowerCase().includes(searchLower)
 //     );
 //     if (hasMatchingCategory) return true;
-    
+
 //     // Search in sub-categories
 //     const hasMatchingSubCategory = type.categories.some(cat =>
 //       cat.subCategories.some(sub =>
 //         sub.employeeSubCategory.toLowerCase().includes(searchLower)
 //       )
 //     );
-    
+
 //     return hasMatchingSubCategory;
 //   });
 
@@ -344,7 +344,7 @@
 //               </button>
 //               <button
 //                 onClick={() => setShowSubCategoryModal(true)}
-//                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+//                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors shadow-sm"
 //               >
 //                 <Layers className="w-4 h-4" />
 //                 Add Sub-Category
@@ -369,7 +369,7 @@
 //               </div>
 //             </div>
 //           </div>
-          
+
 //           <div className="bg-white rounded-xl border border-slate-200 p-4">
 //             <div className="flex items-center justify-between">
 //               <div>
@@ -381,7 +381,7 @@
 //               </div>
 //             </div>
 //           </div>
-          
+
 //           <div className="bg-white rounded-xl border border-slate-200 p-4">
 //             <div className="flex items-center justify-between">
 //               <div>
@@ -393,7 +393,7 @@
 //               </div>
 //             </div>
 //           </div>
-          
+
 //           <div className="bg-white rounded-xl border border-slate-200 p-4">
 //             <div className="flex items-center justify-between">
 //               <div>
@@ -405,7 +405,7 @@
 //               </div>
 //             </div>
 //           </div>
-          
+
 //           <div className="bg-white rounded-xl border border-slate-200 p-4">
 //             <div className="flex items-center justify-between">
 //               <div>
@@ -552,7 +552,7 @@
 //                           <ChevronDown className="w-5 h-5 text-slate-600" />
 //                         )}
 //                       </button>
-                      
+
 //                       <div className="flex items-center gap-3">
 //                         <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
 //                           <Users className="w-5 h-5 text-white" />
@@ -611,7 +611,7 @@
 //                                     <ChevronDown className="w-4 h-4 text-slate-600" />
 //                                   )}
 //                                 </button>
-                                
+
 //                                 <div className="flex items-center gap-2">
 //                                   <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
 //                                     <Tag className="w-4 h-4 text-white" />
@@ -645,10 +645,10 @@
 //                                 {category.subCategories.map((sub) => (
 //                                   <div
 //                                     key={sub._id}
-//                                     className="flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded-lg"
+//                                     className="flex items-center justify-between p-2 bg-slate-50 border border-blue-200 rounded-lg"
 //                                   >
 //                                     <div className="flex items-center gap-2">
-//                                       <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
+//                                       <div className="w-6 h-6 bg-slate-500 rounded flex items-center justify-center">
 //                                         <Layers className="w-3 h-3 text-white" />
 //                                       </div>
 //                                       <span className="text-sm font-medium text-slate-900">
@@ -745,7 +745,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import CreateEmployeeTypeModal from "@/components/modals/CreateEmployeeTypeModal";
 import CreateCategoryModal from "@/components/modals/CreateCategoryModal";
 import CreateSubCategoryModal from "@/components/modals/CreateSubCategoryModal";
-import EditCategoryModal from "@/components/modals/EditCategoryModal"; 
+import EditCategoryModal from "@/components/modals/EditCategoryModal";
 import EditEmployeeTypeModal from "@/components/modals/EditEmployeeTypeModal"; // New import
 import DocumentAdd from "@/components/modals/DocumentsAdd";
 
@@ -767,8 +767,8 @@ export default function EmployeeTypesPage() {
   const [showDocumentsAddModal, setShowDocumentsAddModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showSubCategoryModal, setShowSubCategoryModal] = useState(false);
-  const [showEditCategoryModal, setShowEditCategoryModal] = useState(false); 
-  const [selectedCategory, setSelectedCategory] = useState(null); 
+  const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [showEditTypeModal, setShowEditTypeModal] = useState(false); // New state for type edit
   const [selectedType, setSelectedType] = useState(null); // New state for type edit
   // Expanded states for hierarchy view
@@ -989,11 +989,11 @@ export default function EmployeeTypesPage() {
   const buildHierarchy = () => {
     const hierarchy = [];
     employeeTypes.forEach(type => {
-      const typeCategories = categories.filter(cat => 
+      const typeCategories = categories.filter(cat =>
         cat.employeeTypeId?._id === type._id
       );
       const categoriesWithSubs = typeCategories.map(category => {
-        const categorySubs = subCategories.filter(sub => 
+        const categorySubs = subCategories.filter(sub =>
           sub.employeeCategoryId._id === category._id
         );
         return {
@@ -1016,7 +1016,7 @@ export default function EmployeeTypesPage() {
     if (!searchTerm) return true;
     const searchLower = searchTerm.toLowerCase();
     if (type.employeeType.toLowerCase().includes(searchLower)) return true;
-    const hasMatchingCategory = type.categories.some(cat => 
+    const hasMatchingCategory = type.categories.some(cat =>
       cat.employeeCategory.toLowerCase().includes(searchLower)
     );
     if (hasMatchingCategory) return true;
@@ -1053,67 +1053,67 @@ export default function EmployeeTypesPage() {
                 </div>
               </div>
               <div className="flex gap-3">
-                  <Skeleton className="h-10 w-32 rounded-lg" />
-                  <Skeleton className="h-10 w-32 rounded-lg" />
-                  <Skeleton className="h-10 w-32 rounded-lg" />
+                <Skeleton className="h-10 w-32 rounded-lg" />
+                <Skeleton className="h-10 w-32 rounded-lg" />
+                <Skeleton className="h-10 w-32 rounded-lg" />
               </div>
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 py-6">
-            {/* Stats Skeleton */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                {[1,2,3,4,5].map(i => (
-                    <div key={i} className="bg-white rounded-xl border border-slate-200 p-4">
-                        <div className="flex justify-between">
-                            <div>
-                                <Skeleton className="h-3 w-20 mb-1" />
-                                <Skeleton className="h-8 w-12" />
-                            </div>
-                            <Skeleton className="w-10 h-10 rounded-lg" />
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {/* Filters Skeleton */}
-            <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
-                <div className="grid grid-cols-4 gap-4">
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                    <div className="flex gap-2">
-                        <Skeleton className="h-10 w-full" />
-                        <Skeleton className="h-10 w-full" />
-                    </div>
+          {/* Stats Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="bg-white rounded-xl border border-slate-200 p-4">
+                <div className="flex justify-between">
+                  <div>
+                    <Skeleton className="h-3 w-20 mb-1" />
+                    <Skeleton className="h-8 w-12" />
+                  </div>
+                  <Skeleton className="w-10 h-10 rounded-lg" />
                 </div>
-            </div>
+              </div>
+            ))}
+          </div>
 
-            {/* Hierarchy Skeleton */}
-            <div className="space-y-4">
-                {[1,2,3].map(i => (
-                    <div key={i} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                        <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between">
-                             <div className="flex gap-4 items-center">
-                                 <Skeleton className="w-8 h-8 rounded-lg" />
-                                 <div className="flex gap-3 items-center">
-                                     <Skeleton className="w-10 h-10 rounded-lg" />
-                                     <div>
-                                         <Skeleton className="h-6 w-32 mb-1" />
-                                         <Skeleton className="h-3 w-40" />
-                                     </div>
-                                 </div>
-                             </div>
-                             <div className="flex gap-3 items-center">
-                                 <Skeleton className="h-4 w-20" />
-                                 <Skeleton className="h-8 w-8 rounded-lg" />
-                                 <Skeleton className="h-8 w-8 rounded-lg" />
-                             </div>
-                        </div>
-                    </div>
-                ))}
+          {/* Filters Skeleton */}
+          <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+            <div className="grid grid-cols-4 gap-4">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <div className="flex gap-2">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
             </div>
+          </div>
+
+          {/* Hierarchy Skeleton */}
+          <div className="space-y-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between">
+                  <div className="flex gap-4 items-center">
+                    <Skeleton className="w-8 h-8 rounded-lg" />
+                    <div className="flex gap-3 items-center">
+                      <Skeleton className="w-10 h-10 rounded-lg" />
+                      <div>
+                        <Skeleton className="h-6 w-32 mb-1" />
+                        <Skeleton className="h-3 w-40" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 items-center">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-8 w-8 rounded-lg" />
+                    <Skeleton className="h-8 w-8 rounded-lg" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -1126,7 +1126,7 @@ export default function EmployeeTypesPage() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                 <Users className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -1141,14 +1141,14 @@ export default function EmployeeTypesPage() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowDocumentsAddModal(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 Add Supported Documents
               </button>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 Add Employee Type
@@ -1162,7 +1162,7 @@ export default function EmployeeTypesPage() {
               </button>
               <button
                 onClick={() => setShowSubCategoryModal(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors shadow-sm"
               >
                 <Layers className="w-4 h-4" />
                 Add Sub-Category
@@ -1175,18 +1175,18 @@ export default function EmployeeTypesPage() {
       <div className="max-w-7xl mx-auto px-6 py-6">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 border-l-4 border-l-indigo-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Employee Types</p>
                 <p className="text-2xl font-bold text-slate-900 mt-1">{stats.totalTypes}</p>
               </div>
-              <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <Users className="w-5 h-5 text-yellow-600" />
+              <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-indigo-600" />
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 border-l-4 border-l-green-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Categories</p>
@@ -1197,7 +1197,7 @@ export default function EmployeeTypesPage() {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 border-l-4 border-l-blue-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Sub-Categories</p>
@@ -1208,7 +1208,7 @@ export default function EmployeeTypesPage() {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 border-l-4 border-l-green-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">In-House</p>
@@ -1219,7 +1219,7 @@ export default function EmployeeTypesPage() {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 border-l-4 border-l-blue-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Third Party</p>
@@ -1242,7 +1242,7 @@ export default function EmployeeTypesPage() {
                   placeholder="Search types, categories..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
               <div>
@@ -1252,7 +1252,7 @@ export default function EmployeeTypesPage() {
                     setSelectedOrganization(e.target.value);
                     setSelectedDepartment("");
                   }}
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 appearance-none bg-white"
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-white"
                 >
                   <option value="">All Organizations</option>
                   {organizations.map((org) => (
@@ -1267,7 +1267,7 @@ export default function EmployeeTypesPage() {
                   value={selectedDepartment}
                   onChange={(e) => setSelectedDepartment(e.target.value)}
                   disabled={!selectedOrganization}
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 appearance-none bg-white disabled:bg-slate-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-white disabled:bg-slate-100 disabled:cursor-not-allowed"
                 >
                   <option value="">All Departments</option>
                   {departments.map((dept) => (
@@ -1326,7 +1326,7 @@ export default function EmployeeTypesPage() {
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 Create Employee Type
@@ -1341,7 +1341,7 @@ export default function EmployeeTypesPage() {
                 className="bg-white rounded-xl border border-slate-200 overflow-hidden"
               >
                 {/* Employee Type Header */}
-                <div className="p-4 bg-gradient-to-r from-yellow-50 to-amber-50 border-b border-slate-200">
+                <div className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-slate-200">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <button
@@ -1355,7 +1355,7 @@ export default function EmployeeTypesPage() {
                         )}
                       </button>
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
                           <Users className="w-5 h-5 text-white" />
                         </div>
                         <div>
@@ -1379,14 +1379,14 @@ export default function EmployeeTypesPage() {
                         {type.categories.length} {type.categories.length === 1 ? 'category' : 'categories'}
                       </span>
                       <button
-                                  onClick={() => {
-                                    setSelectedType(type);
-                                    setShowEditTypeModal(true);
-                                  }}
-                                  className="p-2 hover:bg-white/50 rounded-lg transition-colors"
-                                >
-                                  <Edit2 className="w-4 h-4 text-slate-600" />
-                                </button>
+                        onClick={() => {
+                          setSelectedType(type);
+                          setShowEditTypeModal(true);
+                        }}
+                        className="p-2 hover:bg-white/50 rounded-lg transition-colors"
+                      >
+                        <Edit2 className="w-4 h-4 text-slate-600" />
+                      </button>
                       <button
                         onClick={() => handleDeleteType(type._id)}
                         className="p-2 hover:bg-red-50 rounded-lg transition-colors"
@@ -1456,10 +1456,10 @@ export default function EmployeeTypesPage() {
                                 {category.subCategories.map((sub) => (
                                   <div
                                     key={sub._id}
-                                    className="flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded-lg"
+                                    className="flex items-center justify-between p-2 bg-slate-50 border border-blue-200 rounded-lg"
                                   >
                                     <div className="flex items-center gap-2">
-                                      <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
+                                      <div className="w-6 h-6 bg-slate-500 rounded flex items-center justify-center">
                                         <Layers className="w-3 h-3 text-white" />
                                       </div>
                                       <span className="text-sm font-medium text-slate-900">

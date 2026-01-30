@@ -162,7 +162,7 @@ export default function LeaveManagement() {
       });
       if (orgId) params.append("organizationId", orgId);
       if (user?.role === 'supervisor') params.append("supervisorUserId", user.id || user._id);
-      
+
       const response = await fetch(`/api/payroll/employees?${params}`);
       const data = await response.json();
       if (response.ok) {
@@ -193,7 +193,7 @@ export default function LeaveManagement() {
         empParams.append("organizationId", selectedOrganization);
       }
       if (user?.role === 'supervisor') empParams.append("supervisorUserId", user.id || user._id);
-      
+
       const empResponse = await fetch(`/api/payroll/employees?${empParams}`);
       const empData = await empResponse.json();
       const allEmployees = empResponse.ok ? empData.employees || [] : [];
@@ -230,12 +230,12 @@ export default function LeaveManagement() {
       // Step 4: Process each employee to calculate cumulative balance
       let processedLeaves = allEmployees.map(emp => {
         const empLeaves = employeeLeaveMap.get(emp._id) || [];
-        
+
         // Get ANNUAL entitled leaves (total for the whole year, not per month)
-        const annualEntitled = emp.totalLeaveEntitled || 
-                              emp.annualLeaveBalance || 
-                              emp.payslipStructure?.totalLeaveEntitled || 
-                              31;
+        const annualEntitled = emp.totalLeaveEntitled ||
+          emp.annualLeaveBalance ||
+          emp.payslipStructure?.totalLeaveEntitled ||
+          31;
 
         // Calculate balance at the START of selected month (before this month's leaves)
         // This is all unpaid leaves taken BEFORE the selected month in this year
@@ -243,8 +243,8 @@ export default function LeaveManagement() {
         empLeaves.forEach(leave => {
           // Only count leaves BEFORE selected month
           if (leave.month < selectedMonth) {
-            const monthUnpaid = (leave.summary.unpaidLeaves || 0) + 
-                               ((leave.summary.halfDayUnpaidLeaves || 0) * 0.5);
+            const monthUnpaid = (leave.summary.unpaidLeaves || 0) +
+              ((leave.summary.halfDayUnpaidLeaves || 0) * 0.5);
             unpaidBeforeThisMonth += monthUnpaid;
           }
         });
@@ -256,9 +256,9 @@ export default function LeaveManagement() {
         const currentMonthLeave = empLeaves.find(l => l.month === selectedMonth);
 
         // Get unpaid leaves for THIS month
-        const thisMonthUnpaid = currentMonthLeave 
-          ? (currentMonthLeave.summary.unpaidLeaves || 0) + 
-            ((currentMonthLeave.summary.halfDayUnpaidLeaves || 0) * 0.5)
+        const thisMonthUnpaid = currentMonthLeave
+          ? (currentMonthLeave.summary.unpaidLeaves || 0) +
+          ((currentMonthLeave.summary.halfDayUnpaidLeaves || 0) * 0.5)
           : 0;
 
         // Balance at END of this month (after this month's leaves are deducted)
@@ -267,15 +267,15 @@ export default function LeaveManagement() {
         // Total used from January till end of this month
         const totalUsedTillNow = unpaidBeforeThisMonth + thisMonthUnpaid;
 
-        console.log(`👤 ${emp.personalDetails.firstName} ${emp.personalDetails.lastName} - ${months[selectedMonth-1].label} ${selectedYear}:
+        console.log(`👤 ${emp.personalDetails.firstName} ${emp.personalDetails.lastName} - ${months[selectedMonth - 1].label} ${selectedYear}:
           📅 Selected Month: ${selectedMonth}
           💰 Annual Entitled: ${annualEntitled} days
           📊 Months with records: ${empLeaves.map(l => l.month).join(', ')}
-          ⬅️  Used BEFORE ${months[selectedMonth-1].label}: ${unpaidBeforeThisMonth.toFixed(1)} days
+          ⬅️  Used BEFORE ${months[selectedMonth - 1].label}: ${unpaidBeforeThisMonth.toFixed(1)} days
           🚪 Balance at Month START: ${balanceAtMonthStart.toFixed(1)} days
           📍 This Month Unpaid: ${thisMonthUnpaid.toFixed(1)} days
           🏁 Balance at Month END: ${balanceAtMonthEnd.toFixed(1)} days
-          📈 Total Used (Jan-${months[selectedMonth-1].label}): ${totalUsedTillNow.toFixed(1)} days
+          📈 Total Used (Jan-${months[selectedMonth - 1].label}): ${totalUsedTillNow.toFixed(1)} days
           ✅ Remaining for Rest of Year: ${balanceAtMonthEnd.toFixed(1)} days
           ${currentMonthLeave ? '✓ Has record for this month' : '✗ No record for this month (placeholder)'}`);
 
@@ -327,11 +327,11 @@ export default function LeaveManagement() {
 
       // Step 5: Apply filters
       if (selectedStatus) {
-        processedLeaves = processedLeaves.filter(l => 
+        processedLeaves = processedLeaves.filter(l =>
           l.status === selectedStatus || (l._id.toString().startsWith('temp-') && selectedStatus === 'Draft')
         );
       }
-      
+
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         processedLeaves = processedLeaves.filter(l =>
@@ -525,18 +525,18 @@ export default function LeaveManagement() {
 
   const handleEditLeave = async (leaveId) => {
     const leave = leaves.find(l => l._id === leaveId);
-    
+
     // Calculate current paid/unpaid from summary
     // Note: This matches how they are displayed in the grid
     const currentPaid = (leave.summary.paidLeaves || 0) + (leave.summary.halfDayPaidLeaves || 0) * 0.5;
     const currentUnpaid = (leave.summary.unpaidLeaves || 0) + (leave.summary.halfDayUnpaidLeaves || 0) * 0.5;
 
     setEditingLeaveId(leaveId);
-    setEditValues({ 
-      paid: currentPaid, 
-      unpaid: currentUnpaid 
+    setEditValues({
+      paid: currentPaid,
+      unpaid: currentUnpaid
     });
-    
+
     // Pre-fill form data for potential save
     setFormData({
       employeeId: leave.employeeId,
@@ -550,24 +550,24 @@ export default function LeaveManagement() {
 
   const handleSaveInline = async () => {
     const leave = leaves.find(l => l._id === editingLeaveId);
-    
+
     // Build leaves array from inline edit values
     const newLeaves = [];
-    
+
     // Add paid leaves
     for (let i = 0; i < editValues.paid; i++) {
-        // Use dates from original leave if available to preserve specifics, otherwise generate new
-        // Ideally we should try to preserve existing dates if count matches or is less
-        // But for "quick entry", generating sequential dates might be the intended behavior if just counts are changed
-        // For now, consistent with previous 'temp' logic: generate sequential dates
-        // IMPROVEMENT: We could try to retain existing dates if we are just changing counts, but that's complex without full UI
+      // Use dates from original leave if available to preserve specifics, otherwise generate new
+      // Ideally we should try to preserve existing dates if count matches or is less
+      // But for "quick entry", generating sequential dates might be the intended behavior if just counts are changed
+      // For now, consistent with previous 'temp' logic: generate sequential dates
+      // IMPROVEMENT: We could try to retain existing dates if we are just changing counts, but that's complex without full UI
       newLeaves.push({
         date: `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(i + 1).padStart(2, '0')}`,
         leaveType: "Paid",
         reason: "Quick entry",
       });
     }
-    
+
     // Add unpaid leaves
     for (let i = 0; i < editValues.unpaid; i++) {
       newLeaves.push({
@@ -944,9 +944,9 @@ export default function LeaveManagement() {
         )}
       </td>
       <td className="px-6 py-4 text-center">
-        <span className="inline-flex items-center justify-center min-w-[2.5rem] px-2 py-1 bg-blue-50 text-blue-700 rounded-lg font-semibold text-sm border border-blue-200">
-          {editingLeaveId === leave._id 
-            ? (editValues.paid + editValues.unpaid).toFixed(1) 
+        <span className="inline-flex items-center justify-center min-w-[2.5rem] px-2 py-1 bg-slate-50 text-blue-700 rounded-lg font-semibold text-sm border border-blue-200">
+          {editingLeaveId === leave._id
+            ? (editValues.paid + editValues.unpaid).toFixed(1)
             : (leave.summary.totalDays || 0).toFixed(1)}
         </span>
       </td>
@@ -954,13 +954,12 @@ export default function LeaveManagement() {
         <div className="text-sm">
           {/* MAIN DISPLAY: Always show remaining balance prominently */}
           <div className="mb-2">
-            <p className={`text-lg font-bold ${
-              (leave.annualLeaveBalance.remaining || 0) < 5 
-                ? 'text-red-600' 
-                : (leave.annualLeaveBalance.remaining || 0) < 10
+            <p className={`text-lg font-bold ${(leave.annualLeaveBalance.remaining || 0) < 5
+              ? 'text-red-600'
+              : (leave.annualLeaveBalance.remaining || 0) < 10
                 ? 'text-orange-600'
                 : 'text-green-600'
-            }`}>
+              }`}>
               {editingLeaveId === leave._id
                 ? Math.max(0, (leave.annualLeaveBalance.balanceAtMonthStart || 0) - editValues.unpaid).toFixed(1)
                 : (leave.annualLeaveBalance.remaining || 0).toFixed(1)
@@ -970,7 +969,7 @@ export default function LeaveManagement() {
               Remaining
             </p>
           </div>
-          
+
           {/* Detailed breakdown */}
           <div className="space-y-0.5 pt-2 border-t border-slate-200">
             <div className="flex items-center justify-between text-xs">
@@ -1014,7 +1013,7 @@ export default function LeaveManagement() {
             <>
               <button
                 onClick={() => handleEditLeave(leave._id)}
-                className="p-2 text-slate-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                 title="Edit"
               >
                 <Edit className="w-4 h-4" />
@@ -1038,7 +1037,7 @@ export default function LeaveManagement() {
   return (
     <div className="min-h-screen bg-slate-50">
       <Toaster position="top-right" />
-      
+
       {/* Classification Modal */}
       {showClassificationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -1046,8 +1045,8 @@ export default function LeaveManagement() {
             <div className="p-6 border-b border-slate-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <Edit3 className="w-5 h-5 text-yellow-600" />
+                  <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                    <Edit3 className="w-5 h-5 text-indigo-600" />
                   </div>
                   Classify Leave Days
                 </h3>
@@ -1060,18 +1059,18 @@ export default function LeaveManagement() {
               </div>
               <p className="text-slate-600 text-sm mt-2">
                 You're adding{" "}
-                <span className="font-bold text-yellow-600">
+                <span className="font-bold text-indigo-600">
                   {pendingLeaves.length} days
                 </span>{" "}
                 of leave. How many should be paid vs unpaid?
               </p>
             </div>
             <div className="p-6 space-y-6">
-              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 text-center">
-                <p className="text-sm text-yellow-700 font-semibold mb-2">
+              <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4 text-center">
+                <p className="text-sm text-indigo-700 font-semibold mb-2">
                   Total Days to Add
                 </p>
-                <p className="text-4xl font-bold text-yellow-900">
+                <p className="text-4xl font-bold text-indigo-900">
                   {pendingLeaves.length}
                 </p>
               </div>
@@ -1138,13 +1137,13 @@ export default function LeaveManagement() {
               </div>
               {classificationData.paidCount + classificationData.unpaidCount !==
                 pendingLeaves.length && (
-                <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg p-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
-                  <p className="text-sm text-red-700">
-                    Total must equal {pendingLeaves.length} days
-                  </p>
-                </div>
-              )}
+                  <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg p-3">
+                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                    <p className="text-sm text-red-700">
+                      Total must equal {pendingLeaves.length} days
+                    </p>
+                  </div>
+                )}
             </div>
             <div className="p-6 border-t border-slate-200 flex items-center justify-end gap-3">
               <button
@@ -1157,10 +1156,10 @@ export default function LeaveManagement() {
                 onClick={applyClassification}
                 disabled={
                   classificationData.paidCount +
-                    classificationData.unpaidCount !==
+                  classificationData.unpaidCount !==
                   pendingLeaves.length
                 }
-                className="px-6 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 <CheckCircle className="w-4 h-4" />
                 Apply Classification
@@ -1178,7 +1177,7 @@ export default function LeaveManagement() {
             <div className="p-6 border-b border-slate-200">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
                     <Calendar className="w-5 h-5 text-white" />
                   </div>
                   {isEdit ? "Edit Leave Record" : "Add Leave Record"}
@@ -1206,7 +1205,7 @@ export default function LeaveManagement() {
                   <select
                     value={selectedOrganization}
                     onChange={handleOrganizationChange}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                   >
                     <option value="">All Organizations</option>
                     {organizationTypes.map((org) => (
@@ -1216,7 +1215,7 @@ export default function LeaveManagement() {
                     ))}
                   </select>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="space-y-2">
                     <label className="block text-sm font-semibold text-slate-700">
@@ -1224,18 +1223,17 @@ export default function LeaveManagement() {
                     </label>
                     {loadingEmployees ? (
                       <div className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm bg-slate-100 flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-yellow-500" />
+                        <Loader2 className="w-4 h-4 animate-spin text-indigo-500" />
                         <span>Loading employees...</span>
                       </div>
                     ) : (
                       <select
                         value={formData.employeeId}
                         onChange={handleEmployeeChange}
-                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white ${
-                          errors.employeeId
-                            ? "border-red-300"
-                            : "border-slate-300"
-                        }`}
+                        className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white ${errors.employeeId
+                          ? "border-red-300"
+                          : "border-slate-300"
+                          }`}
                       >
                         <option value="">Select Employee</option>
                         {employees.map((emp) => (
@@ -1266,9 +1264,8 @@ export default function LeaveManagement() {
                         }))
                       }
                       disabled={isEdit}
-                      className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${
-                        isEdit ? "bg-slate-100 cursor-not-allowed" : "bg-white"
-                      } border-slate-300`}
+                      className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${isEdit ? "bg-slate-100 cursor-not-allowed" : "bg-white"
+                        } border-slate-300`}
                     >
                       {months.map((month) => (
                         <option key={month.value} value={month.value}>
@@ -1290,9 +1287,8 @@ export default function LeaveManagement() {
                         }))
                       }
                       disabled={isEdit}
-                      className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${
-                        isEdit ? "bg-slate-100 cursor-not-allowed" : "bg-white"
-                      } border-slate-300`}
+                      className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${isEdit ? "bg-slate-100 cursor-not-allowed" : "bg-white"
+                        } border-slate-300`}
                     >
                       {years.map((year) => (
                         <option key={year} value={year}>
@@ -1304,37 +1300,37 @@ export default function LeaveManagement() {
                 </div>
 
                 {selectedEmployee && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                       <div>
-                        <p className="text-yellow-700 font-semibold mb-1">
+                        <p className="text-indigo-700 font-semibold mb-1">
                           Employee ID
                         </p>
-                        <p className="text-yellow-900 font-medium">
+                        <p className="text-indigo-900 font-medium">
                           {selectedEmployee.employeeId}
                         </p>
                       </div>
                       <div>
-                        <p className="text-yellow-700 font-semibold mb-1">
+                        <p className="text-indigo-700 font-semibold mb-1">
                           Organization
                         </p>
-                        <p className="text-yellow-900 font-medium">
+                        <p className="text-indigo-900 font-medium">
                           {selectedEmployee.organizationType || "N/A"}
                         </p>
                       </div>
                       <div>
-                        <p className="text-yellow-700 font-semibold mb-1">
+                        <p className="text-indigo-700 font-semibold mb-1">
                           Department
                         </p>
-                        <p className="text-yellow-900 font-medium">
+                        <p className="text-indigo-900 font-medium">
                           {selectedEmployee.jobDetails?.department || "N/A"}
                         </p>
                       </div>
                       <div>
-                        <p className="text-yellow-700 font-semibold mb-1">
+                        <p className="text-indigo-700 font-semibold mb-1">
                           Email
                         </p>
-                        <p className="text-yellow-900 font-medium truncate">
+                        <p className="text-indigo-900 font-medium truncate">
                           {selectedEmployee.personalDetails?.email || "N/A"}
                         </p>
                       </div>
@@ -1473,7 +1469,7 @@ export default function LeaveManagement() {
                                       e.target.value
                                     );
                                   }}
-                                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 />
                               </div>
                               <div className="space-y-2">
@@ -1490,7 +1486,7 @@ export default function LeaveManagement() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
                                   {leaveTypes.map((type) => (
                                     <option key={type.value} value={type.value}>
@@ -1514,7 +1510,7 @@ export default function LeaveManagement() {
                                     )
                                   }
                                   placeholder="Reason for leave"
-                                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 />
                               </div>
                               <div className="flex items-end">
@@ -1639,7 +1635,7 @@ export default function LeaveManagement() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-yellow-500 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-11 h-11 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
                 <Calendar className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -1653,7 +1649,7 @@ export default function LeaveManagement() {
             </div>
             <button
               onClick={handleAddLeave}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors shadow-sm"
             >
               <Plus className="w-4 h-4" />
               Add Leave Record
@@ -1665,7 +1661,7 @@ export default function LeaveManagement() {
       <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm border-l-4 border-l-indigo-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">
@@ -1678,12 +1674,12 @@ export default function LeaveManagement() {
                   Annual balance tracking
                 </p>
               </div>
-              <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center border border-yellow-100">
-                <Users className="w-6 h-6 text-yellow-600" />
+              <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
+                <Users className="w-6 h-6 text-indigo-600" />
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm border-l-4 border-l-green-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">
@@ -1699,7 +1695,7 @@ export default function LeaveManagement() {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm border-l-4 border-l-red-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">
@@ -1715,7 +1711,7 @@ export default function LeaveManagement() {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm border-l-4 border-l-blue-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">
@@ -1726,7 +1722,7 @@ export default function LeaveManagement() {
                 </p>
                 <p className="text-xs text-slate-500 mt-1">This month</p>
               </div>
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                 <Clock className="w-6 h-6 text-blue-600" />
               </div>
             </div>
@@ -1735,24 +1731,21 @@ export default function LeaveManagement() {
 
         {/* Organization Grouping Toggle */}
         <div
-          className={`bg-white rounded-xl border-2 transition-all ${
-            groupByOrganization
-              ? "border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50"
-              : "border-slate-200"
-          } shadow-sm`}
+          className={`bg-white rounded-xl border-2 transition-all ${groupByOrganization
+            ? "border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50"
+            : "border-slate-200"
+            } shadow-sm`}
         >
           <div className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                    groupByOrganization ? "bg-yellow-500" : "bg-slate-100"
-                  }`}
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${groupByOrganization ? "bg-yellow-500" : "bg-slate-100"
+                    }`}
                 >
                   <Layers
-                    className={`w-5 h-5 ${
-                      groupByOrganization ? "text-white" : "text-slate-500"
-                    }`}
+                    className={`w-5 h-5 ${groupByOrganization ? "text-white" : "text-slate-500"
+                      }`}
                   />
                 </div>
                 <div>
@@ -1785,14 +1778,12 @@ export default function LeaveManagement() {
                 )}
                 <button
                   onClick={handleGroupToggle}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    groupByOrganization ? "bg-yellow-500" : "bg-slate-300"
-                  }`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${groupByOrganization ? "bg-yellow-500" : "bg-slate-300"
+                    }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      groupByOrganization ? "translate-x-6" : "translate-x-1"
-                    }`}
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${groupByOrganization ? "translate-x-6" : "translate-x-1"
+                      }`}
                   />
                 </button>
               </div>
@@ -1950,10 +1941,10 @@ export default function LeaveManagement() {
                     {groupByOrganization ? "Organizations" : "Leave Records"} -{" "}
                     {formatMonthYear(selectedMonth, selectedYear)}
                   </h2>
-                  <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-2 px-3 py-1 bg-slate-50 border border-blue-200 rounded-lg">
                     <Info className="w-3.5 h-3.5 text-blue-600" />
                     <span className="text-xs font-medium text-blue-700">
-                      Balance shown is at end of {months[selectedMonth-1].label}
+                      Balance shown is at end of {months[selectedMonth - 1].label}
                     </span>
                   </div>
                 </div>
@@ -1966,23 +1957,23 @@ export default function LeaveManagement() {
 
           {loading ? (
             <div className="p-6 space-y-6">
-               <div className="flex items-center justify-between">
-                   <Skeleton className="h-8 w-1/3" />
-                   <Skeleton className="h-8 w-24" />
-               </div>
-               <div className="space-y-4">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className="flex items-center p-4 border border-slate-100 rounded-lg gap-4">
-                          <Skeleton className="h-10 w-10 rounded-full" />
-                          <div className="flex-1 space-y-2">
-                              <Skeleton className="h-4 w-1/4" />
-                              <Skeleton className="h-3 w-1/3" />
-                          </div>
-                          <Skeleton className="h-8 w-20" />
-                          <Skeleton className="h-8 w-8" />
-                      </div>
-                  ))}
-               </div>
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-8 w-1/3" />
+                <Skeleton className="h-8 w-24" />
+              </div>
+              <div className="space-y-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex items-center p-4 border border-slate-100 rounded-lg gap-4">
+                    <Skeleton className="h-10 w-10 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-4 w-1/4" />
+                      <Skeleton className="h-3 w-1/3" />
+                    </div>
+                    <Skeleton className="h-8 w-20" />
+                    <Skeleton className="h-8 w-8" />
+                  </div>
+                ))}
+              </div>
             </div>
           ) : leaves.length === 0 ? (
             <div className="text-center py-16">
@@ -2017,7 +2008,7 @@ export default function LeaveManagement() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-slate-500 rounded-lg flex items-center justify-center">
                           <Building2 className="w-4 h-4 text-white" />
                         </div>
                         <div>

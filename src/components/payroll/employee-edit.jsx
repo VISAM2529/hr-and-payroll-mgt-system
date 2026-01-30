@@ -484,7 +484,7 @@ function DocumentUploadSection({
         </div>
       )}
       {employeeCategory && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-slate-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm font-medium text-blue-800">
             Document requirements for: <span className="font-semibold">{employeeCategory}</span>
           </p>
@@ -785,7 +785,7 @@ function PayslipStructureSection({
   return (
     <div className="space-y-8">
       {/* Month Selection for PT Calculation */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+      <div className="bg-slate-50 border border-blue-200 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
           <Calendar className="w-5 h-5 text-blue-600" />
           Month Selection for Professional Tax
@@ -1449,7 +1449,7 @@ function PayslipStructureSection({
               : "Needs adjustment - Deductions exceed earnings"}
           </div>
           {payslipStructure.salaryType === "perday" && (
-            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="mt-4 bg-slate-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm font-semibold text-blue-800">
                 Per Day Salary Configuration
               </p>
@@ -2606,7 +2606,7 @@ export default function EmployeeEdit({ employeeId }) {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
           <div className="p-6 border-b border-slate-200">
             <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+              <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                 <Building className="w-4 h-4 text-blue-600" />
               </div>
               Organization Details
@@ -3116,7 +3116,7 @@ export default function EmployeeEdit({ employeeId }) {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
           <div className="p-6 border-b border-slate-200">
             <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+              <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                 <Building className="w-4 h-4 text-blue-600" />
               </div>
               Organization Details
@@ -3251,7 +3251,7 @@ export default function EmployeeEdit({ employeeId }) {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm mb-8">
           <div className="p-6 border-b border-slate-200">
             <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+              <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                 <Briefcase className="w-4 h-4 text-blue-600" />
               </div>
               Job Details
@@ -3875,7 +3875,7 @@ export default function EmployeeEdit({ employeeId }) {
 
             {/* Supervisor Selection Section */}
             {formData.attendanceApproval.required === "yes" && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <div className="bg-slate-50 border border-blue-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2 mb-4">
                   <UserCheck className="w-5 h-5 text-blue-600" />
                   Attendance Approval Supervisors

@@ -130,7 +130,7 @@
 //         // Handle null/undefined dates by pushing them to the bottom
 //         if (!a.createdAt) return 1;
 //         if (!b.createdAt) return -1;
-        
+
 //         // Sort descending (b - a for newest first)
 //         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 //     });
@@ -161,7 +161,7 @@
 //       }
 
 //       const response = await fetch("/api/tasks");
-      
+
 //       if (!response.ok) {
 //         const errorText = await response.text();
 //         throw new Error(`Failed to fetch tasks: ${response.status}`);
@@ -220,7 +220,7 @@
 
 //     const now = new Date();
 //     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
+
 //     // Get the start of the current week (Sunday)
 //     const firstDayOfWeek = new Date(today);
 //     firstDayOfWeek.setDate(today.getDate() - today.getDay()); 
@@ -234,7 +234,7 @@
 //       total: taskList.length,
 //       completed: taskList.filter((task) => task.status === "Completed").length,
 //       pending: taskList.filter((task) => task.status === "Pending").length,
-      
+
 //       // Calculate overdue based on tasks not completed and due date passed
 //       overdue: taskList.filter(
 //         (task) =>
@@ -244,7 +244,7 @@
 //       ).length,
 
 //       inProgress: taskList.filter((task) => task.status === "In Progress").length,
-      
+
 //       // Calculate tasks due today (due date matches today)
 //       todayDue: taskList.filter(
 //         (task) =>
@@ -297,7 +297,7 @@
 //   const handleProgressUpdate = async (taskId, progress, comments = "") => {
 //     try {
 //       setError("");
-      
+
 //       const updateData = {
 //         progress: progress,
 //         lastUpdated: new Date().toISOString(),
@@ -344,14 +344,14 @@
 //         }
 
 //         const updatedTask = data.task;
-        
+
 //         // Update local state with the new task
 //         setTasks((prevTasks) =>
 //           prevTasks.map((task) =>
 //             task._id === taskId ? updatedTask : task
 //           )
 //         );
-        
+
 //         // Recalculate stats with the fully updated list
 //         const updatedTasksList = tasks.map(task => 
 //           task._id === taskId ? updatedTask : task
@@ -414,7 +414,7 @@
 //         setTasks((prevTasks) =>
 //           prevTasks.map((task) => (task._id === taskId ? updatedTask : task))
 //         );
-        
+
 //         const updatedTasks = tasks.map(task => 
 //           task._id === taskId ? updatedTask : task
 //         );
@@ -587,7 +587,7 @@
 //             </div>
 //           </div>
 //         </CardHeader>
-        
+
 //         <CardContent className="space-y-3">
 //           {/* Progress Section */}
 //           <div className="space-y-2">
@@ -602,7 +602,7 @@
 //                 className={`h-2 rounded-full transition-all duration-500 ${
 //                   progress === 0 ? "bg-gray-400" :
 //                   progress < 50 ? "bg-yellow-500" :
-//                   progress < 100 ? "bg-blue-500" : "bg-green-500"
+//                   progress < 100 ? "bg-slate-500" : "bg-green-500"
 //                 }`}
 //                 style={{ width: `${progress}%` }}
 //               />
@@ -679,7 +679,7 @@
 //           ? "bg-green-500 hover:bg-green-600"
 //           : "bg-yellow-500 hover:bg-yellow-600"
 //       } text-white shadow-sm px-3 py-1.5 font-medium flex-1 h-8
-      
+
 //       /* <<< --- ADDED / MODIFIED LINES HERE --- >>> */
 //       flex justify-center items-center whitespace-nowrap 
 //       /* <<< ----------------------------------- >>> */
@@ -1584,7 +1584,7 @@
 //                     : progressPercentage < 50
 //                     ? "bg-yellow-500"
 //                     : progressPercentage < 100
-//                     ? "bg-blue-500"
+//                     ? "bg-slate-500"
 //                     : "bg-green-500"
 //                 }`}
 //                 style={{ width: `${progressPercentage}%` }}
@@ -1707,7 +1707,7 @@
 //                           className={`h-3 rounded-full transition-all duration-500 ${
 //                             (selectedTaskDetails.progress || 0) === 0 ? "bg-gray-400" :
 //                             (selectedTaskDetails.progress || 0) < 50 ? "bg-yellow-500" :
-//                             (selectedTaskDetails.progress || 0) < 100 ? "bg-blue-500" : "bg-green-500"
+//                             (selectedTaskDetails.progress || 0) < 100 ? "bg-slate-500" : "bg-green-500"
 //                           }`}
 //                           style={{ width: `${selectedTaskDetails.progress || 0}%` }}
 //                         />
@@ -1794,7 +1794,6 @@ import {
   Search,
   Plus,
   FileText,
-  Bell,
   Star,
   ArrowUp,
   ArrowDown,
@@ -1911,12 +1910,12 @@ export default function MyTasks() {
 
     // 5. Sorting: Latest task at the top (by createdAt descending)
     result.sort((a, b) => {
-        // Handle null/undefined dates by pushing them to the bottom
-        if (!a.createdAt) return 1;
-        if (!b.createdAt) return -1;
-        
-        // Sort descending (b - a for newest first)
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      // Handle null/undefined dates by pushing them to the bottom
+      if (!a.createdAt) return 1;
+      if (!b.createdAt) return -1;
+
+      // Sort descending (b - a for newest first)
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 
     return result;
@@ -1926,7 +1925,7 @@ export default function MyTasks() {
   const paginationData = useMemo(() => {
     const totalTasks = filteredTasks.length;
     const totalPages = Math.ceil(totalTasks / tasksPerPage);
-    
+
     // Calculate current page tasks
     const startIndex = (currentPage - 1) * tasksPerPage;
     const endIndex = startIndex + tasksPerPage;
@@ -1953,9 +1952,9 @@ export default function MyTasks() {
     if (user) {
       fetchMyTasks();
     } else {
-        if (!user) {
-          setError("User session not available. Please log in again.");
-        }
+      if (!user) {
+        setError("User session not available. Please log in again.");
+      }
     }
   }, [user]);
 
@@ -1969,7 +1968,7 @@ export default function MyTasks() {
       }
 
       const response = await fetch("/api/tasks");
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to fetch tasks: ${response.status}`);
@@ -1981,7 +1980,7 @@ export default function MyTasks() {
       let assignedTasks = [];
       if (user.role === "admin") {
         // Admins see all tasks
-        assignedTasks = allTasks; 
+        assignedTasks = allTasks;
       } else if (user.role === "Employee") {
         // Employees see tasks assigned to them
         assignedTasks = allTasks?.filter((task) => {
@@ -2028,10 +2027,10 @@ export default function MyTasks() {
 
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
+
     // Get the start of the current week (Sunday)
     const firstDayOfWeek = new Date(today);
-    firstDayOfWeek.setDate(today.getDate() - today.getDay()); 
+    firstDayOfWeek.setDate(today.getDate() - today.getDay());
 
     // Get the end of the current week (Saturday midnight)
     const lastDayOfWeek = new Date(firstDayOfWeek);
@@ -2041,7 +2040,7 @@ export default function MyTasks() {
       total: taskList.length,
       completed: taskList.filter((task) => task.status === "Completed").length,
       pending: taskList.filter((task) => task.status === "Pending").length,
-      
+
       // Calculate overdue based on tasks not completed and due date passed
       overdue: taskList.filter(
         (task) =>
@@ -2051,7 +2050,7 @@ export default function MyTasks() {
       ).length,
 
       inProgress: taskList.filter((task) => task.status === "In Progress").length,
-      
+
       // Calculate tasks due today (due date matches today)
       todayDue: taskList.filter(
         (task) =>
@@ -2065,7 +2064,7 @@ export default function MyTasks() {
         (task) =>
           task.status !== "Completed" &&
           task.dueDate &&
-          new Date(task.dueDate) >= today && 
+          new Date(task.dueDate) >= today &&
           new Date(task.dueDate) < lastDayOfWeek
       ).length,
     };
@@ -2129,14 +2128,14 @@ export default function MyTasks() {
     // If task is pending, start it with 0% progress
     if (task.status === "Pending") {
       handleProgressUpdate(task._id, 0, "Started working on the task");
-    } 
+    }
     // If task is already in progress, show progress modal to update it
     else if (task.status === "In Progress" && (task.progress || 0) < 100) {
       setSelectedTask(task);
       setProgressPercentage(task.progress || 0);
       setProgressComments("");
       setProgressModalOpen(true);
-    } 
+    }
     // If progress is already 100%, allow completion
     else if (task.status === "In Progress" && (task.progress || 0) >= 100) {
       handleStatusChange(task._id, "Completed");
@@ -2146,7 +2145,7 @@ export default function MyTasks() {
   const handleProgressUpdate = async (taskId, progress, comments = "") => {
     try {
       setError("");
-      
+
       const updateData = {
         progress: progress,
         lastUpdated: new Date().toISOString(),
@@ -2158,7 +2157,7 @@ export default function MyTasks() {
         const currentTask = tasks.find(t => t._id === taskId);
 
         updateData.progressComments = [
-          ...(currentTask?.progressComments || []), 
+          ...(currentTask?.progressComments || []),
           {
             comment: comments,
             progress: progress,
@@ -2192,16 +2191,16 @@ export default function MyTasks() {
         }
 
         const updatedTask = data.task;
-        
+
         // Update local state with the new task
         setTasks((prevTasks) =>
           prevTasks.map((task) =>
             task._id === taskId ? updatedTask : task
           )
         );
-        
+
         // Recalculate stats with the fully updated list
-        const updatedTasksList = tasks.map(task => 
+        const updatedTasksList = tasks.map(task =>
           task._id === taskId ? updatedTask : task
         );
         calculateStats(updatedTasksList);
@@ -2262,8 +2261,8 @@ export default function MyTasks() {
         setTasks((prevTasks) =>
           prevTasks.map((task) => (task._id === taskId ? updatedTask : task))
         );
-        
-        const updatedTasks = tasks.map(task => 
+
+        const updatedTasks = tasks.map(task =>
           task._id === taskId ? updatedTask : task
         );
         calculateStats(updatedTasks);
@@ -2275,7 +2274,7 @@ export default function MyTasks() {
       console.error("❌ Error updating task status:", error);
       setError(`Error updating task status: ${error.message}`);
       // Re-fetch in case of failure to ensure data consistency
-      await fetchMyTasks(); 
+      await fetchMyTasks();
     }
   };
 
@@ -2435,7 +2434,7 @@ export default function MyTasks() {
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-3">
           {/* Progress Section */}
           <div className="space-y-2">
@@ -2447,11 +2446,10 @@ export default function MyTasks() {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
-                className={`h-2 rounded-full transition-all duration-500 ${
-                  progress === 0 ? "bg-gray-400" :
+                className={`h-2 rounded-full transition-all duration-500 ${progress === 0 ? "bg-gray-400" :
                   progress < 50 ? "bg-yellow-500" :
-                  progress < 100 ? "bg-blue-500" : "bg-green-500"
-                }`}
+                    progress < 100 ? "bg-slate-500" : "bg-green-500"
+                  }`}
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -2466,11 +2464,10 @@ export default function MyTasks() {
                       setProgressComments("");
                       setProgressModalOpen(true);
                     }}
-                    className={`flex-1 text-xs py-1 px-2 rounded border transition-colors ${
-                      value <= progress
-                        ? "bg-green-100 text-green-700 border-green-300"
-                        : "bg-gray-100 text-gray-600 border-gray-300 hover:bg-gray-200"
-                    }`}
+                    className={`flex-1 text-xs py-1 px-2 rounded border transition-colors ${value <= progress
+                      ? "bg-green-100 text-green-700 border-green-300"
+                      : "bg-gray-100 text-gray-600 border-gray-300 hover:bg-gray-200"
+                      }`}
                     disabled={value <= progress}
                   >
                     {value}%
@@ -2484,11 +2481,10 @@ export default function MyTasks() {
           <div className="flex items-center justify-between text-xs text-gray-600">
             <div className="flex items-center gap-2">
               <Calendar className="h-3 w-3" />
-              <span className={`font-medium ${
-                isTaskOverdue && task.status !== "Completed"
-                  ? "text-red-600"
-                  : "text-gray-700"
-              }`}>
+              <span className={`font-medium ${isTaskOverdue && task.status !== "Completed"
+                ? "text-red-600"
+                : "text-gray-700"
+                }`}>
                 {formatDate(task.dueDate)}
                 {isTaskOverdue && task.status !== "Completed" && (
                   <span className="ml-1 text-red-500 font-semibold">(Overdue)</span>
@@ -2522,11 +2518,10 @@ export default function MyTasks() {
             {task.status !== "Completed" ? (
               <Button
                 size="sm"
-                className={`${
-                  task.status === "In Progress"
-                    ? "bg-green-500 hover:bg-green-600"
-                    : "bg-yellow-500 hover:bg-yellow-600"
-                } text-white shadow-sm px-3 py-1.5 font-medium flex-1 h-8
+                className={`${task.status === "In Progress"
+                  ? "bg-green-500 hover:bg-green-600"
+                  : "bg-yellow-500 hover:bg-yellow-600"
+                  } text-white shadow-sm px-3 py-1.5 font-medium flex-1 h-8
                 flex justify-center items-center whitespace-nowrap`}
                 onClick={() => handleStatusUpdate(task)}
               >
@@ -2612,7 +2607,7 @@ export default function MyTasks() {
   // Pagination Component
   const Pagination = () => {
     const { totalPages, currentTasks, startIndex, endIndex, totalTasks, hasPrevious, hasNext } = paginationData;
-    
+
     if (totalPages <= 1) return null;
 
     const pageNumbers = getPageNumbers();
@@ -2666,11 +2661,10 @@ export default function MyTasks() {
                   variant={currentPage === page ? "default" : "outline"}
                   size="sm"
                   onClick={() => handlePageChange(page)}
-                  className={`h-9 w-9 p-0 ${
-                    currentPage === page 
-                      ? "bg-yellow-500 hover:bg-yellow-600 text-white" 
-                      : ""
-                  }`}
+                  className={`h-9 w-9 p-0 ${currentPage === page
+                    ? "bg-yellow-500 hover:bg-yellow-600 text-white"
+                    : ""
+                    }`}
                 >
                   {page}
                 </Button>
@@ -2915,9 +2909,7 @@ export default function MyTasks() {
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <AlertCircle className="w-5 h-5 text-red-600" />
                   </div>
-                  {stats.overdue > 0 && (
-                    <Bell className="w-4 h-4 text-red-500 animate-pulse" />
-                  )}
+
                 </div>
                 <p className="text-red-600 text-sm font-medium">Overdue</p>
                 <p className="text-2xl font-semibold text-red-700">
@@ -2999,8 +2991,8 @@ export default function MyTasks() {
                       {stats.total > 0 && stats.completed / stats.total > 0.7
                         ? "Excellent Progress!"
                         : stats.total > 0 && stats.completed / stats.total > 0.5
-                        ? "Good Momentum!"
-                        : "Keep Going!"}
+                          ? "Good Momentum!"
+                          : "Keep Going!"}
                     </span>
                   </div>
                   <p className="text-xs text-yellow-700">
@@ -3042,21 +3034,19 @@ export default function MyTasks() {
                 <div className="flex rounded-lg border border-gray-200 p-1">
                   <button
                     onClick={() => setViewMode("list")}
-                    className={`p-2 rounded transition-colors text-gray-600 ${
-                      viewMode === "list"
-                        ? "bg-yellow-100 text-yellow-600"
-                        : "hover:text-yellow-600 hover:bg-yellow-50"
-                    }`}
+                    className={`p-2 rounded transition-colors text-gray-600 ${viewMode === "list"
+                      ? "bg-yellow-100 text-yellow-600"
+                      : "hover:text-yellow-600 hover:bg-yellow-50"
+                      }`}
                   >
                     <List className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-2 rounded transition-colors text-gray-600 ${
-                      viewMode === "grid"
-                        ? "bg-yellow-100 text-yellow-600"
-                        : "hover:text-yellow-600 hover:bg-yellow-50"
-                    }`}
+                    className={`p-2 rounded transition-colors text-gray-600 ${viewMode === "grid"
+                      ? "bg-yellow-100 text-yellow-600"
+                      : "hover:text-yellow-600 hover:bg-yellow-50"
+                      }`}
                   >
                     <Grid3X3 className="w-4 h-4" />
                   </button>
@@ -3160,8 +3150,8 @@ export default function MyTasks() {
                 {activeFiltersCount > 0
                   ? "No tasks match your current filters. Try adjusting your search criteria."
                   : filter === "all"
-                  ? "You don't have any tasks assigned yet. Create your first task to get started!"
-                  : `No ${filter.toLowerCase()} tasks found.`}
+                    ? "You don't have any tasks assigned yet. Create your first task to get started!"
+                    : `No ${filter.toLowerCase()} tasks found.`}
               </CardDescription>
               <div className="flex items-center justify-center space-x-3">
                 {activeFiltersCount > 0 && (
@@ -3236,11 +3226,10 @@ export default function MyTasks() {
                     <div
                       className="bg-gradient-to-r from-yellow-500 to-blue-500 h-3 rounded-full transition-all duration-500 shadow-sm"
                       style={{
-                        width: `${
-                          stats.total > 0
-                            ? (stats.completed / stats.total) * 100
-                            : 0
-                        }%`,
+                        width: `${stats.total > 0
+                          ? (stats.completed / stats.total) * 100
+                          : 0
+                          }%`,
                       }}
                     ></div>
                   </div>
@@ -3267,15 +3256,15 @@ export default function MyTasks() {
                         {stats.total > 0 && stats.completed / stats.total > 0.8
                           ? "Excellent Work!"
                           : stats.total > 0 && stats.completed / stats.total > 0.5
-                          ? "Great Progress!"
-                          : "Keep Going!"}
+                            ? "Great Progress!"
+                            : "Keep Going!"}
                       </p>
                       <p className="text-xs text-yellow-600">
                         {stats.total > 0 && stats.completed / stats.total > 0.8
                           ? "You're crushing your tasks!"
                           : stats.total > 0 && stats.completed / stats.total > 0.5
-                          ? "You're on the right track!"
-                          : "Every task completed is progress!"}
+                            ? "You're on the right track!"
+                            : "Every task completed is progress!"}
                       </p>
                     </div>
                   </div>
@@ -3430,11 +3419,10 @@ export default function MyTasks() {
                         key={value}
                         type="button"
                         onClick={() => setProgressPercentage(value)}
-                        className={`px-2 py-1 rounded transition-colors ${
-                          progressPercentage === value
-                            ? "bg-yellow-100 text-yellow-700 font-medium"
-                            : "hover:bg-gray-100"
-                        }`}
+                        className={`px-2 py-1 rounded transition-colors ${progressPercentage === value
+                          ? "bg-yellow-100 text-yellow-700 font-medium"
+                          : "hover:bg-gray-100"
+                          }`}
                         disabled={value < (selectedTask?.progress || 0)}
                       >
                         {value}%
@@ -3454,11 +3442,10 @@ export default function MyTasks() {
                     Progress Comments
                   </label>
                   <span
-                    className={`text-xs ${
-                      progressComments.length > 200
-                        ? "text-red-500"
-                        : "text-gray-400"
-                    }`}
+                    className={`text-xs ${progressComments.length > 200
+                      ? "text-red-500"
+                      : "text-gray-400"
+                      }`}
                   >
                     {progressComments.length}/200
                   </span>
@@ -3486,23 +3473,22 @@ export default function MyTasks() {
                       {progressPercentage}%
                     </span>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        progressPercentage === 0
-                          ? "bg-gray-200 text-gray-600"
-                          : progressPercentage < 50
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${progressPercentage === 0
+                        ? "bg-gray-200 text-gray-600"
+                        : progressPercentage < 50
                           ? "bg-yellow-100 text-yellow-700"
                           : progressPercentage < 100
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-green-100 text-green-700"
-                      }`}
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-green-100 text-green-700"
+                        }`}
                     >
                       {progressPercentage === 0
                         ? "Not Started"
                         : progressPercentage < 50
-                        ? "In Progress"
-                        : progressPercentage < 100
-                        ? "Almost Done"
-                        : "Completed"}
+                          ? "In Progress"
+                          : progressPercentage < 100
+                            ? "Almost Done"
+                            : "Completed"}
                     </span>
                   </div>
                 </div>
@@ -3510,15 +3496,14 @@ export default function MyTasks() {
                 <div className="space-y-2">
                   <div className="w-full bg-white border border-gray-300 rounded-full h-3 overflow-hidden">
                     <div
-                      className={`h-3 rounded-full transition-all duration-500 ease-out ${
-                        progressPercentage === 0
-                          ? "bg-gray-400"
-                          : progressPercentage < 50
+                      className={`h-3 rounded-full transition-all duration-500 ease-out ${progressPercentage === 0
+                        ? "bg-gray-400"
+                        : progressPercentage < 50
                           ? "bg-yellow-500"
                           : progressPercentage < 100
-                          ? "bg-blue-500"
-                          : "bg-green-500"
-                      }`}
+                            ? "bg-slate-500"
+                            : "bg-green-500"
+                        }`}
                       style={{ width: `${progressPercentage}%` }}
                     />
                   </div>
@@ -3547,7 +3532,7 @@ export default function MyTasks() {
               <Button
                 onClick={handleProgressSubmit}
                 disabled={
-                  (progressPercentage < 100 && !progressComments.trim()) || 
+                  (progressPercentage < 100 && !progressComments.trim()) ||
                   progressPercentage === (selectedTask?.progress || 0)
                 }
                 className="min-w-[140px] px-4 py-2 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -3636,11 +3621,10 @@ export default function MyTasks() {
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
                         <div
-                          className={`h-3 rounded-full transition-all duration-500 ${
-                            (selectedTaskDetails.progress || 0) === 0 ? "bg-gray-400" :
+                          className={`h-3 rounded-full transition-all duration-500 ${(selectedTaskDetails.progress || 0) === 0 ? "bg-gray-400" :
                             (selectedTaskDetails.progress || 0) < 50 ? "bg-yellow-500" :
-                            (selectedTaskDetails.progress || 0) < 100 ? "bg-blue-500" : "bg-green-500"
-                          }`}
+                              (selectedTaskDetails.progress || 0) < 100 ? "bg-slate-500" : "bg-green-500"
+                            }`}
                           style={{ width: `${selectedTaskDetails.progress || 0}%` }}
                         />
                       </div>

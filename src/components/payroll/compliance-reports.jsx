@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Plus, Search, Filter, MoreVertical, Eye, FileText, CheckCircle, AlertCircle,
-  Clock, User, Download, ChevronDown, RefreshCw, BarChart3, Settings, Bell,
+  Clock, User, Download, ChevronDown, RefreshCw, BarChart3, Settings,
   Calendar, TrendingUp, Shield, FilterX, Archive, Star
 } from 'lucide-react';
 
@@ -26,15 +26,15 @@ export default function ComplianceReports() {
       setLoading(!reports.length);
       setRefreshing(reports.length > 0);
       setError(null);
-      
+
       const params = new URLSearchParams();
       if (searchTerm) params.append('search', searchTerm);
       if (typeFilter) params.append('reportType', typeFilter);
       if (statusFilter) params.append('status', statusFilter);
-      
+
       const response = await fetch(`/api/payroll/compliance?${params}`);
       const data = await response.json();
-      
+
       if (response.ok) {
         setReports(data.complianceReports || []);
       } else {
@@ -52,24 +52,24 @@ export default function ComplianceReports() {
 
   const getStatusConfig = (status) => {
     const statusConfig = {
-      Compliant: { 
-        bg: 'bg-green-50', 
-        text: 'text-green-700', 
-        border: 'border-green-200', 
+      Compliant: {
+        bg: 'bg-green-50',
+        text: 'text-green-700',
+        border: 'border-green-200',
         icon: CheckCircle,
         dot: 'bg-green-500'
       },
-      'Non-Compliant': { 
-        bg: 'bg-red-50', 
-        text: 'text-red-700', 
-        border: 'border-red-200', 
+      'Non-Compliant': {
+        bg: 'bg-red-50',
+        text: 'text-red-700',
+        border: 'border-red-200',
         icon: AlertCircle,
         dot: 'bg-red-500'
       },
-      'Partially Compliant': { 
-        bg: 'bg-amber-50', 
-        text: 'text-amber-700', 
-        border: 'border-amber-200', 
+      'Partially Compliant': {
+        bg: 'bg-amber-50',
+        text: 'text-amber-700',
+        border: 'border-amber-200',
         icon: Clock,
         dot: 'bg-amber-500'
       },
@@ -80,7 +80,7 @@ export default function ComplianceReports() {
   const getStatusBadge = (status) => {
     const config = getStatusConfig(status);
     const Icon = config.icon;
-    
+
     return (
       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border ${config.bg} ${config.text} ${config.border}`}>
         <div className={`w-1.5 h-1.5 rounded-full ${config.dot}`}></div>
@@ -92,7 +92,7 @@ export default function ComplianceReports() {
 
   const getTypeConfig = (type) => {
     const typeConfig = {
-      Monthly: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+      Monthly: { bg: 'bg-slate-50', text: 'text-blue-700', border: 'border-blue-200' },
       Quarterly: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
       Annual: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
       'Ad-hoc': { bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200' },
@@ -156,11 +156,9 @@ export default function ComplianceReports() {
                 <p className="text-slate-600 text-sm mt-0.5">Monitor regulatory compliance and generate reports</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
-                <Bell className="w-5 h-5" />
-              </button>
+
               <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
                 <Settings className="w-5 h-5" />
               </button>
@@ -184,7 +182,7 @@ export default function ComplianceReports() {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
@@ -197,7 +195,7 @@ export default function ComplianceReports() {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
@@ -210,7 +208,7 @@ export default function ComplianceReports() {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
@@ -237,7 +235,7 @@ export default function ComplianceReports() {
                   </span>
                 )}
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <button
                   onClick={fetchComplianceReports}
@@ -247,12 +245,12 @@ export default function ComplianceReports() {
                   <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                   Refresh
                 </button>
-                
+
                 <button className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium">
                   <Download className="w-4 h-4" />
                   Export
                 </button>
-                
+
                 <Link
                   href="/payroll/compliance/generate"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors shadow-sm"
@@ -278,7 +276,7 @@ export default function ComplianceReports() {
                   />
                 </div>
               </div>
-              
+
               <div className="lg:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-2">Report Type</label>
                 <select
@@ -293,7 +291,7 @@ export default function ComplianceReports() {
                   <option value="Ad-hoc">Ad-hoc</option>
                 </select>
               </div>
-              
+
               <div className="lg:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
                 <select
@@ -307,7 +305,7 @@ export default function ComplianceReports() {
                   <option value="Partially Compliant">Partially Compliant</option>
                 </select>
               </div>
-              
+
               <div className="lg:col-span-2 flex items-end">
                 {hasActiveFilters && (
                   <button
@@ -365,7 +363,7 @@ export default function ComplianceReports() {
                             {hasActiveFilters ? 'No matching compliance reports' : 'No compliance reports found'}
                           </h3>
                           <p className="text-slate-500 text-sm mt-1 max-w-md">
-                            {hasActiveFilters 
+                            {hasActiveFilters
                               ? 'Try adjusting your search criteria or filters to find the reports you\'re looking for.'
                               : 'Start by generating your first compliance report to monitor regulatory requirements.'
                             }
@@ -442,7 +440,7 @@ export default function ComplianceReports() {
                             <Eye className="w-4 h-4" />
                           </Link>
                           {/* <button
-                            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors"
                             title="Download report"
                           >
                             <Download className="w-4 h-4" />

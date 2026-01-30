@@ -299,7 +299,7 @@ const LoginPage = () => {
       <div className="hidden lg:flex lg:w-1/2 relative bg-indigo-600 overflow-hidden items-center justify-center">
         {/* Background Circles/Gradients */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-slate-500/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 
         {/* Content */}
         <div className="relative z-10 w-full max-w-xl px-8 flex flex-col h-full justify-center">

@@ -385,7 +385,7 @@ export default function PayslipView({ payslipId }) {
   const getStatusBadge = (status) => {
     const statusConfig = {
       Draft: { color: "bg-slate-50 text-slate-700 border-slate-200", icon: Clock },
-      Generated: { color: "bg-blue-50 text-blue-700 border-blue-200", icon: FileText },
+      Generated: { color: "bg-slate-50 text-blue-700 border-blue-200", icon: FileText },
       Approved: { color: "bg-green-50 text-green-700 border-green-200", icon: CheckCircle },
       Paid: { color: "bg-purple-50 text-purple-700 border-purple-200", icon: CreditCard },
       Failed: { color: "bg-red-50 text-red-700 border-red-200", icon: AlertCircle },

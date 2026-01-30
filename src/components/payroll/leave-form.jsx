@@ -273,7 +273,7 @@ export default function LeaveForm({ leaveId }) {
     while (currentDate <= to) {
       const dateStr = currentDate.toISOString().split("T")[0];
       const dayOfWeek = currentDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-      
+
       // Skip Sundays
       if (dayOfWeek === 0) {
         skippedSundays.push(dateStr);
@@ -314,7 +314,7 @@ export default function LeaveForm({ leaveId }) {
   // Apply classification to pending leaves
   const applyClassification = () => {
     const { paidCount, unpaidCount } = classificationData;
-    
+
     if (paidCount + unpaidCount !== pendingLeaves.length) {
       toast.error(`Total must equal ${pendingLeaves.length} days`);
       return;
@@ -493,7 +493,7 @@ export default function LeaveForm({ leaveId }) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Toaster/>
+      <Toaster />
       {/* Classification Modal */}
       {showClassificationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -514,7 +514,7 @@ export default function LeaveForm({ leaveId }) {
                 </button>
               </div>
               <p className="text-slate-600 text-sm mt-2">
-                You're adding <span className="font-bold text-yellow-600">{pendingLeaves.length} days</span> of leave. 
+                You're adding <span className="font-bold text-yellow-600">{pendingLeaves.length} days</span> of leave.
                 How many should be paid vs unpaid?
               </p>
             </div>
@@ -713,15 +713,13 @@ export default function LeaveForm({ leaveId }) {
                       value={formData.employeeId}
                       onChange={handleEmployeeChange}
                       disabled={isEdit || !selectedOrganization}
-                      className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${
-                        isEdit || !selectedOrganization
+                      className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${isEdit || !selectedOrganization
                           ? "bg-slate-100 cursor-not-allowed"
                           : "bg-white"
-                      } ${
-                        errors.employeeId
+                        } ${errors.employeeId
                           ? "border-red-300 focus:ring-red-500 focus:border-red-500"
                           : "border-slate-300"
-                      }`}
+                        }`}
                     >
                       <option value="">
                         {selectedOrganization
@@ -758,9 +756,8 @@ export default function LeaveForm({ leaveId }) {
                       }))
                     }
                     disabled={isEdit}
-                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${
-                      isEdit ? "bg-slate-100 cursor-not-allowed" : "bg-white"
-                    } border-slate-300`}
+                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${isEdit ? "bg-slate-100 cursor-not-allowed" : "bg-white"
+                      } border-slate-300`}
                   >
                     {months.map((month) => (
                       <option key={month.value} value={month.value}>
@@ -784,9 +781,8 @@ export default function LeaveForm({ leaveId }) {
                       }))
                     }
                     disabled={isEdit}
-                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${
-                      isEdit ? "bg-slate-100 cursor-not-allowed" : "bg-white"
-                    } border-slate-300`}
+                    className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors ${isEdit ? "bg-slate-100 cursor-not-allowed" : "bg-white"
+                      } border-slate-300`}
                   >
                     {years.map((year) => (
                       <option key={year} value={year}>
@@ -866,12 +862,12 @@ export default function LeaveForm({ leaveId }) {
                     onChange={(e) => {
                       const selectedDate = new Date(e.target.value);
                       const dayOfWeek = selectedDate.getDay();
-                      
+
                       if (dayOfWeek === 0) {
                         toast.error("⚠️ Sunday is not a working day! Please select a weekday (Monday-Saturday).");
                         return;
                       }
-                      
+
                       setDateRange((prev) => ({
                         ...prev,
                         fromDate: e.target.value,
@@ -896,12 +892,12 @@ export default function LeaveForm({ leaveId }) {
                     onChange={(e) => {
                       const selectedDate = new Date(e.target.value);
                       const dayOfWeek = selectedDate.getDay();
-                      
+
                       if (dayOfWeek === 0) {
                         toast.error("⚠️ Sunday is not a working day! Please select a weekday (Monday-Saturday).");
                         return;
                       }
-                      
+
                       setDateRange((prev) => ({
                         ...prev,
                         toDate: e.target.value,
@@ -1009,12 +1005,12 @@ export default function LeaveForm({ leaveId }) {
                               onChange={(e) => {
                                 const selectedDate = new Date(e.target.value);
                                 const dayOfWeek = selectedDate.getDay();
-                                
+
                                 if (dayOfWeek === 0) {
                                   toast.error("⚠️ Sunday is not a working day! Please select a weekday (Monday-Saturday).");
                                   return;
                                 }
-                                
+
                                 handleLeaveChange(
                                   index,
                                   "date",
@@ -1100,7 +1096,7 @@ export default function LeaveForm({ leaveId }) {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
               <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-blue-50 to-indigo-50">
                 <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-slate-500 rounded-lg flex items-center justify-center">
                     <FileText className="w-4 h-4 text-white" />
                   </div>
                   Leave Summary

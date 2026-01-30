@@ -399,7 +399,7 @@ export default function EmployeeList() {
 
           <div className="space-y-3 mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+              <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                 <DeptIcon className="w-4 h-4 text-blue-600" />
               </div>
               <div>
@@ -665,7 +665,7 @@ export default function EmployeeList() {
                   </p>
                   <p className="text-xs text-slate-500 mt-1">Business units</p>
                 </div>
-                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+                <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                   <Building className="w-6 h-6 text-blue-600" />
                 </div>
               </div>
@@ -946,7 +946,7 @@ export default function EmployeeList() {
                             )}
                           </div>
 
-                          <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                          <div className="w-10 h-10 bg-slate-500 rounded-lg flex items-center justify-center">
                             <Building2 className="w-5 h-5 text-white" />
                           </div>
 
@@ -1032,7 +1032,7 @@ export default function EmployeeList() {
                                 </td>
                                 <td className="py-4 px-6">
                                   <div className="flex items-center gap-2">
-                                    <div className="w-6 h-6 bg-blue-50 rounded flex items-center justify-center border border-blue-100">
+                                    <div className="w-6 h-6 bg-slate-50 rounded flex items-center justify-center border border-blue-100">
                                       <DeptIcon className="w-3 h-3 text-blue-600" />
                                     </div>
                                     <span className="text-slate-900 text-sm font-medium">{employee.jobDetails?.department || 'N/A'}</span>

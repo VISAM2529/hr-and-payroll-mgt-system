@@ -1695,7 +1695,7 @@ export default function CreditManagementPage() {
                 <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
                   <div className="p-6 border-b border-slate-200">
                     <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                      <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                         <DollarSign className="w-4 h-4 text-blue-600" />
                       </div>
                       Ledger-wise Outstanding
@@ -1707,7 +1707,7 @@ export default function CreditManagementPage() {
                       {Object.entries(ledgerWiseOutstanding).map(([ledger, amount]) => (
                         <div key={ledger} className="group bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-200 bg-slate-50 hover:scale-105">
                           <div className="flex items-center justify-between mb-3">
-                            <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
+                            <div className="p-3 rounded-xl bg-slate-50 border border-blue-200">
                               <FileText className="h-6 w-6 text-blue-600" />
                             </div>
                             <div className="flex items-center gap-1 text-sm">
@@ -2274,7 +2274,7 @@ export default function CreditManagementPage() {
                 <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
                   <div className="p-6 border-b border-slate-200">
                     <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                      <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                         <FileText className="w-4 h-4 text-blue-600" />
                       </div>
                       Purchase Order Tracking

@@ -427,7 +427,7 @@
 //                     <div className="flex items-center justify-between">
 //                       <div>
 //                         <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-//                           <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+//                           <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
 //                             <FileText className="w-4 h-4 text-blue-600" />
 //                           </div>
 //                           Tax Components
@@ -551,7 +551,7 @@
 //                           </span>
 //                         </div>
                         
-//                         <div className="flex justify-between items-center py-2 bg-blue-50 px-3 rounded-lg">
+//                         <div className="flex justify-between items-center py-2 bg-slate-50 px-3 rounded-lg">
 //                           <span className="text-sm font-medium text-blue-900">Taxable Income</span>
 //                           <span className="font-bold text-blue-900">
 //                             {formatCurrency(calculatedValues.taxableIncome)}
@@ -1254,7 +1254,7 @@ const handleSubmit = async (e) => {
                   <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
                     <div className="p-6 border-b border-slate-200">
                       <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                        <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                           <Shield className="w-4 h-4 text-blue-600" />
                         </div>
                         Deductions (Chapter VI-A)
@@ -1349,7 +1349,7 @@ const handleSubmit = async (e) => {
                           </div>
                         )}
                         
-                        <div className="flex justify-between items-center py-2 bg-blue-50 px-3 rounded-lg border">
+                        <div className="flex justify-between items-center py-2 bg-slate-50 px-3 rounded-lg border">
                           <span className="text-sm font-medium text-blue-900">Taxable Income</span>
                           <span className="font-bold text-blue-900">
                             {formatCurrency(calculatedValues.taxableIncome)}

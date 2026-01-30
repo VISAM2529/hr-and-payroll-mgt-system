@@ -95,23 +95,49 @@ export default function ExpenseManager({ employeeId, isAdmin = false }) {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                    { label: "Total Claimed", value: `₹${stats.totalAmount.toLocaleString()}`, icon: Wallet, color: "indigo" },
-                    { label: "Pending Claims", value: stats.pendingClaims, icon: Clock, color: "orange" },
-                    { label: "Approved Amount", value: `₹${stats.approvedAmount.toLocaleString()}`, icon: CheckCircle2, color: "emerald" },
-                    { label: "Rejected", value: stats.rejectedClaims, icon: XCircle, color: "rose" },
-                ].map((stat, i) => (
-                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all duration-500">
-                        <div className={`absolute top-0 right-0 w-24 h-24 bg-${stat.color}-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700`}></div>
-                        <div className="relative z-10">
-                            <div className={`w-12 h-12 bg-${stat.color}-100 rounded-2xl flex items-center justify-center mb-4`}>
-                                <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
-                            </div>
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{stat.label}</p>
-                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stat.value}</h3>
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all duration-500 border-l-4 border-l-indigo-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center mb-4">
+                            <Wallet className="w-6 h-6 text-indigo-600" />
                         </div>
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Total Claimed</p>
+                        <h3 className="text-2xl font-black text-slate-900 mt-1">₹{stats.totalAmount.toLocaleString()}</h3>
                     </div>
-                ))}
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all duration-500 border-l-4 border-l-orange-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center mb-4">
+                            <Clock className="w-6 h-6 text-orange-600" />
+                        </div>
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Pending Claims</p>
+                        <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.pendingClaims}</h3>
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all duration-500 border-l-4 border-l-emerald-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4">
+                            <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+                        </div>
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Approved Amount</p>
+                        <h3 className="text-2xl font-black text-slate-900 mt-1">₹{stats.approvedAmount.toLocaleString()}</h3>
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all duration-500 border-l-4 border-l-rose-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-rose-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center mb-4">
+                            <XCircle className="w-6 h-6 text-rose-600" />
+                        </div>
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Rejected</p>
+                        <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.rejectedClaims}</h3>
+                    </div>
+                </div>
             </div>
 
             {/* Main Content */}
@@ -192,9 +218,9 @@ export default function ExpenseManager({ employeeId, isAdmin = false }) {
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase inline-flex items-center gap-1.5 ${expense.status === 'Approved' ? 'bg-emerald-50 text-emerald-600' :
-                                                    expense.status === 'Pending' ? 'bg-orange-50 text-orange-600' :
-                                                        expense.status === 'Rejected' ? 'bg-rose-50 text-rose-600' :
-                                                            'bg-indigo-50 text-indigo-600'
+                                                expense.status === 'Pending' ? 'bg-orange-50 text-orange-600' :
+                                                    expense.status === 'Rejected' ? 'bg-rose-50 text-rose-600' :
+                                                        'bg-indigo-50 text-indigo-600'
                                                 }`}>
                                                 {expense.status === 'Approved' && <CheckCircle2 className="w-3 h-3" />}
                                                 {expense.status === 'Pending' && <Clock className="w-3 h-3" />}

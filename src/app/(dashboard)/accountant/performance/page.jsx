@@ -29,7 +29,7 @@ import {
   XCircle,
   RefreshCw,
   Settings,
-  Bell,
+
   Zap
 } from 'lucide-react';
 
@@ -79,7 +79,7 @@ function CreditDaysMonitor({ customers, timeRange }) {
     // Calculate credit days metrics
     if (customers.length > 0) {
       const overallAverage = customers.reduce((sum, c) => sum + c.avgPaymentDays, 0) / customers.length;
-     
+
       // Calculate trend (simplified)
       const previousAverage = overallAverage * 0.95; // Mock previous period
       const trend = ((overallAverage - previousAverage) / previousAverage) * 100;
@@ -93,7 +93,7 @@ function CreditDaysMonitor({ customers, timeRange }) {
       // Distribution by ranges
       const distribution = [
         { range: '0-30 days', count: customers.filter(c => c.avgPaymentDays <= 30).length, color: 'bg-green-500' },
-        { range: '31-45 days', count: customers.filter(c => c.avgPaymentDays > 30 && c.avgPaymentDays <= 45).length, color: 'bg-blue-500' },
+        { range: '31-45 days', count: customers.filter(c => c.avgPaymentDays > 30 && c.avgPaymentDays <= 45).length, color: 'bg-slate-500' },
         { range: '46-60 days', count: customers.filter(c => c.avgPaymentDays > 45 && c.avgPaymentDays <= 60).length, color: 'bg-yellow-500' },
         { range: '60+ days', count: customers.filter(c => c.avgPaymentDays > 60).length, color: 'bg-red-500' }
       ];
@@ -124,7 +124,7 @@ function CreditDaysMonitor({ customers, timeRange }) {
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
         <div className="p-6 border-b border-slate-200">
           <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
               <Clock className="w-4 h-4 text-blue-600" />
             </div>
             Credit Days Metrics
@@ -133,9 +133,9 @@ function CreditDaysMonitor({ customers, timeRange }) {
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="group bg-white rounded-xl border border-blue-200 p-6 hover:shadow-lg transition-all duration-200 bg-blue-50 hover:scale-105">
+            <div className="group bg-white rounded-xl border border-blue-200 p-6 hover:shadow-lg transition-all duration-200 bg-slate-50 hover:scale-105">
               <div className="flex items-center justify-between mb-3">
-                <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
+                <div className="p-3 rounded-xl bg-slate-50 border border-blue-200">
                   <CalendarDays className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="flex items-center gap-1 text-sm">
@@ -270,7 +270,7 @@ function CreditDaysMonitor({ customers, timeRange }) {
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-3 relative">
                     <div
-                      className="h-3 rounded-full bg-blue-500 absolute"
+                      className="h-3 rounded-full bg-slate-500 absolute"
                       style={{ width: `${(month.average / 60) * 100}%` }}
                     ></div>
                     <div
@@ -308,11 +308,10 @@ function CreditDaysMonitor({ customers, timeRange }) {
               .sort((a, b) => a.avgPaymentDays - b.avgPaymentDays)
               .map((customer, index) => (
                 <div key={customer.id} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    customer.avgPaymentDays <= 30 ? 'bg-green-100 text-green-600' :
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${customer.avgPaymentDays <= 30 ? 'bg-green-100 text-green-600' :
                     customer.avgPaymentDays <= 45 ? 'bg-blue-100 text-blue-600' :
-                    customer.avgPaymentDays <= 60 ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'
-                  }`}>
+                      customer.avgPaymentDays <= 60 ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'
+                    }`}>
                     <Clock className="h-4 w-4" />
                   </div>
                   <div className="flex-1">
@@ -323,9 +322,8 @@ function CreditDaysMonitor({ customers, timeRange }) {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-lg font-bold ${
-                      customer.avgPaymentDays <= customer.paymentTerms ? 'text-green-600' : 'text-red-600'
-                    }`}>
+                    <p className={`text-lg font-bold ${customer.avgPaymentDays <= customer.paymentTerms ? 'text-green-600' : 'text-red-600'
+                      }`}>
                       {customer.avgPaymentDays} days
                     </p>
                     <p className="text-xs text-slate-500">
@@ -345,7 +343,7 @@ function CreditDaysMonitor({ customers, timeRange }) {
 function CustomerAgingDetail({ customer, onClose }) {
   const agingData = [
     { period: 'Current', amount: customer.currentAmount, color: 'bg-green-500' },
-    { period: '1-30 Days', amount: customer.aging1to30, color: 'bg-blue-500' },
+    { period: '1-30 Days', amount: customer.aging1to30, color: 'bg-slate-500' },
     { period: '31-60 Days', amount: customer.aging31to60, color: 'bg-yellow-500' },
     { period: '61-90 Days', amount: customer.aging61to90, color: 'bg-orange-500' },
     { period: '90+ Days', amount: customer.aging90Plus, color: 'bg-red-500' }
@@ -452,10 +450,9 @@ function CustomerAgingDetail({ customer, onClose }) {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium text-slate-900">₹{invoice.amount.toLocaleString()}</p>
-                  <p className={`text-xs ${
-                    invoice.status === 'Overdue' ? 'text-red-600' :
+                  <p className={`text-xs ${invoice.status === 'Overdue' ? 'text-red-600' :
                     invoice.status === 'Paid' ? 'text-green-600' : 'text-slate-500'
-                  }`}>
+                    }`}>
                     {invoice.status}
                   </p>
                 </div>
@@ -602,7 +599,7 @@ export default function PerformanceIndexPage() {
   const averageAging = customers.length > 0
     ? customers.reduce((sum, c) => sum + c.avgPaymentDays, 0) / customers.length
     : 0;
- 
+
   const highRiskCustomers = customers.filter(c => c.riskLevel === 'High').length;
   const totalCustomers = customers.length;
 
@@ -656,7 +653,7 @@ export default function PerformanceIndexPage() {
 
   const getRiskBadge = (riskLevel) => {
     const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
-   
+
     switch (riskLevel) {
       case 'Low':
         return `${baseClasses} bg-green-100 text-green-700`;
@@ -689,7 +686,7 @@ export default function PerformanceIndexPage() {
                 <p className="text-slate-600 text-sm mt-0.5">Track outstanding payments and credit days</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <button className="p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
                 <RefreshCw className="h-5 w-5" />
@@ -697,12 +694,7 @@ export default function PerformanceIndexPage() {
               {/* <button className="p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
                 <Settings className="h-5 w-5" />
               </button> */}
-              <button className="relative p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {highRiskCustomers}
-                </span>
-              </button>
+
             </div>
           </div>
         </div>
@@ -713,19 +705,19 @@ export default function PerformanceIndexPage() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
           <div className="p-6 border-b border-slate-200">
             <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+              <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                 <DollarSign className="w-4 h-4 text-blue-600" />
               </div>
               Key Performance Indicators
             </h2>
             <p className="text-slate-600 text-sm mt-1">Real-time metrics for AR performance</p>
           </div>
-          
+
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="group bg-white rounded-xl border border-blue-200 p-6 hover:shadow-lg transition-all duration-200 bg-blue-50 hover:scale-105">
+              <div className="group bg-white rounded-xl border border-blue-200 p-6 hover:shadow-lg transition-all duration-200 bg-slate-50 hover:scale-105">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
+                  <div className="p-3 rounded-xl bg-slate-50 border border-blue-200">
                     <DollarSign className="h-6 w-6 text-blue-600" />
                   </div>
                   <div className="flex items-center gap-1 text-sm">
@@ -814,11 +806,10 @@ export default function PerformanceIndexPage() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-3 py-4 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === tab.id
-                        ? 'border-[#FB9D00] text-[#FB9D00]'
-                        : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-200'
-                    }`}
+                    className={`flex items-center gap-2 px-3 py-4 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
+                      ? 'border-[#FB9D00] text-[#FB9D00]'
+                      : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-200'
+                      }`}
                   >
                     <Icon className="h-4 w-4" />
                     {tab.label}
@@ -864,7 +855,7 @@ export default function PerformanceIndexPage() {
                 <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
                   <div className="p-6 border-b border-slate-200">
                     <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                      <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                         <PieChart className="w-4 h-4 text-blue-600" />
                       </div>
                       Aging Distribution
@@ -914,10 +905,9 @@ export default function PerformanceIndexPage() {
                               <div className="flex items-center gap-3">
                                 <div className="w-20 bg-slate-200 rounded-full h-2">
                                   <div
-                                    className={`h-2 rounded-full ${
-                                      risk === 'Low' ? 'bg-green-500' :
+                                    className={`h-2 rounded-full ${risk === 'Low' ? 'bg-green-500' :
                                       risk === 'Medium' ? 'bg-yellow-500' : 'bg-red-500'
-                                    }`}
+                                      }`}
                                     style={{ width: `${percentage}%` }}
                                   ></div>
                                 </div>
@@ -948,10 +938,9 @@ export default function PerformanceIndexPage() {
                           .slice(0, 5)
                           .map(customer => (
                             <div key={customer.id} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                customer.riskLevel === 'Low' ? 'bg-green-100 text-green-600' :
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${customer.riskLevel === 'Low' ? 'bg-green-100 text-green-600' :
                                 customer.riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'
-                              }`}>
+                                }`}>
                                 <Users className="h-4 w-4" />
                               </div>
                               <div className="flex-1">
@@ -1056,9 +1045,8 @@ export default function PerformanceIndexPage() {
                               ₹{customer.totalOutstanding.toLocaleString()}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`text-sm font-medium ${
-                                customer.avgPaymentDays <= customer.paymentTerms ? 'text-green-600' : 'text-red-600'
-                              }`}>
+                              <span className={`text-sm font-medium ${customer.avgPaymentDays <= customer.paymentTerms ? 'text-green-600' : 'text-red-600'
+                                }`}>
                                 {customer.avgPaymentDays} days
                               </span>
                             </td>
@@ -1066,9 +1054,8 @@ export default function PerformanceIndexPage() {
                               {customer.paymentTerms} days
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                variance <= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                              }`}>
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variance <= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                }`}>
                                 {variance > 0 ? '+' : ''}{variance} days
                               </span>
                             </td>
@@ -1119,10 +1106,9 @@ export default function PerformanceIndexPage() {
                               <div className="flex items-center gap-3">
                                 <div className="w-24 bg-slate-200 rounded-full h-2">
                                   <div
-                                    className={`h-2 rounded-full ${
-                                      customer.paymentPerformance >= 90 ? 'bg-green-500' :
+                                    className={`h-2 rounded-full ${customer.paymentPerformance >= 90 ? 'bg-green-500' :
                                       customer.paymentPerformance >= 75 ? 'bg-yellow-500' : 'bg-red-500'
-                                    }`}
+                                      }`}
                                     style={{ width: `${customer.paymentPerformance}%` }}
                                   ></div>
                                 </div>
@@ -1187,17 +1173,15 @@ export default function PerformanceIndexPage() {
                       {['Low', 'Medium', 'High'].map(risk => {
                         const segmentCustomers = customers.filter(c => c.riskLevel === risk);
                         const totalSegmentOutstanding = segmentCustomers.reduce((sum, c) => sum + c.totalOutstanding, 0);
-                       
+
                         return (
                           <div key={risk} className="text-center p-4 border border-slate-200 rounded-lg">
-                            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full ${
-                              risk === 'Low' ? 'bg-green-100' :
+                            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full ${risk === 'Low' ? 'bg-green-100' :
                               risk === 'Medium' ? 'bg-yellow-100' : 'bg-red-100'
-                            }`}>
-                              <Users className={`h-6 w-6 ${
-                                risk === 'Low' ? 'text-green-600' :
+                              }`}>
+                              <Users className={`h-6 w-6 ${risk === 'Low' ? 'text-green-600' :
                                 risk === 'Medium' ? 'text-yellow-600' : 'text-red-600'
-                              }`} />
+                                }`} />
                             </div>
                             <h4 className="font-semibold text-slate-900 mt-2">{risk} Risk</h4>
                             <p className="text-2xl font-bold text-slate-900 mt-1">
@@ -1225,7 +1209,7 @@ export default function PerformanceIndexPage() {
                   <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
                     <div className="p-6 border-b border-slate-200">
                       <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                        <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                           <TrendingUp className="w-4 h-4 text-blue-600" />
                         </div>
                         Aging Trend (Last 6 Months)

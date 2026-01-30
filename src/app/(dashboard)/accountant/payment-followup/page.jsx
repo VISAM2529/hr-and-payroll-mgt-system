@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Bell,
   Shield,
   Users,
   DollarSign,
@@ -95,8 +94,8 @@ function ReminderRuleForm({ onSave, onClose, editingRule = null }) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium text-slate-700">
-            {formData.triggerType === 'days_before_due' ? 'Days Before Due' : 
-             formData.triggerType === 'days_after_due' ? 'Days After Due' : 'Notification Day'}
+            {formData.triggerType === 'days_before_due' ? 'Days Before Due' :
+              formData.triggerType === 'days_after_due' ? 'Days After Due' : 'Notification Day'}
           </label>
           <input
             type="number"
@@ -355,26 +354,23 @@ function CreditLimitForm({ customer, onSave, onClose }) {
       </div>
 
       {formData.newLimit !== formData.currentLimit && (
-        <div className={`p-4 rounded-xl border ${
-          formData.newLimit > formData.currentLimit 
-            ? 'bg-green-50 border-green-200' 
-            : 'bg-red-50 border-red-200'
-        }`}>
+        <div className={`p-4 rounded-xl border ${formData.newLimit > formData.currentLimit
+          ? 'bg-green-50 border-green-200'
+          : 'bg-red-50 border-red-200'
+          }`}>
           <div className="flex items-center gap-2">
             {formData.newLimit > formData.currentLimit ? (
               <TrendingUp className="h-5 w-5 text-green-600" />
             ) : (
               <TrendingDown className="h-5 w-5 text-red-600" />
             )}
-            <span className={`font-medium ${
-              formData.newLimit > formData.currentLimit ? 'text-green-800' : 'text-red-800'
-            }`}>
+            <span className={`font-medium ${formData.newLimit > formData.currentLimit ? 'text-green-800' : 'text-red-800'
+              }`}>
               {formData.newLimit > formData.currentLimit ? 'Increase' : 'Decrease'} by ₹{Math.abs(formData.newLimit - formData.currentLimit).toLocaleString()}
             </span>
           </div>
-          <p className={`text-sm mt-1 ${
-            formData.newLimit > formData.currentLimit ? 'text-green-700' : 'text-red-700'
-          }`}>
+          <p className={`text-sm mt-1 ${formData.newLimit > formData.currentLimit ? 'text-green-700' : 'text-red-700'
+            }`}>
             New utilization: {((customer.outstandingAmount / formData.newLimit) * 100).toFixed(1)}%
           </p>
         </div>
@@ -592,7 +588,7 @@ export default function CreditControlPage() {
   // Handler functions
   const handleSaveReminderRule = (ruleData) => {
     if (editingRule) {
-      setReminderRules(rules => rules.map(rule => 
+      setReminderRules(rules => rules.map(rule =>
         rule.id === editingRule.id ? { ...ruleData, id: editingRule.id } : rule
       ));
     } else {
@@ -619,8 +615,8 @@ export default function CreditControlPage() {
     setCreditAdjustments(adjustments => [...adjustments, newAdjustment]);
 
     // Update customer credit limit
-    setCustomers(customers => customers.map(customer => 
-      customer.id === selectedCustomer.id 
+    setCustomers(customers => customers.map(customer =>
+      customer.id === selectedCustomer.id
         ? { ...customer, creditLimit: adjustmentData.newLimit }
         : customer
     ));
@@ -630,8 +626,8 @@ export default function CreditControlPage() {
   };
 
   const toggleCustomerBlock = (customerId) => {
-    setCustomers(customers => customers.map(customer => 
-      customer.id === customerId 
+    setCustomers(customers => customers.map(customer =>
+      customer.id === customerId
         ? { ...customer, isBlocked: !customer.isBlocked }
         : customer
     ));
@@ -655,20 +651,20 @@ export default function CreditControlPage() {
 
   const calculateRiskScore = (customer) => {
     let score = 100;
-    
+
     // Deduct points for overdue payments
     if (customer.overdueAmount > 0) score -= 30;
-    
+
     // Deduct points for high utilization
     const utilization = (customer.outstandingAmount / customer.creditLimit) * 100;
     if (utilization > 80) score -= 20;
     else if (utilization > 60) score -= 10;
-    
+
     // Deduct points for late payments
     if (customer.avgPaymentDays > customer.paymentTerms) {
       score -= (customer.avgPaymentDays - customer.paymentTerms) * 2;
     }
-    
+
     return Math.max(0, score);
   };
 
@@ -690,11 +686,11 @@ export default function CreditControlPage() {
     return daysUntilDue <= 7 && daysUntilDue > 0;
   }).length;
 
-  const filteredCustomers = customers.filter(customer => 
+  const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (filterStatus === 'all' || 
-     (filterStatus === 'blocked' && customer.isBlocked) ||
-     (filterStatus === 'active' && !customer.isBlocked))
+    (filterStatus === 'all' ||
+      (filterStatus === 'blocked' && customer.isBlocked) ||
+      (filterStatus === 'active' && !customer.isBlocked))
   );
 
   const openDialog = (type, customer = null) => {
@@ -717,7 +713,7 @@ export default function CreditControlPage() {
                 <p className="text-slate-600 text-sm mt-0.5">Manage reminders, blocks, and credit limits</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <button className="p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
                 <RefreshCw className="h-5 w-5" />
@@ -725,12 +721,7 @@ export default function CreditControlPage() {
               {/* <button className="p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
                 <Settings className="h-5 w-5" />
               </button> */}
-              <button className="relative p-2.5 text-slate-600 hover:text-[#FB9D00] hover:bg-[#FB9D00]/10 rounded-lg transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {pendingReminders}
-                </span>
-              </button>
+
             </div>
           </div>
         </div>
@@ -753,11 +744,10 @@ export default function CreditControlPage() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-3 py-4 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === tab.id
-                        ? 'border-[#FB9D00] text-[#FB9D00]'
-                        : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-200'
-                    }`}
+                    className={`flex items-center gap-2 px-3 py-4 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
+                      ? 'border-[#FB9D00] text-[#FB9D00]'
+                      : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-200'
+                      }`}
                   >
                     <Icon className="h-4 w-4" />
                     {tab.label}
@@ -776,14 +766,14 @@ export default function CreditControlPage() {
                 <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
                   <div className="p-6 border-b border-slate-200">
                     <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                      <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                         <BarChart3 className="w-4 h-4 text-blue-600" />
                       </div>
                       Credit Control Metrics
                     </h2>
                     <p className="text-slate-600 text-sm mt-1">Key indicators for risk and collections</p>
                   </div>
-                  
+
                   <div className="p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                       <div className="group bg-white rounded-xl border border-red-200 p-6 hover:shadow-lg transition-all duration-200 bg-red-50 hover:scale-105">
@@ -840,9 +830,9 @@ export default function CreditControlPage() {
                         </div>
                       </div>
 
-                      <div className="group bg-white rounded-xl border border-blue-200 p-6 hover:shadow-lg transition-all duration-200 bg-blue-50 hover:scale-105">
+                      <div className="group bg-white rounded-xl border border-blue-200 p-6 hover:shadow-lg transition-all duration-200 bg-slate-50 hover:scale-105">
                         <div className="flex items-center justify-between mb-3">
-                          <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
+                          <div className="p-3 rounded-xl bg-slate-50 border border-blue-200">
                             <Bell className="h-6 w-6 text-blue-600" />
                           </div>
                           <div className="flex items-center gap-1 text-sm">
@@ -877,38 +867,35 @@ export default function CreditControlPage() {
                       {customers.map(customer => {
                         const riskScore = calculateRiskScore(customer);
                         const riskLevel = getRiskLevel(riskScore);
-                        
+
                         return (
                           <div key={customer.id} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                              riskLevel === 'Low' ? 'bg-green-100 text-green-600' :
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${riskLevel === 'Low' ? 'bg-green-100 text-green-600' :
                               riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-600' :
-                              riskLevel === 'High' ? 'bg-orange-100 text-orange-600' : 'bg-red-100 text-red-600'
-                            }`}>
+                                riskLevel === 'High' ? 'bg-orange-100 text-orange-600' : 'bg-red-100 text-red-600'
+                              }`}>
                               <Shield className="h-4 w-4" />
                             </div>
                             <div className="flex-1">
                               <h4 className="font-medium text-slate-900 text-sm">{customer.name}</h4>
                               <p className="text-xs text-slate-600 mt-1">
-                                Utilization: {((customer.outstandingAmount / customer.creditLimit) * 100).toFixed(1)}% • 
+                                Utilization: {((customer.outstandingAmount / customer.creditLimit) * 100).toFixed(1)}% •
                                 Overdue: ₹{customer.overdueAmount.toLocaleString()}
                               </p>
                             </div>
                             <div className="flex items-center gap-3">
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                riskLevel === 'Low' ? 'bg-green-100 text-green-700' :
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${riskLevel === 'Low' ? 'bg-green-100 text-green-700' :
                                 riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                                riskLevel === 'High' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'
-                              }`}>
+                                  riskLevel === 'High' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'
+                                }`}>
                                 {riskLevel} Risk ({riskScore}%)
                               </span>
                               <button
                                 onClick={() => toggleCustomerBlock(customer.id)}
-                                className={`px-3 py-1 rounded text-sm ${
-                                  customer.isBlocked 
-                                    ? 'bg-green-100 text-green-700 hover:bg-green-200' 
-                                    : 'bg-red-100 text-red-700 hover:bg-red-200'
-                                }`}
+                                className={`px-3 py-1 rounded text-sm ${customer.isBlocked
+                                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                                  : 'bg-red-100 text-red-700 hover:bg-red-200'
+                                  }`}
                               >
                                 {customer.isBlocked ? 'Unblock' : 'Block'}
                               </button>
@@ -1000,11 +987,10 @@ export default function CreditControlPage() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="w-24 bg-slate-200 rounded-full h-2">
-                              <div 
-                                className={`h-2 rounded-full ${
-                                  (customer.outstandingAmount / customer.creditLimit) * 100 < 60 ? 'bg-green-600' : 
+                              <div
+                                className={`h-2 rounded-full ${(customer.outstandingAmount / customer.creditLimit) * 100 < 60 ? 'bg-green-600' :
                                   (customer.outstandingAmount / customer.creditLimit) * 100 < 80 ? 'bg-yellow-600' : 'bg-red-600'
-                                }`}
+                                  }`}
                                 style={{ width: `${Math.min((customer.outstandingAmount / customer.creditLimit) * 100, 100)}%` }}
                               ></div>
                             </div>
@@ -1030,11 +1016,10 @@ export default function CreditControlPage() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button
                               onClick={() => toggleCustomerBlock(customer.id)}
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                customer.isBlocked
-                                  ? 'bg-red-100 text-red-800'
-                                  : 'bg-green-100 text-green-800'
-                              }`}
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${customer.isBlocked
+                                ? 'bg-red-100 text-red-800'
+                                : 'bg-green-100 text-green-800'
+                                }`}
                             >
                               {customer.isBlocked ? (
                                 <>
@@ -1086,7 +1071,7 @@ export default function CreditControlPage() {
                   <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm">
                     <div className="p-6 border-b border-slate-200">
                       <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center border border-blue-100">
+                        <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center border border-blue-100">
                           <Bell className="w-4 h-4 text-blue-600" />
                         </div>
                         Sent Reminders
@@ -1099,13 +1084,12 @@ export default function CreditControlPage() {
                           const customer = customers.find(c => c.id === reminder.customerId);
                           return (
                             <div key={reminder.id} className="flex items-start gap-4 p-4 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                reminder.type === 'email' ? 'bg-blue-100 text-blue-600' :
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${reminder.type === 'email' ? 'bg-blue-100 text-blue-600' :
                                 reminder.type === 'sms' ? 'bg-green-100 text-green-600' : 'bg-purple-100 text-purple-600'
-                              }`}>
+                                }`}>
                                 {reminder.type === 'email' ? <Mail className="h-4 w-4" /> :
-                                 reminder.type === 'sms' ? <MessageSquare className="h-4 w-4" /> :
-                                 <Bell className="h-4 w-4" />}
+                                  reminder.type === 'sms' ? <MessageSquare className="h-4 w-4" /> :
+                                    <Bell className="h-4 w-4" />}
                               </div>
                               <div className="flex-1">
                                 <h4 className="font-medium text-slate-900">{customer?.name}</h4>
@@ -1293,11 +1277,10 @@ export default function CreditControlPage() {
                             ₹{adjustment.newLimit.toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              adjustment.changeAmount > 0 
-                                ? 'bg-green-100 text-green-800' 
-                                : 'bg-red-100 text-red-800'
-                            }`}>
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${adjustment.changeAmount > 0
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-red-100 text-red-800'
+                              }`}>
                               {adjustment.changeAmount > 0 ? '+' : ''}
                               ₹{Math.abs(adjustment.changeAmount).toLocaleString()}
                             </span>
@@ -1373,8 +1356,8 @@ export default function CreditControlPage() {
                             {rule.name}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
-                            {rule.triggerDays} {rule.triggerType === 'days_before_due' ? 'days before' : 
-                                             rule.triggerType === 'days_after_due' ? 'days after' : 'on'} due
+                            {rule.triggerDays} {rule.triggerType === 'days_before_due' ? 'days before' :
+                              rule.triggerType === 'days_after_due' ? 'days after' : 'on'} due
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -1387,15 +1370,14 @@ export default function CreditControlPage() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button
                               onClick={() => {
-                                setReminderRules(rules => rules.map(r => 
+                                setReminderRules(rules => rules.map(r =>
                                   r.id === rule.id ? { ...r, isActive: !r.isActive } : r
                                 ));
                               }}
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                rule.isActive
-                                  ? 'bg-green-100 text-green-800'
-                                  : 'bg-slate-100 text-slate-800'
-                              }`}
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${rule.isActive
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-slate-100 text-slate-800'
+                                }`}
                             >
                               {rule.isActive ? 'Active' : 'Inactive'}
                             </button>
@@ -1445,7 +1427,7 @@ export default function CreditControlPage() {
             </div>
             <div className="p-6">
               {dialogType === 'reminderRule' && (
-                <ReminderRuleForm 
+                <ReminderRuleForm
                   onSave={handleSaveReminderRule}
                   onClose={() => {
                     setIsDialogOpen(false);
@@ -1455,7 +1437,7 @@ export default function CreditControlPage() {
                 />
               )}
               {dialogType === 'creditAdjustment' && (
-                <CreditLimitForm 
+                <CreditLimitForm
                   customer={selectedCustomer}
                   onSave={handleSaveCreditAdjustment}
                   onClose={() => {

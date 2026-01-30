@@ -237,7 +237,7 @@ export default function ESSDashboard() {
                                 </div>
                                 <div className="divide-y divide-slate-100">
                                     <div className="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
-                                        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                                        <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-blue-600 shrink-0">
                                             <FileText className="w-5 h-5" />
                                         </div>
                                         <div className="flex-1">
@@ -265,9 +265,9 @@ export default function ESSDashboard() {
                         {/* Right Column: Mini Widgets */}
                         <div className="space-y-8">
                             {/* Tax Tip Widget */}
-                            <Card className="p-6 border-l-4 border-l-amber-500 bg-amber-50/30">
+                            <Card className="p-6 bg-blue-50/50">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <AlertTriangle className="w-5 h-5 text-amber-500" />
+                                    <AlertTriangle className="w-5 h-5 text-blue-600" />
                                     <h4 className="font-bold text-slate-900 text-sm">Tax Season Reminder</h4>
                                 </div>
                                 <p className="text-xs text-slate-600 leading-relaxed mb-4">
@@ -275,7 +275,7 @@ export default function ESSDashboard() {
                                 </p>
                                 <button
                                     onClick={() => setActiveTab("tax")}
-                                    className="w-full py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2"
+                                    className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2"
                                 >
                                     Upload Proofs <ArrowUpRight className="w-3 h-3" />
                                 </button>

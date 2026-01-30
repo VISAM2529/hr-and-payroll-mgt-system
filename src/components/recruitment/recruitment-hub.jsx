@@ -93,25 +93,57 @@ export default function RecruitmentHub() {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                    { label: "Total Requisitions", value: stats.totalJobs, icon: Briefcase, color: "indigo" },
-                    { label: "Active Positions", value: stats.activePositions, icon: Target, color: "emerald" },
-                    { label: "Candidates in Funnel", value: stats.totalCandidates, icon: Users, color: "blue" },
-                    { label: "Monthly Hires", value: stats.hiresThisMonth, icon: UserPlus, color: "orange" },
-                ].map((stat, i) => (
-                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden">
-                        <div className={`absolute top-0 right-0 w-24 h-24 bg-${stat.color}-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700`}></div>
-                        <div className="relative z-10 flex flex-col gap-4">
-                            <div className={`w-12 h-12 bg-${stat.color}-100 rounded-2xl flex items-center justify-center`}>
-                                <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
-                            </div>
-                            <div>
-                                <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{stat.label}</p>
-                                <h3 className="text-2xl font-black text-slate-900 mt-1">{stat.value}</h3>
-                            </div>
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden border-l-4 border-l-indigo-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10 flex flex-col gap-4">
+                        <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center">
+                            <Briefcase className="w-6 h-6 text-indigo-600" />
+                        </div>
+                        <div>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Total Requisitions</p>
+                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.totalJobs}</h3>
                         </div>
                     </div>
-                ))}
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden border-l-4 border-l-emerald-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10 flex flex-col gap-4">
+                        <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center">
+                            <Target className="w-6 h-6 text-emerald-600" />
+                        </div>
+                        <div>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Active Positions</p>
+                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.activePositions}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden border-l-4 border-l-blue-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10 flex flex-col gap-4">
+                        <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
+                            <Users className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Candidates in Funnel</p>
+                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.totalCandidates}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm group hover:shadow-xl hover:shadow-indigo-100/30 transition-all duration-500 relative overflow-hidden border-l-4 border-l-orange-500">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700"></div>
+                    <div className="relative z-10 flex flex-col gap-4">
+                        <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
+                            <UserPlus className="w-6 h-6 text-orange-600" />
+                        </div>
+                        <div>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Monthly Hires</p>
+                            <h3 className="text-2xl font-black text-slate-900 mt-1">{stats.hiresThisMonth}</h3>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Main Navigation Tabs */}

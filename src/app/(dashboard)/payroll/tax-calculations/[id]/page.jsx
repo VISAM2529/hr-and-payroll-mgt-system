@@ -749,9 +749,9 @@ export default function TaxCalculationDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-blue-50 flex items-center justify-center">
         <div className="flex items-center space-x-3">
-          <Loader2 className="w-8 h-8 animate-spin text-yellow-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
           <span className="text-slate-600 font-medium">Loading tax calculation...</span>
         </div>
       </div>
@@ -760,7 +760,7 @@ export default function TaxCalculationDetailPage() {
 
   if (error || !taxCalculation) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <FileText className="w-8 h-8 text-slate-500" />
@@ -769,7 +769,7 @@ export default function TaxCalculationDetailPage() {
           <p className="text-slate-600 mb-6">{error || 'The requested tax calculation could not be found.'}</p>
           <Link
             href="/payroll/tax-calculations"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Tax Calculations
@@ -780,7 +780,7 @@ export default function TaxCalculationDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-blue-50">
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
@@ -793,7 +793,7 @@ export default function TaxCalculationDetailPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
                   <Receipt className="w-8 h-8 text-white" />
                 </div>
                 <div>
@@ -806,7 +806,7 @@ export default function TaxCalculationDetailPage() {
               <button
                 onClick={handleDownloadPDF}
                 disabled={generatingPdf}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {generatingPdf ? (
                   <>
@@ -822,14 +822,14 @@ export default function TaxCalculationDetailPage() {
               </button>
               <button
                 onClick={handlePrint}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
               >
                 <Printer className="w-4 h-4" />
                 Print
               </button>
               <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
               >
                 <Edit2 className="w-4 h-4" />
                 {isEditing ? 'Cancel Edit' : 'Edit'}
@@ -857,7 +857,7 @@ export default function TaxCalculationDetailPage() {
                   name="financialYear"
                   value={formData.financialYear || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="e.g., 2023-24"
                 />
               </div>
@@ -868,7 +868,7 @@ export default function TaxCalculationDetailPage() {
                   name="totalEarnings"
                   value={formData.totalEarnings || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
               <div>
@@ -878,7 +878,7 @@ export default function TaxCalculationDetailPage() {
                   name="totalDeductions"
                   value={formData.totalDeductions || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
               <div>
@@ -888,7 +888,7 @@ export default function TaxCalculationDetailPage() {
                   name="taxableIncome"
                   value={formData.taxableIncome || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
               <div>
@@ -898,7 +898,7 @@ export default function TaxCalculationDetailPage() {
                   name="totalTax"
                   value={formData.totalTax || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
               <div>
@@ -907,7 +907,7 @@ export default function TaxCalculationDetailPage() {
                   name="status"
                   value={formData.status || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="Calculated">Calculated</option>
                   <option value="Reviewed">Reviewed</option>
@@ -921,7 +921,7 @@ export default function TaxCalculationDetailPage() {
                   name="notes"
                   value={formData.notes || ''}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500"
+                  className="w-full p-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                   rows="4"
                 />
               </div>
@@ -929,7 +929,7 @@ export default function TaxCalculationDetailPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
@@ -946,7 +946,7 @@ export default function TaxCalculationDetailPage() {
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
                 >
                   Cancel
                 </button>
@@ -983,7 +983,7 @@ export default function TaxCalculationDetailPage() {
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 text-slate-600 bg-blue-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors font-medium"
                 >
                   Cancel
                 </button>
@@ -1091,8 +1091,8 @@ export default function TaxCalculationDetailPage() {
           {/* Tax Breakdown */}
           <div className="p-6 border-b border-slate-200">
             <h3 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-              <div className="w-6 h-6 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <Calculator className="w-3 h-3 text-yellow-600" />
+              <div className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <Calculator className="w-3 h-3 text-indigo-600" />
               </div>
               Tax Breakdown
             </h3>
@@ -1178,14 +1178,14 @@ export default function TaxCalculationDetailPage() {
 
           {/* Net Taxable Income */}
           <div className="p-6 border-b border-slate-200">
-            <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-200 p-6 rounded-xl">
+            <div className="bg-gradient-to-r from-indigo-50 to-amber-50 border-2 border-indigo-200 p-6 rounded-xl">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 mb-2">Net Taxable Income</h4>
                   <p className="text-slate-600">Total income after deductions</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-yellow-700">{formatCurrency(taxCalculation.taxableIncome)}</p>
+                  <p className="text-3xl font-bold text-indigo-700">{formatCurrency(taxCalculation.taxableIncome)}</p>
                   <p className="text-sm text-slate-600 mt-1 max-w-xs">
                     <span className="font-medium">In words:</span> {amountToWords(taxCalculation.taxableIncome)}
                   </p>
@@ -1196,14 +1196,14 @@ export default function TaxCalculationDetailPage() {
 
           {/* Total Tax */}
           <div className="p-6 border-b border-slate-200">
-            <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-200 p-6 rounded-xl">
+            <div className="bg-gradient-to-r from-indigo-50 to-amber-50 border-2 border-indigo-200 p-6 rounded-xl">
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 mb-2">Total Tax Payable</h4>
                   <p className="text-slate-600">Total tax liability</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-yellow-700">{formatCurrency(taxCalculation.totalTax)}</p>
+                  <p className="text-3xl font-bold text-indigo-700">{formatCurrency(taxCalculation.totalTax)}</p>
                   <p className="text-sm text-slate-600 mt-1 max-w-xs">
                     <span className="font-medium">In words:</span> {amountToWords(taxCalculation.totalTax)}
                   </p>
@@ -1217,7 +1217,7 @@ export default function TaxCalculationDetailPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div>
                 <h4 className="font-semibold text-slate-900 mb-3">Notes</h4>
-                <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                <div className="p-4 bg-blue-50 rounded-lg border border-slate-200">
                   <p className="text-sm text-slate-600">
                     {taxCalculation.notes || 'This is a computer-generated tax calculation and does not require signature.'}
                   </p>
@@ -1245,7 +1245,7 @@ export default function TaxCalculationDetailPage() {
               <button
                 onClick={handleDownloadPDF}
                 disabled={generatingPdf}
-                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-yellow-300 hover:bg-yellow-50 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
                   {generatingPdf ? (
@@ -1261,7 +1261,7 @@ export default function TaxCalculationDetailPage() {
               </button>
               <button
                 onClick={handlePrint}
-                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-yellow-300 hover:bg-yellow-50 transition-all group"
+                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group"
               >
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-green-200 transition-colors">
                   <Printer className="w-6 h-6 text-green-600" />
@@ -1271,10 +1271,10 @@ export default function TaxCalculationDetailPage() {
               </button>
               <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-yellow-300 hover:bg-yellow-50 transition-all group"
+                className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group"
               >
-                <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-yellow-200 transition-colors">
-                  <Edit2 className="w-6 h-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-indigo-200 transition-colors">
+                  <Edit2 className="w-6 h-6 text-indigo-600" />
                 </div>
                 <span className="font-medium text-slate-900">{isEditing ? 'Cancel Edit' : 'Edit Tax Calculation'}</span>
                 <span className="text-sm text-slate-600 mt-1">Modify tax calculation details</span>

@@ -612,7 +612,7 @@ export default function AttendanceDashboard() {
       Present: "bg-green-50 text-green-700 border-green-200",
       Absent: "bg-red-50 text-red-700 border-red-200",
       "Half-day": "bg-yellow-50 text-yellow-700 border-yellow-200",
-      Leave: "bg-blue-50 text-blue-700 border-blue-200",
+      Leave: "bg-slate-50 text-blue-700 border-blue-200",
       Weekend: "bg-slate-50 text-slate-700 border-slate-200",
       Holiday: "bg-purple-50 text-purple-700 border-purple-200",
     };
@@ -651,7 +651,7 @@ export default function AttendanceDashboard() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex items-center space-x-3">
-          <Loader2 className="w-8 h-8 animate-spin text-yellow-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
           <span className="text-slate-600 font-medium">
             Loading attendance data...
           </span>
@@ -668,7 +668,7 @@ export default function AttendanceDashboard() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
                 <Calendar className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -704,7 +704,7 @@ export default function AttendanceDashboard() {
                 onClick={() =>
                   router.push("/payroll/attendance/add-attendance")
                 }
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-white bg-blue-700 hover:bg-blue-800 rounded-lg transition-colors font-medium"
               >
                 <Plus className="w-4 h-4" />
                 Add Attendance
@@ -720,7 +720,7 @@ export default function AttendanceDashboard() {
               <button
                 onClick={() => setViewMode("daily")}
                 className={`flex items-center gap-2 py-4 px-1 border-b-2 text-sm font-medium transition-colors ${viewMode === "daily"
-                  ? "border-yellow-500 text-yellow-600"
+                  ? "border-indigo-500 text-indigo-600"
                   : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
                   }`}
               >
@@ -730,7 +730,7 @@ export default function AttendanceDashboard() {
               <button
                 onClick={() => setViewMode("monthly")}
                 className={`flex items-center gap-2 py-4 px-1 border-b-2 text-sm font-medium transition-colors ${viewMode === "monthly"
-                  ? "border-yellow-500 text-yellow-600"
+                  ? "border-indigo-500 text-indigo-600"
                   : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
                   }`}
               >
@@ -743,7 +743,7 @@ export default function AttendanceDashboard() {
 
         {/* Statistics Cards */}
         <div className="flex flex-wrap gap-6 mb-8 overflow-x-auto">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 border-l-4 border-l-blue-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">
@@ -758,13 +758,13 @@ export default function AttendanceDashboard() {
                     : "Tracked this month"}
                 </p>
               </div>
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                 <Users className="w-6 h-6 text-blue-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 border-l-4 border-l-green-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">
@@ -787,7 +787,7 @@ export default function AttendanceDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 border-l-4 border-l-red-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">
@@ -810,7 +810,7 @@ export default function AttendanceDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 border-l-4 border-l-yellow-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">On Leave</p>
@@ -833,7 +833,7 @@ export default function AttendanceDashboard() {
 
           {viewMode === "monthly" && (
             <>
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 border-l-4 border-l-blue-500">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-600">
@@ -846,13 +846,13 @@ export default function AttendanceDashboard() {
                       Hours worked this month
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+                  <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                     <Clock className="w-6 h-6 text-blue-600" />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 border-l-4 border-l-purple-500">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-600">
@@ -877,7 +877,7 @@ export default function AttendanceDashboard() {
         {/* Organization Grouping Toggle */}
         <div
           className={`bg-white rounded-xl border-2 transition-all ${groupByOrganization
-            ? "border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50"
+            ? "border-indigo-200 bg-gradient-to-r from-indigo-50 to-blue-50"
             : "border-slate-200"
             } shadow-sm mb-8`}
         >
@@ -885,7 +885,7 @@ export default function AttendanceDashboard() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${groupByOrganization ? "bg-yellow-500" : "bg-slate-100"
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${groupByOrganization ? "bg-indigo-500" : "bg-slate-100"
                     }`}
                 >
                   <Layers
@@ -914,7 +914,7 @@ export default function AttendanceDashboard() {
                           ? expandAllEmployees
                           : expandAllOrganizations
                       }
-                      className="px-3 py-1.5 text-xs font-medium text-yellow-700 bg-yellow-100 hover:bg-yellow-200 rounded-lg transition-colors border border-yellow-200"
+                      className="px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-100 hover:bg-indigo-200 rounded-lg transition-colors border border-indigo-200"
                     >
                       Expand All
                     </button>
@@ -933,7 +933,7 @@ export default function AttendanceDashboard() {
 
                 <button
                   onClick={handleGroupToggle}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${groupByOrganization ? "bg-yellow-500" : "bg-slate-300"
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${groupByOrganization ? "bg-indigo-500" : "bg-slate-300"
                     }`}
                 >
                   <span
@@ -964,7 +964,7 @@ export default function AttendanceDashboard() {
                 <select
                   value={selectedOrganization}
                   onChange={(e) => setSelectedOrganization(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                 >
                   <option value="">All Organizations</option>
                   {organizations.map((org) => (
@@ -985,7 +985,7 @@ export default function AttendanceDashboard() {
                     type="date"
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                   />
                 </div>
               ) : (
@@ -999,7 +999,7 @@ export default function AttendanceDashboard() {
                       onChange={(e) =>
                         setSelectedMonth(parseInt(e.target.value))
                       }
-                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                     >
                       {months.map((month) => (
                         <option key={month.value} value={month.value}>
@@ -1017,7 +1017,7 @@ export default function AttendanceDashboard() {
                       onChange={(e) =>
                         setSelectedYear(parseInt(e.target.value))
                       }
-                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white"
+                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white"
                     >
                       {years.map((year) => (
                         <option key={year} value={year}>
@@ -1041,7 +1041,7 @@ export default function AttendanceDashboard() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search by name or ID..."
-                    className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                   />
                 </div>
               </div>
@@ -1091,7 +1091,7 @@ export default function AttendanceDashboard() {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                          <div className="w-8 h-8 bg-slate-500 rounded-lg flex items-center justify-center">
                             <Building2 className="w-4 h-4 text-white" />
                           </div>
                           <div>
@@ -1324,7 +1324,7 @@ export default function AttendanceDashboard() {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                          <div className="w-8 h-8 bg-slate-500 rounded-lg flex items-center justify-center">
                             <Building2 className="w-4 h-4 text-white" />
                           </div>
                           <div>

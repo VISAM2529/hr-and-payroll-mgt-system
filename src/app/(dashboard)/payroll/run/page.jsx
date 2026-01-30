@@ -30,7 +30,7 @@ const StatusBadge = ({ status }) => {
         'Processing': 'bg-blue-100 text-blue-700 border-blue-200 animate-pulse',
         'Completed': 'bg-emerald-100 text-emerald-700 border-emerald-200',
         'Approved': 'bg-indigo-100 text-indigo-700 border-indigo-200',
-        'Locked': 'bg-amber-100 text-amber-700 border-amber-200',
+        'Locked': 'bg-red-100 text-red-700 border-red-200',
         'Cancelled': 'bg-red-100 text-red-700 border-red-200'
     };
     return (
@@ -171,7 +171,7 @@ export default function PayrollRunPage() {
                             className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
                             title="Refresh"
                         >
-                            <RefreshCw className={`w-4 h-4 text-slate-600 ${loading ? 'animate-spin' : ''}`} />
+                            <RefreshCw className={`w-4 h-4 text-indigo-600 ${loading ? 'animate-spin' : ''}`} />
                         </button>
                         <div className="h-8 w-[1px] bg-slate-200 mx-1" />
                         <div className="flex bg-white border border-slate-200 rounded-lg p-1 shadow-sm">
@@ -217,9 +217,9 @@ export default function PayrollRunPage() {
 
                 {/* Stats Summary */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-blue-500">
                         <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600">
+                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-blue-600">
                                 <Users className="w-4 h-4" />
                             </div>
                             <span className="text-sm font-medium text-slate-500">Total Proccessed</span>
@@ -228,7 +228,7 @@ export default function PayrollRunPage() {
                             {runs.reduce((sum, r) => sum + (r.processedEmployees || 0), 0)}
                         </div>
                     </div>
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
                         <div className="flex items-center gap-3 mb-3">
                             <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600">
                                 <TrendingUp className="w-4 h-4" />
@@ -240,18 +240,18 @@ export default function PayrollRunPage() {
                         </div>
                         <p className="text-[10px] text-slate-400 mt-1">Latest Run</p>
                     </div>
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-purple-500">
                         <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
+                            <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center text-purple-600">
                                 <Clock className="w-4 h-4" />
                             </div>
                             <span className="text-sm font-medium text-slate-500">Next Pay Date</span>
                         </div>
                         <div className="text-2xl font-bold text-slate-900">01 Feb</div>
                     </div>
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
+                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-yellow-500">
                         <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center text-amber-600">
+                            <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center text-yellow-600">
                                 <AlertCircle className="w-4 h-4" />
                             </div>
                             <span className="text-sm font-medium text-slate-500">Awaiting Action</span>
@@ -423,11 +423,11 @@ export default function PayrollRunPage() {
                                     <p className="text-xs text-slate-500">The system calculates CTC to Net, including LOP and Retros.</p>
                                 </div>
                             </div>
-                            <div className="flex items-start gap-3 text-emerald-600">
-                                <div className="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center text-xs font-bold shrink-0 border border-emerald-100">3</div>
+                            <div className="flex items-start gap-3">
+                                <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600 shrink-0">3</div>
                                 <div>
-                                    <p className="text-sm font-semibold">Review & Lock</p>
-                                    <p className="text-xs text-emerald-600/70">Verify totals and lock the run to prevent any further changes.</p>
+                                    <p className="text-sm font-semibold text-slate-800">Review & Lock</p>
+                                    <p className="text-xs text-slate-500">Verify totals and lock the run to prevent any further changes.</p>
                                 </div>
                             </div>
                         </div>

@@ -792,7 +792,7 @@ export default function DiscountManagementPage() {
 
                       <div className="group bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-200 bg-slate-50 hover:scale-105">
                         <div className="flex items-center justify-between mb-3">
-                          <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
+                          <div className="p-3 rounded-xl bg-slate-50 border border-blue-200">
                             <TrendingUp className="h-6 w-6 text-blue-600" />
                           </div>
                           <div className="flex items-center gap-1 text-sm">

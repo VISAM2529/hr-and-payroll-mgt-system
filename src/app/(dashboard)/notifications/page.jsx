@@ -59,7 +59,7 @@ export default function NotificationsDashboard() {
       case 'threshold-exceeded':
         return 'border-red-200 bg-red-50';
       case 'attendance-report':
-        return 'border-blue-200 bg-blue-50';
+        return 'border-blue-200 bg-slate-50';
       case 'document-reminder':
         return 'border-orange-200 bg-orange-50';
       case 'system':
@@ -143,65 +143,65 @@ export default function NotificationsDashboard() {
                 </div>
               </div>
               <div className="flex gap-2">
-                 <Skeleton className="h-10 w-24 rounded-lg" />
-                 <Skeleton className="w-10 h-10 rounded-lg" />
+                <Skeleton className="h-10 w-24 rounded-lg" />
+                <Skeleton className="w-10 h-10 rounded-lg" />
               </div>
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
-             {/* Stats Skeleton */}
-             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                 {[1,2,3,4].map(i => (
-                     <div key={i} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                         <div className="flex justify-between">
-                             <div>
-                                 <Skeleton className="h-3 w-24 mb-2" />
-                                 <Skeleton className="h-8 w-12 mb-1" />
-                                 <Skeleton className="h-3 w-16" />
-                             </div>
-                             <Skeleton className="w-12 h-12 rounded-xl" />
-                         </div>
-                     </div>
-                 ))}
-             </div>
+          {/* Stats Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div className="flex justify-between">
+                  <div>
+                    <Skeleton className="h-3 w-24 mb-2" />
+                    <Skeleton className="h-8 w-12 mb-1" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                  <Skeleton className="w-12 h-12 rounded-xl" />
+                </div>
+              </div>
+            ))}
+          </div>
 
-             {/* Filters Skeleton */}
-             <div className="bg-white rounded-xl border border-slate-200 p-5">
-                 <div className="flex gap-4">
-                     <Skeleton className="h-10 w-full" />
-                     <Skeleton className="h-10 w-48" />
-                 </div>
-             </div>
+          {/* Filters Skeleton */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <div className="flex gap-4">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-48" />
+            </div>
+          </div>
 
-             {/* List Skeleton */}
-             <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
-                 <div className="p-6 border-b border-slate-200 flex justify-between">
-                     <Skeleton className="h-6 w-48" />
-                     <Skeleton className="h-6 w-16 rounded-full" />
-                 </div>
-                 <div className="divide-y divide-slate-200">
-                     {[1,2,3,4,5].map(i => (
-                         <div key={i} className="p-5">
-                             <div className="flex items-start gap-4">
-                                 <Skeleton className="w-10 h-10 rounded-lg" />
-                                 <div className="flex-1 space-y-2">
-                                     <div className="flex justify-between">
-                                         <Skeleton className="h-4 w-48" />
-                                         <Skeleton className="h-5 w-20 rounded-md" />
-                                     </div>
-                                     <Skeleton className="h-4 w-3/4" />
-                                     <div className="flex gap-4">
-                                         <Skeleton className="h-3 w-24" />
-                                         <Skeleton className="h-3 w-24" />
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     ))}
-                 </div>
-             </div>
+          {/* List Skeleton */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+            <div className="p-6 border-b border-slate-200 flex justify-between">
+              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-6 w-16 rounded-full" />
+            </div>
+            <div className="divide-y divide-slate-200">
+              {[1, 2, 3, 4, 5].map(i => (
+                <div key={i} className="p-5">
+                  <div className="flex items-start gap-4">
+                    <Skeleton className="w-10 h-10 rounded-lg" />
+                    <div className="flex-1 space-y-2">
+                      <div className="flex justify-between">
+                        <Skeleton className="h-4 w-48" />
+                        <Skeleton className="h-5 w-20 rounded-md" />
+                      </div>
+                      <Skeleton className="h-4 w-3/4" />
+                      <div className="flex gap-4">
+                        <Skeleton className="h-3 w-24" />
+                        <Skeleton className="h-3 w-24" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -216,7 +216,7 @@ export default function NotificationsDashboard() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
                 <Bell className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -224,7 +224,7 @@ export default function NotificationsDashboard() {
                 <p className="text-slate-600 text-sm mt-0.5">Monitor system notifications and alerts</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <button
                 onClick={fetchNotifications}
@@ -244,20 +244,20 @@ export default function NotificationsDashboard() {
       <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm border-l-4 border-l-blue-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Total Notifications</p>
                 <p className="text-2xl font-bold text-slate-900 mt-2">{stats.total}</p>
                 <p className="text-xs text-slate-500 mt-1">All time</p>
               </div>
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                 <Bell className="w-6 h-6 text-blue-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm border-l-4 border-l-orange-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Unread</p>
@@ -270,7 +270,7 @@ export default function NotificationsDashboard() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm border-l-4 border-l-red-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">High Priority</p>
@@ -283,7 +283,7 @@ export default function NotificationsDashboard() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm border-l-4 border-l-purple-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Threshold Alerts</p>
@@ -308,7 +308,7 @@ export default function NotificationsDashboard() {
                   placeholder="Search notifications..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                 />
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function NotificationsDashboard() {
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors bg-white font-medium"
+                className="px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white font-medium"
               >
                 <option value="all">All Types</option>
                 <option value="threshold-exceeded">Threshold Alerts</option>
@@ -337,7 +337,7 @@ export default function NotificationsDashboard() {
                 Recent Notifications
               </h2>
               {filteredNotifications.length > 0 && (
-                <span className="inline-flex items-center px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full border border-yellow-200">
+                <span className="inline-flex items-center px-2.5 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full border border-indigo-200">
                   {filteredNotifications.length} Total
                 </span>
               )}
@@ -347,8 +347,8 @@ export default function NotificationsDashboard() {
           <div className="divide-y-2 divide-slate-200">
             {filteredNotifications.length === 0 ? (
               <div className="p-16 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl flex items-center justify-center mx-auto mb-4 border-2 border-yellow-200">
-                  <Bell className="w-8 h-8 text-yellow-600" />
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4 border-2 border-indigo-200">
+                  <Bell className="w-8 h-8 text-indigo-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">No notifications found</h3>
                 <p className="text-slate-500 text-sm max-w-md mx-auto">
@@ -362,28 +362,25 @@ export default function NotificationsDashboard() {
               filteredNotifications.map((notification) => (
                 <div
                   key={notification._id}
-                  className={`p-5 hover:bg-slate-50 cursor-pointer transition-all ${
-                    !notification.read ? 'bg-blue-50/50 border-l-4 border-l-yellow-500' : ''
-                  }`}
+                  className={`p-5 hover:bg-slate-50 cursor-pointer transition-all ${!notification.read ? 'bg-slate-50/50 border-l-4 border-l-indigo-500' : ''
+                    }`}
                   onClick={() => setSelectedNotification(notification)}
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0 mt-1">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        notification.type === 'threshold-exceeded' ? 'bg-red-100' :
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${notification.type === 'threshold-exceeded' ? 'bg-red-100' :
                         notification.type === 'attendance-report' ? 'bg-blue-100' :
-                        notification.type === 'document-reminder' ? 'bg-orange-100' :
-                        'bg-slate-100'
-                      }`}>
+                          notification.type === 'document-reminder' ? 'bg-orange-100' :
+                            'bg-slate-100'
+                        }`}>
                         {getNotificationIcon(notification.type)}
                       </div>
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-4">
-                        <h3 className={`text-sm font-semibold ${
-                          !notification.read ? 'text-slate-900' : 'text-slate-700'
-                        }`}>
+                        <h3 className={`text-sm font-semibold ${!notification.read ? 'text-slate-900' : 'text-slate-700'
+                          }`}>
                           {notification.title}
                         </h3>
                         <div className="flex items-center gap-2 flex-shrink-0">
@@ -391,7 +388,7 @@ export default function NotificationsDashboard() {
                             {notification.priority}
                           </span>
                           {!notification.read && (
-                            <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                            <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                           )}
                         </div>
                       </div>
@@ -424,7 +421,7 @@ export default function NotificationsDashboard() {
                           e.stopPropagation();
                           setSelectedNotification(notification);
                         }}
-                        className="p-2 text-slate-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                       >
                         <Eye className="h-4 w-4" />
                       </button>
@@ -442,7 +439,7 @@ export default function NotificationsDashboard() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-yellow-500 to-orange-500 px-6 py-5 border-b-2 border-orange-600">
+            <div className="sticky top-0 bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-5 border-b-2 border-blue-600">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-md">
@@ -479,7 +476,7 @@ export default function NotificationsDashboard() {
                 </div>
 
                 {selectedNotification.details && (
-                  <div className="p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                  <div className="p-4 bg-slate-50 rounded-lg border-2 border-blue-200">
                     <h4 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
                       <Info className="w-4 h-4 text-blue-600" />
                       Additional Details
@@ -508,7 +505,7 @@ export default function NotificationsDashboard() {
                       {selectedNotification.actions.map((action, index) => (
                         <button
                           key={index}
-                          className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-sm rounded-lg font-semibold transition-all shadow-md"
+                          className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white text-sm rounded-lg font-semibold transition-all shadow-md"
                           onClick={() => {
                             console.log('Action clicked:', action);
                             toast.success(`Action: ${action.label}`);
@@ -529,7 +526,7 @@ export default function NotificationsDashboard() {
                       markAsRead(selectedNotification._id);
                       setSelectedNotification(null);
                     }}
-                    className="w-full px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all shadow-lg flex items-center justify-center gap-2"
+                    className="w-full px-4 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white rounded-lg font-semibold transition-all shadow-lg flex items-center justify-center gap-2"
                   >
                     <CheckCircle className="w-5 h-5" />
                     Mark as Read

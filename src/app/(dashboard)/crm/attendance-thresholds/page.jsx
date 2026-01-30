@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import {
   Plus, Edit, Trash2, Settings, AlertTriangle, Building, Users,
-  Save, X, Loader2, RefreshCw, CheckCircle, AlertCircle, Bell,
+  Save, X, Loader2, RefreshCw, CheckCircle, AlertCircle,
   BarChart3, TrendingUp, Package, Minus
 } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -339,7 +339,7 @@ export default function AttendanceThresholds() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-11 h-11 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
                 <AlertTriangle className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -349,9 +349,7 @@ export default function AttendanceThresholds() {
             </div>
 
             <div className="flex items-center space-x-2">
-              <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
-                <Bell className="w-5 h-5" />
-              </button>
+
               <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
                 <Settings className="w-5 h-5" />
               </button>
@@ -363,20 +361,20 @@ export default function AttendanceThresholds() {
       <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
         {/* Analytics Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm border-l-4 border-l-indigo-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Total Thresholds</p>
                 <p className="text-2xl font-bold text-slate-900 mt-2">{thresholds.length}</p>
                 <p className="text-xs text-slate-500 mt-1">Configured rules</p>
               </div>
-              <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center border border-yellow-100">
-                <Package className="w-6 h-6 text-yellow-600" />
+              <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
+                <Package className="w-6 h-6 text-indigo-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm border-l-4 border-l-green-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Active Rules</p>
@@ -389,20 +387,20 @@ export default function AttendanceThresholds() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm border-l-4 border-l-blue-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Organizations</p>
                 <p className="text-2xl font-bold text-slate-900 mt-2">{totalOrganizations}</p>
                 <p className="text-xs text-slate-500 mt-1">Involved in rules</p>
               </div>
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+              <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-blue-100">
                 <Building className="w-6 h-6 text-blue-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-sm border-l-4 border-l-purple-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Avg. Threshold</p>
@@ -423,7 +421,7 @@ export default function AttendanceThresholds() {
               <div className="flex items-center space-x-3">
                 <h2 className="text-xl font-semibold text-slate-900">Configured Thresholds</h2>
                 {thresholds.length > 0 && (
-                  <span className="inline-flex items-center px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full border border-yellow-200">
+                  <span className="inline-flex items-center px-2.5 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full border border-indigo-200">
                     {thresholds.length} Rules
                   </span>
                 )}
@@ -441,7 +439,7 @@ export default function AttendanceThresholds() {
 
                 <button
                   onClick={() => setShowForm(true)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
                 >
                   <Plus className="w-4 h-4" />
                   Add Threshold
@@ -454,8 +452,8 @@ export default function AttendanceThresholds() {
           <div className="p-6">
             {thresholds.length === 0 ? (
               <div className="text-center py-16">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl flex items-center justify-center mx-auto mb-4 border-2 border-yellow-200">
-                  <AlertTriangle className="w-8 h-8 text-yellow-600" />
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4 border-2 border-indigo-200">
+                  <AlertTriangle className="w-8 h-8 text-indigo-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">No thresholds configured</h3>
                 <p className="text-slate-500 text-sm mb-6 max-w-md mx-auto">
@@ -463,7 +461,7 @@ export default function AttendanceThresholds() {
                 </p>
                 <button
                   onClick={() => setShowForm(true)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
                 >
                   <Plus className="w-4 h-4" />
                   Add First Threshold
@@ -474,11 +472,11 @@ export default function AttendanceThresholds() {
                 {thresholds.map((threshold) => (
                   <div
                     key={threshold._id}
-                    className="border-2 border-slate-200 rounded-xl p-5 hover:shadow-lg transition-all hover:border-yellow-200 bg-white"
+                    className="border-2 border-slate-200 rounded-xl p-5 hover:shadow-lg transition-all hover:border-indigo-200 bg-white"
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center shadow-md">
+                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
                           <Building className="w-5 h-5 text-white" />
                         </div>
                         <div>
@@ -496,7 +494,7 @@ export default function AttendanceThresholds() {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => handleEdit(threshold)}
-                          className="p-2 text-slate-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                          className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                           title="Edit"
                         >
                           <Edit className="h-4 w-4" />
@@ -532,11 +530,11 @@ export default function AttendanceThresholds() {
                         </ul>
                       </div>
 
-                      <div className="flex items-center gap-2 p-2 bg-orange-50 rounded-lg">
-                        <AlertTriangle className="h-4 w-4 text-orange-500 flex-shrink-0" />
+                      <div className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
+                        <AlertTriangle className="h-4 w-4 text-blue-500 flex-shrink-0" />
                         <div className="min-w-0 flex-1">
-                          <span className="text-xs text-orange-600 block">Total Threshold Limit</span>
-                          <span className="text-lg font-bold text-orange-600 block">
+                          <span className="text-xs text-blue-600 block">Total Threshold Limit</span>
+                          <span className="text-lg font-bold text-blue-600 block">
                             {threshold.threshold}
                           </span>
                         </div>
@@ -574,11 +572,11 @@ export default function AttendanceThresholds() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 px-6 py-4 border-b-2 border-orange-600 rounded-t-xl flex-shrink-0">
+            <div className="bg-gradient-to-r from-indigo-500 to-blue-500 px-6 py-4 border-b-2 border-blue-600 rounded-t-xl flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                    <AlertTriangle className="w-5 h-5 text-orange-500" />
+                    <AlertTriangle className="w-5 h-5 text-blue-500" />
                   </div>
                   <h2 className="text-xl font-bold text-white">
                     {editingThreshold ? 'Edit Threshold Rule' : 'Add Threshold Rule'}
@@ -605,7 +603,7 @@ export default function AttendanceThresholds() {
                     <button
                       type="button"
                       onClick={addCriterion}
-                      className="text-xs flex items-center gap-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-3 py-1.5 rounded-md font-medium transition-colors"
+                      className="text-xs flex items-center gap-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-3 py-1.5 rounded-md font-medium transition-colors"
                     >
                       <Plus className="w-3 h-3" />
                       Add Group
@@ -626,7 +624,7 @@ export default function AttendanceThresholds() {
                             <select
                               value={criterion.organizationId}
                               onChange={(e) => updateCriterion(index, 'organizationId', e.target.value)}
-                              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500"
+                              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                               required
                             >
                               <option value="">Select Org</option>
@@ -644,7 +642,7 @@ export default function AttendanceThresholds() {
                             <select
                               value={criterion.departmentId}
                               onChange={(e) => updateCriterion(index, 'departmentId', e.target.value)}
-                              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 disabled:bg-slate-100"
+                              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-slate-100"
                               required
                               disabled={!criterion.organizationId}
                             >
@@ -663,7 +661,7 @@ export default function AttendanceThresholds() {
                             <select
                               value={criterion.categoryId}
                               onChange={(e) => updateCriterion(index, 'categoryId', e.target.value)}
-                              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 disabled:bg-slate-100"
+                              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-slate-100"
                               required
                               disabled={!criterion.departmentId}
                             >
@@ -683,7 +681,7 @@ export default function AttendanceThresholds() {
                               type="text"
                               value={criterion.subType}
                               onChange={(e) => updateCriterion(index, 'subType', e.target.value)}
-                              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500"
+                              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                               placeholder="Optional"
                             />
                           </div>
@@ -711,7 +709,7 @@ export default function AttendanceThresholds() {
                       type="number"
                       value={formData.threshold}
                       onChange={(e) => setFormData({ ...formData, threshold: e.target.value })}
-                      className="w-full px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-colors"
+                      className="w-full px-4 py-2.5 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                       placeholder="e.g., 52"
                       min="1"
                       required
@@ -728,7 +726,7 @@ export default function AttendanceThresholds() {
                         id="isActive"
                         checked={formData.isActive}
                         onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                        className="h-5 w-5 text-yellow-600 focus:ring-yellow-500 border-slate-300 rounded"
+                        className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded"
                       />
                       <label htmlFor="isActive" className="ml-3 text-sm font-medium text-slate-700 cursor-pointer select-none">
                         Active (Enable this rule)
@@ -753,7 +751,7 @@ export default function AttendanceThresholds() {
                   type="submit"
                   form="thresholdForm"
                   disabled={saving}
-                  className="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white py-2.5 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-semibold transition-all shadow-lg"
+                  className="flex-1 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white py-2.5 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-semibold transition-all shadow-lg"
                 >
                   {saving ? (
                     <>
