@@ -61,6 +61,23 @@ export default function AdminTalentHub() {
     const [showSkillModal, setShowSkillModal] = useState(false);
     const [showCareerModal, setShowCareerModal] = useState(false);
 
+    // Derived State for Search Filtering
+    const filteredAppraisals = appraisals.filter(app => {
+        const term = searchQuery.toLowerCase();
+        const name = `${app.employee?.personalDetails?.firstName} ${app.employee?.personalDetails?.lastName}`.toLowerCase();
+        return name.includes(term);
+    });
+
+    const filteredGoals = goals.filter(goal => {
+        const term = searchQuery.toLowerCase();
+        const title = goal.title?.toLowerCase() || '';
+        const name = `${goal.employee?.personalDetails?.firstName} ${goal.employee?.personalDetails?.lastName}`.toLowerCase();
+        return title.includes(term) || name.includes(term);
+    });
+
+    const allSkills = ['React', 'Node.js', 'System Design', 'Leadership', 'Communication', 'Strategic Thinking', 'Agile', 'Cloud'];
+    const filteredSkills = allSkills.filter(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()));
+
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             {/* Header Panel */}
@@ -161,10 +178,10 @@ export default function AdminTalentHub() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-50">
-                                        {appraisals.length === 0 ? (
-                                            <tr><td colSpan="6" className="p-20 text-center text-slate-400 font-bold italic">No appraisal cycles initiated yet</td></tr>
+                                        {filteredAppraisals.length === 0 ? (
+                                            <tr><td colSpan="6" className="p-20 text-center text-slate-400 font-bold italic">No matching appraisals found</td></tr>
                                         ) : (
-                                            appraisals.map((app) => (
+                                            filteredAppraisals.map((app) => (
                                                 <tr key={app._id} className="hover:bg-slate-50/50 transition-colors group">
                                                     <td className="p-4">
                                                         <div className="flex items-center gap-3">
@@ -211,10 +228,10 @@ export default function AdminTalentHub() {
 
                         {activeTab === 'goals' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                                {goals.length === 0 ? (
-                                    <div className="col-span-full py-20 text-center text-slate-400 font-bold italic">No goals assigned to the team yet</div>
+                                {filteredGoals.length === 0 ? (
+                                    <div className="col-span-full py-20 text-center text-slate-400 font-bold italic">No matching goals found</div>
                                 ) : (
-                                    goals.map((goal) => (
+                                    filteredGoals.map((goal) => (
                                         <div key={goal._id} className="p-6 bg-white border border-slate-200 rounded-3xl hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-100/30 transition-all group relative overflow-hidden">
                                             <div className="flex justify-between items-start mb-6">
                                                 <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-2xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all">
@@ -302,18 +319,19 @@ export default function AdminTalentHub() {
                                         Organizational Skill Matrix
                                     </h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                        {['React', 'Node.js', 'System Design', 'Leadership', 'Communication', 'Strategic Thinking', 'Agile', 'Cloud'].map(skill => (
-                                            <div key={skill} className="p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center group hover:border-indigo-200 hover:shadow-lg transition-all">
-                                                <span className="text-xs font-bold text-slate-700">{skill}</span>
-                                                <div className="flex items-center gap-1.5">
-                                                    <div className="flex gap-0.5">
-                                                        {[1, 2, 3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-indigo-600"></div>)}
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-slate-200"></div>
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-slate-200"></div>
+                                        {filteredSkills.length === 0 ? <p className="text-slate-400 col-span-4 text-center py-4">No skills match your search.</p> :
+                                            filteredSkills.map(skill => (
+                                                <div key={skill} className="p-4 bg-white border border-slate-100 rounded-2xl flex justify-between items-center group hover:border-indigo-200 hover:shadow-lg transition-all">
+                                                    <span className="text-xs font-bold text-slate-700">{skill}</span>
+                                                    <div className="flex items-center gap-1.5">
+                                                        <div className="flex gap-0.5">
+                                                            {[1, 2, 3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-indigo-600"></div>)}
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-slate-200"></div>
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-slate-200"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
                                     </div>
                                 </div>
                             </div>

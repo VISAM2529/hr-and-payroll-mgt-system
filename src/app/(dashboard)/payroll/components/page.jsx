@@ -210,15 +210,26 @@ export default function SalaryComponentsPage() {
         }
     };
 
-    const deleteComponent = async (id) => {
-        if (!confirm("Are you sure? This action cannot be undone.")) return;
+    const deleteComponent = async (id, e) => {
+        if (e) e.stopPropagation();
+
+        if (!confirm("Are you sure you want to delete this component?")) return;
+
         try {
-            const res = await fetch(`/api/payroll/components/${id}`, { method: "DELETE" });
-            if (!res.ok) throw new Error("Delete failed");
-            toast.success("Component removed");
-            fetchComponents();
+            console.log("Triggering delete for:", id);
+            const result = await deleteSalaryComponent(id);
+
+            if (result.success) {
+                toast.success("Component deleted");
+                // Force a re-fetch to update UI state immediately
+                await fetchComponents();
+            } else {
+                console.error("Server returned error:", result.error);
+                toast.error(result.error || "Deletion failed");
+            }
         } catch (error) {
-            toast.error(error.message);
+            console.error("Delete handler error:", error);
+            toast.error("Something went wrong");
         }
     };
 
@@ -289,7 +300,7 @@ export default function SalaryComponentsPage() {
                                             <Edit2 className="w-4 h-4" />
                                         </button>
                                         <button
-                                            onClick={() => deleteComponent(comp._id)}
+                                            onClick={(e) => deleteComponent(comp._id, e)}
                                             className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                         >
                                             <Trash2 className="w-4 h-4" />

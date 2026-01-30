@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import {
     Target, Trophy, BookOpen,
-    Map, Star, TrendingUp,
+    Map as MapIcon, Star, TrendingUp,
     ChevronRight, Award, Zap,
     Clock, Plus, Loader2,
-    Radar, ArrowUpRight
+    Radar as RadarIcon, ArrowUpRight
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { format } from 'date-fns';
@@ -173,7 +173,7 @@ export default function ESSTalentDashboard({ employeeId }) {
                 <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
                     <div className="flex justify-between items-start mb-4">
                         <div className="p-2 bg-orange-50 rounded-xl text-orange-600 group-hover:scale-110 transition-transform">
-                            <Map className="w-5 h-5" />
+                            <MapIcon className="w-5 h-5" />
                         </div>
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Next Milestone</span>
                     </div>
@@ -257,7 +257,7 @@ export default function ESSTalentDashboard({ employeeId }) {
                     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
                         <div className="p-6 border-b border-slate-100 bg-slate-50/50">
                             <h4 className="font-black text-slate-900 flex items-center gap-2">
-                                <Map className="w-5 h-5 text-orange-600" />
+                                <MapIcon className="w-5 h-5 text-orange-600" />
                                 Career Roadmap
                             </h4>
                         </div>
@@ -295,7 +295,7 @@ export default function ESSTalentDashboard({ employeeId }) {
                 <div className="space-y-8">
                     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 overflow-hidden">
                         <h4 className="font-black text-slate-900 flex items-center gap-2 mb-6">
-                            <Radar className="w-5 h-5 text-indigo-600" />
+                            <RadarIcon className="w-5 h-5 text-indigo-600" />
                             Skill Proficiency
                         </h4>
                         <div className="aspect-square relative flex items-center justify-center p-4">

@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { calculateProfessionalTax } from "@/utils/validation";
+import { useSession } from "@/context/SessionContext";
 
 // Function to calculate total days in a month
 const getMonthDetails = (month, year) => {
@@ -36,6 +37,7 @@ const getMonthDetails = (month, year) => {
 
 export default function PayslipGenerator() {
   const router = useRouter();
+  const { user } = useSession();
   const [loading, setLoading] = useState(false);
   const [checkingDuplicate, setCheckingDuplicate] = useState(false);
   const [loadingLeaves, setLoadingLeaves] = useState(false);
@@ -639,6 +641,14 @@ export default function PayslipGenerator() {
       newErrors.presentDays = "Present days cannot exceed total days";
     if (formData.presentDays < 0)
       newErrors.presentDays = "Present days cannot be negative";
+
+    // Validate Organization from employee data
+    const orgName = employeeData?.jobDetails?.organization || employeeData?.jobDetails?.organizationId?.name;
+    if (employeeData && !orgName) {
+      newErrors.employee = "Selected employee does not have an Organization assigned.";
+      toast.error("Employee must have an Organization assigned to generate a payslip");
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -651,7 +661,7 @@ export default function PayslipGenerator() {
       if (!emp.jobDetails) return;
       console.log("emp.jobDetails", emp.jobDetails);
 
-      const org = emp.jobDetails?.organization || "Unassigned Organization";
+      const org = emp.jobDetails?.organization || emp.jobDetails?.organizationId?.name || "Unassigned Organization";
       const dept = emp.jobDetails?.department || "Unassigned Department";
       const empType = emp.jobDetails?.employeeType || "Unassigned Type";
       if (!grouped[org]) grouped[org] = {};
@@ -807,8 +817,9 @@ export default function PayslipGenerator() {
         overtimeAmount: calculatedValues.overtimeAmount,
         status: "Generated",
         notes: formData.notes,
-        organizationName: employeeData?.jobDetails?.organization || "",
+        organizationName: employeeData?.jobDetails?.organization || employeeData?.jobDetails?.organizationId?.name || "",
         salaryType: employeeData?.payslipStructure?.salaryType || "monthly",
+        generatedBy: user?.id, // Add the current user ID
       };
       const response = await fetch("/api/payroll/payslip", {
         method: "POST",

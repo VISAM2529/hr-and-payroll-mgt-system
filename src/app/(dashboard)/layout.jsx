@@ -48,6 +48,14 @@ import {
 import "../globals.css";
 import { useSession } from "@/context/SessionContext";
 import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -174,8 +182,6 @@ export default function DashboardLayout({ children }) {
         },
         { name: "Org Chart", href: "/crm/org-chart", icon: GitGraph },
         { name: "Org Settings", href: "/crm/org-settings", icon: Settings2 },
-        // { name: "Permissions", href: "/crm/permissions", icon: Shield },
-        // { name: 'Payslip Structure', href: '/crm/payslip-structure', icon: FileText },
       ],
     },
     {
@@ -208,7 +214,6 @@ export default function DashboardLayout({ children }) {
       href: "/logs",
       icon: Clock,
     },
-
   ];
 
   const supervisorNavigation = [
@@ -466,21 +471,47 @@ export default function DashboardLayout({ children }) {
 
 
                 <div className="flex items-center space-x-3 pl-4 border-l border-slate-200">
-                  <div className="text-right hidden sm:block">
-                    <p className="text-sm font-semibold text-slate-900">
-                      Welcome,{" "}
-                      {user?.personalDetails?.firstName ||
-                        (role === "admin" ? "Admin" : "Employee")}
-                    </p>
-                    <p className="text-xs text-slate-500 capitalize">{role}</p>
-                  </div>
-                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-md shadow-indigo-200 ring-2 ring-white">
-                    <span className="text-white font-bold text-sm">
-                      {user?.personalDetails?.firstName
-                        ?.charAt(0)
-                        ?.toUpperCase() || role?.charAt(0)?.toUpperCase()}
-                    </span>
-                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center space-x-3 outline-none group">
+                      <div className="text-right hidden sm:block">
+                        <p className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                          Welcome,{" "}
+                          {user?.personalDetails?.firstName ||
+                            (role === "admin" ? "Admin" : "Employee")}
+                        </p>
+                        <p className="text-xs text-slate-500 capitalize">{role}</p>
+                      </div>
+                      <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center shadow-md shadow-indigo-200 ring-2 ring-white group-hover:ring-indigo-100 transition-all">
+                        <span className="text-white font-bold text-sm">
+                          {user?.personalDetails?.firstName
+                            ?.charAt(0)
+                            ?.toUpperCase() || role?.charAt(0)?.toUpperCase()}
+                        </span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 bg-white border border-slate-200 shadow-xl rounded-xl p-1 mt-2">
+                      <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        My Account
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator className="-mx-1 my-1 border-t border-slate-100" />
+
+                      <DropdownMenuItem onClick={() => router.push("/ess")}>
+                        <User className="w-4 h-4 mr-2 text-slate-500" />
+                        My Portal
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => router.push("/change-password")}>
+                        <Lock className="w-4 h-4 mr-2 text-slate-500" />
+                        Change Password
+                      </DropdownMenuItem>
+
+                      <DropdownMenuSeparator className="-mx-1 my-1 border-t border-slate-100" />
+                      <DropdownMenuItem onClick={() => { logout(); router.push("/auth/login"); }} className="text-red-600 hover:bg-red-50 hover:text-red-700">
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Log Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             </div>

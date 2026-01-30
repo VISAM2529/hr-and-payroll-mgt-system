@@ -25,10 +25,28 @@ export async function GET(request) {
         const { searchParams } = new URL(request.url);
         const employeeId = searchParams.get('employeeId');
         const status = searchParams.get('status');
+        const startDate = searchParams.get('startDate');
+        const endDate = searchParams.get('endDate');
+        const search = searchParams.get('search');
 
         let query = {};
         if (employeeId) query.employee = employeeId;
         if (status) query.status = status;
+
+        // Search Logic
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { category: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        // Date Filtering
+        if (startDate || endDate) {
+            query.date = {};
+            if (startDate) query.date.$gte = new Date(startDate);
+            if (endDate) query.date.$lte = new Date(endDate);
+        }
 
         const expenses = await Expense.find(query)
             .populate('employee', 'personalDetails employeeId')

@@ -11,9 +11,11 @@ import {
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import VendorManager from "./vendor-manager";
+import JournalEntryModal from "./journal-entry-modal"; // Import Modal
 
 export default function FinanceDashboard({ initialTab = "overview" }) {
     const [activeTab, setActiveTab] = useState(initialTab);
+    const [isEntryModalOpen, setIsEntryModalOpen] = useState(false); // Modal state
     const [stats, setStats] = useState({
         totalRevenue: 0,
         totalExpenses: 0,
@@ -26,6 +28,47 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
         // Fetch financial overview stats
         setTimeout(() => setLoading(false), 1000); // Demo loading
     }, []);
+
+    const handleExport = async () => {
+        try {
+            const res = await fetch('/api/finance/ledger');
+            const data = await res.json();
+
+            if (!data.entries || data.entries.length === 0) {
+                toast.error("No data to export");
+                return;
+            }
+
+            // Convert to CSV
+            const headers = ["Date", "Reference", "Description", "Source", "TotalDebit", "TotalCredit"];
+            const csvRows = [headers.join(',')];
+
+            data.entries.forEach(entry => {
+                const row = [
+                    format(new Date(entry.date), 'yyyy-MM-dd'),
+                    entry.referenceNumber,
+                    `"${entry.description.replace(/"/g, '""')}"`, // Escape quotes
+                    entry.source,
+                    entry.totalDebit,
+                    entry.totalCredit
+                ];
+                csvRows.push(row.join(','));
+            });
+
+            const csvContent = csvRows.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ledger-export-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            toast.success("Report Exported Successfully");
+        } catch (error) {
+            console.error(error);
+            toast.error("Export Failed");
+        }
+    };
 
     const tabs = [
         { id: "overview", label: "Overview", icon: Activity },
@@ -53,10 +96,16 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
                     <p className="text-slate-500 text-sm font-medium mt-1">Real-time financial visibility and payroll-accounting integration.</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm">
+                    <button
+                        onClick={handleExport}
+                        className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm"
+                    >
                         <Download className="w-4 h-4" /> Export Report
                     </button>
-                    <button className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+                    <button
+                        onClick={() => setIsEntryModalOpen(true)}
+                        className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+                    >
                         <DollarSign className="w-4 h-4" /> New Entry
                     </button>
                 </div>
@@ -179,6 +228,17 @@ export default function FinanceDashboard({ initialTab = "overview" }) {
                     {activeTab === "reports" && <div className="text-center py-20 text-slate-400 font-bold uppercase tracking-widest text-lg animate-pulse italic">Compiling advanced financial analytics...</div>}
                 </div>
             </div>
+
+            <JournalEntryModal
+                isOpen={isEntryModalOpen}
+                onClose={() => setIsEntryModalOpen(false)}
+                onEntrySaved={() => {
+                    if (activeTab === "ledger") {
+                        setActiveTab("overview");
+                        setTimeout(() => setActiveTab("ledger"), 50);
+                    }
+                }}
+            />
         </div>
     );
 }

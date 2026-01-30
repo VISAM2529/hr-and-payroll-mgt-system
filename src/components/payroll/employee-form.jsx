@@ -2167,8 +2167,82 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
   const handlePrev = () => {
     if (currentStep > 0) {
       setDirection(-1);
-      setCurrentStep(prev => prev - 1);
+      setCurrentStep(prev => prev + -1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Handle Status Change (Quick Activate/Deactivate)
+  const handleStatusChange = async (newStatus) => {
+    // For Inactive, we can still use the DELETE endpoint if preferred, or just use PATCH for both.
+    // Using PATCH for both is cleaner for status toggles.
+    if (!confirm(`Are you sure you want to change status to ${newStatus}?`)) return;
+
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/payroll/employees/${employeeData._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) throw new Error(`Failed to update status to ${newStatus}`);
+
+      toast.success(`Employee status updated to ${newStatus}`);
+      setFormData(prev => ({ ...prev, status: newStatus }));
+      router.refresh();
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle Soft Delete (Deactivate) - Kept for backward compatibility if needed, 
+  // but handleStatusChange('Inactive') could replace it.
+  const handleSoftDelete = async () => {
+    if (!confirm("Are you sure you want to deactivate this employee?")) return;
+
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/payroll/employees/${employeeData._id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Failed to deactivate employee");
+
+      toast.success("Employee deactivated successfully");
+      router.push("/payroll/employees");
+      router.refresh();
+    } catch (error) {
+      console.error("Error deactivating employee:", error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle Permanent Delete
+  const handlePermanentDelete = async () => {
+    if (!confirm("ARE YOU SURE? This will PERMANENTLY DELETE the employee and cannot be undone.")) return;
+
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/payroll/employees/${employeeData._id}?permanent=true`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Failed to delete employee");
+
+      toast.success("Employee permanently deleted");
+      router.push("/payroll/employees");
+      router.refresh();
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -2620,34 +2694,88 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
   // Load existing employee data in edit mode
   useEffect(() => {
     if (employeeData && isEdit) {
-      setFormData(employeeData);
+      // Robust merge to ensure all nested objects exist
+      setFormData((prev) => {
+        const mergedData = {
+          ...prev,
+          ...employeeData,
+          personalDetails: {
+            ...prev.personalDetails,
+            ...(employeeData.personalDetails || {}),
+            currentAddress: {
+              ...prev.personalDetails.currentAddress,
+              ...(employeeData.personalDetails?.currentAddress || {}),
+            },
+            permanentAddress: {
+              ...prev.personalDetails.permanentAddress,
+              ...(employeeData.personalDetails?.permanentAddress || {}),
+            },
+            emergencyContact: {
+              ...prev.personalDetails.emergencyContact,
+              ...(employeeData.personalDetails?.emergencyContact || {}),
+            },
+          },
+          jobDetails: {
+            ...prev.jobDetails,
+            ...(employeeData.jobDetails || {}),
+            // Ensure ID fields are used if populated (though Page usually sends IDs)
+            reportingManager: employeeData.jobDetails?.reportingManager?._id || employeeData.jobDetails?.reportingManager || "",
+            // Handle potentially missing nested IDs
+            organizationId: employeeData.jobDetails?.organizationId || "",
+            departmentId: employeeData.jobDetails?.departmentId || "",
+          },
+          salaryDetails: {
+            ...prev.salaryDetails,
+            ...(employeeData.salaryDetails || {}),
+            bankAccount: {
+              ...prev.salaryDetails.bankAccount,
+              ...(employeeData.salaryDetails?.bankAccount || {}),
+            },
+          },
+          payslipStructure: {
+            ...prev.payslipStructure,
+            ...(employeeData.payslipStructure || {}),
+            earnings: employeeData.payslipStructure?.earnings || prev.payslipStructure.earnings,
+            deductions: employeeData.payslipStructure?.deductions || prev.payslipStructure.deductions,
+            additionalFields: employeeData.payslipStructure?.additionalFields || prev.payslipStructure.additionalFields,
+          },
+          attendanceApproval: {
+            ...prev.attendanceApproval,
+            ...(employeeData.attendanceApproval || {}),
+            // Handle populated supervisors by extracting ID
+            shift1Supervisor: employeeData.attendanceApproval?.shift1Supervisor?._id || employeeData.attendanceApproval?.shift1Supervisor || "",
+            shift2Supervisor: employeeData.attendanceApproval?.shift2Supervisor?._id || employeeData.attendanceApproval?.shift2Supervisor || "",
+          }
+        };
+        return mergedData;
+      });
+
       if (employeeData.documents) {
         setUploadedFiles(employeeData.documents);
       }
 
       // Trigger cascade loading for edit mode
-      if (employeeData.jobDetails?.organizationId) {
-        fetchDepartments(employeeData.jobDetails.organizationId);
-        fetchSupervisors(employeeData.jobDetails.organizationId);
+      // Use defaults if jobDetails is missing to avoid crash
+      const jobDetails = employeeData.jobDetails || {};
 
-        if (employeeData.jobDetails?.departmentId) {
-          fetchEmployeeTypes(
-            employeeData.jobDetails.organizationId,
-            employeeData.jobDetails.departmentId
-          );
+      if (jobDetails.organizationId) {
+        // Handle if organizationId is an object (populated) or string
+        const orgId = typeof jobDetails.organizationId === 'object' ? jobDetails.organizationId._id : jobDetails.organizationId;
 
-          if (employeeData.jobDetails.employeeTypeId) {
-            fetchCategories(
-              employeeData.jobDetails.organizationId,
-              employeeData.jobDetails.departmentId,
-              employeeData.jobDetails.employeeTypeId
-            ).then(() => {
-              if (employeeData.jobDetails.category?.toLowerCase() !== "team lead") {
-                fetchTeamLeads(
-                  employeeData.jobDetails.organizationId,
-                  employeeData.jobDetails.departmentId,
-                  employeeData?._id
-                );
+        fetchDepartments(orgId);
+        fetchSupervisors(orgId);
+
+        if (jobDetails.departmentId) {
+          const deptId = typeof jobDetails.departmentId === 'object' ? jobDetails.departmentId._id : jobDetails.departmentId;
+
+          fetchEmployeeTypes(orgId, deptId);
+
+          if (jobDetails.employeeTypeId) {
+            const empTypeId = typeof jobDetails.employeeTypeId === 'object' ? jobDetails.employeeTypeId._id : jobDetails.employeeTypeId;
+
+            fetchCategories(orgId, deptId, empTypeId).then(() => {
+              if (jobDetails.category?.toLowerCase() !== "team lead") {
+                fetchTeamLeads(orgId, deptId, jobDetails.categoryId, employeeData._id);
               }
             });
           }
@@ -3111,12 +3239,12 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
     if (!formData.jobDetails.departmentId) {
       newErrors["jobDetails.departmentId"] = "Department is required";
     }
-    if (!formData.jobDetails.employeeTypeId) {
-      newErrors["jobDetails.employeeTypeId"] = "Employee type is required";
-    }
-    if (!formData.jobDetails.categoryId) {
-      newErrors["jobDetails.categoryId"] = "Category is required";
-    }
+    // if (!formData.jobDetails.employeeTypeId) {
+    //   newErrors["jobDetails.employeeTypeId"] = "Employee type is required";
+    // }
+    // if (!formData.jobDetails.categoryId) {
+    //   newErrors["jobDetails.categoryId"] = "Category is required";
+    // }
     // Removed validation for basic salary in salaryDetails since it's no longer there
     // NEW: Validate payslip structure
     if (
@@ -3302,8 +3430,8 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
       formData.personalDetails.dateOfJoining,
       formData.jobDetails.organizationId,
       formData.jobDetails.departmentId,
-      formData.jobDetails.employeeTypeId,
-      formData.jobDetails.categoryId,
+      // formData.jobDetails.employeeTypeId,
+      // formData.jobDetails.categoryId,
       formData.salaryDetails.bankAccount.accountNumber,
       formData.probation,
       formData.isAttending,
@@ -3687,7 +3815,7 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
                           {/* 5. Employee Type Dropdown */}
                           <div className="space-y-2">
                             <label className="block text-sm font-semibold text-slate-700">
-                              Employee Type <span className="text-red-500">*</span>
+                              Employee Type
                             </label>
                             <SimpleSelect
                               value={formData.jobDetails.employeeTypeId}
@@ -3708,7 +3836,7 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
                           {/* 6. Category Dropdown */}
                           <div className="space-y-2">
                             <label className="block text-sm font-semibold text-slate-700">
-                              Category <span className="text-red-500">*</span>
+                              Category
                             </label>
                             <SimpleSelect
                               value={formData.jobDetails.categoryId}
@@ -4912,6 +5040,39 @@ export default function EmployeeForm({ employeeData, isEdit = false }) {
                 <ArrowLeft className="w-4 h-4" />
                 Back
               </button>
+
+              {isEdit && (
+                <div className="flex items-center gap-3">
+                  {formData.status !== 'Inactive' && (
+                    <button
+                      type="button"
+                      onClick={handleSoftDelete}
+                      disabled={loading}
+                      className="px-4 py-2.5 text-amber-600 hover:bg-amber-50 rounded-lg font-medium transition-colors border border-amber-200"
+                    >
+                      Deactivate
+                    </button>
+                  )}
+                  {formData.status === 'Inactive' && (
+                    <button
+                      type="button"
+                      onClick={() => handleStatusChange("Active")}
+                      disabled={loading}
+                      className="px-4 py-2.5 text-green-600 hover:bg-green-50 rounded-lg font-medium transition-colors border border-green-200"
+                    >
+                      Activate
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={handlePermanentDelete}
+                    disabled={loading}
+                    className="px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-lg font-medium transition-colors border border-red-200"
+                  >
+                    Delete Permanently
+                  </button>
+                </div>
+              )}
 
               <div className="flex items-center gap-3">
                 {currentStep === steps.length - 1 || formData.role === "attendance_only" ? (

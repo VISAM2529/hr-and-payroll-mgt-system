@@ -18,17 +18,20 @@ import {
     PlusCircle,
     Info,
     Wallet,
-    Percent
+    Percent,
+    Trophy
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { format } from "date-fns";
 import { useSession } from "@/context/SessionContext";
 import ESSLeaveManagement from "@/components/payroll/ess-leave-management";
 import ESSTalentDashboard from "@/components/talent/ess-talent-dashboard";
-import { Trophy } from "lucide-react";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const TabButton = ({ active, label, icon: Icon, onClick }) => (
     <button
+        type="button"
         onClick={onClick}
         className={`flex items-center gap-2 px-6 py-3 text-sm font-semibold transition-all duration-300 border-b-2 ${active
             ? 'border-indigo-600 text-indigo-600'
@@ -54,6 +57,10 @@ export default function ESSDashboard() {
     const [payslips, setPayslips] = useState([]);
     const [investments, setInvestments] = useState(null);
 
+    const [showPolicyModal, setShowPolicyModal] = useState(false);
+    const [selectedFY, setSelectedFY] = useState("2025-26");
+    const [previewSlip, setPreviewSlip] = useState(null);
+
     useEffect(() => {
         if (user?.id) {
             fetchDashboardData(user.id);
@@ -61,6 +68,83 @@ export default function ESSDashboard() {
             setLoading(false);
         }
     }, [user, sessionLoading]);
+
+    const handleDownload = (filename, content) => {
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        toast.success(`Downloaded ${filename}`);
+    };
+
+    const handleDownloadPDF = (slip) => {
+        try {
+            const doc = new jsPDF();
+
+            // Header
+            doc.setFontSize(18);
+            doc.setTextColor(79, 70, 229);
+            doc.text("PAYROLL SYSTEM", 105, 15, { align: "center" }); // Generic name if company unknown
+
+            doc.setFontSize(14);
+            doc.setTextColor(15, 23, 42);
+            doc.text(`Payslip for ${getMonthName(slip.month)} ${slip.year}`, 105, 25, { align: "center" });
+
+            // Employee Info
+            autoTable(doc, {
+                startY: 35,
+                head: [['Employee Details', '']],
+                body: [
+                    ['Name', `${employee?.personalDetails?.firstName || ''} ${employee?.personalDetails?.lastName || ''}`],
+                    ['Employee ID', employee?.employeeId || 'N/A'],
+                    ['Designation', employee?.jobDetails?.designation || 'N/A'],
+                    ['PAN', employee?.salaryDetails?.panNumber || 'N/A']
+                ],
+                theme: 'grid',
+                headStyles: { fillColor: [79, 70, 229] },
+                columnStyles: { 0: { fontStyle: 'bold', cellWidth: 50 } }
+            });
+
+            // Salary Breakdown
+            autoTable(doc, {
+                startY: doc.lastAutoTable.finalY + 10,
+                head: [['Earnings', 'Amount', 'Deductions', 'Amount']],
+                body: [
+                    ['Basic Salary', `Rs. ${slip.basicSalary?.toLocaleString()}`, 'Tax Deducted (TDS)', `Rs. ${slip.taxDeduction?.toLocaleString() || 0}`],
+                    ['Allowances', `Rs. ${((slip.grossSalary || 0) - (slip.basicSalary || 0))?.toLocaleString()}`, '', ''],
+                    ['Gross Earnings', `Rs. ${slip.grossSalary?.toLocaleString()}`, 'Total Deductions', `Rs. ${slip.taxDeduction?.toLocaleString() || 0}`]
+                ],
+                theme: 'striped',
+                headStyles: { fillColor: [79, 70, 229] }
+            });
+
+            // Net Pay
+            const finalY = doc.lastAutoTable.finalY + 15;
+            doc.setFillColor(240, 253, 244); // Light green bg
+            doc.rect(14, finalY, 182, 15, 'F');
+            doc.setFontSize(12);
+            doc.setTextColor(21, 128, 61); // Green 700
+            doc.setFont("helvetica", "bold");
+            doc.text(`Net Payable: Rs. ${slip.netSalary?.toLocaleString()}`, 105, finalY + 10, { align: "center" });
+
+            // Footer
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            doc.setFont("helvetica", "normal");
+            doc.text("** This is a computer generated payslip and does not require a signature **", 105, finalY + 30, { align: "center" });
+
+            doc.save(`Payslip_${slip.month}_${slip.year}.pdf`);
+            toast.success("Payslip PDF Downloaded");
+        } catch (error) {
+            console.error("PDF Generation Error:", error);
+            toast.error("Failed to generate PDF");
+        }
+    };
 
     const fetchDashboardData = async (employeeId) => {
         try {
@@ -203,11 +287,16 @@ export default function ESSDashboard() {
                                         </div>
                                         <span className="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2 py-1 rounded">Latest Pay</span>
                                     </div>
+
+
+
+                                    // ... inside component
+
                                     <h3 className="text-3xl font-black mb-1">₹{latestPayslip?.netSalary?.toLocaleString() || '0'}</h3>
-                                    <p className="text-indigo-100 text-sm">Disbursed for {latestPayslip ? `${format(new Date(latestPayslip.year, latestPayslip.month - 1, 1), 'MMMM yyyy')}` : 'N/A'}</p>
+                                    <p className="text-indigo-100 text-sm">Disbursed for {latestPayslip ? safeFormatDate(latestPayslip.year, latestPayslip.month) : 'N/A'}</p>
                                     <div className="mt-6 pt-6 border-t border-white/10 flex justify-between items-center text-xs">
                                         <span className="opacity-80">Gross: ₹{latestPayslip?.grossSalary?.toLocaleString() || '0'}</span>
-                                        <button className="flex items-center gap-1 hover:underline">View Breakdown <ChevronRight className="w-3 h-3" /></button>
+                                        <button type="button" onClick={() => setActiveTab("payslips")} className="flex items-center gap-1 hover:underline">View Breakdown <ChevronRight className="w-3 h-3" /></button>
                                     </div>
                                 </Card>
 
@@ -233,7 +322,7 @@ export default function ESSDashboard() {
                             <Card className="p-0 overflow-hidden">
                                 <div className="p-5 border-b border-slate-100 flex justify-between items-center">
                                     <h3 className="font-bold text-slate-900">Recent Payroll Events</h3>
-                                    <button className="text-xs text-indigo-600 font-semibold hover:underline">Check Policy</button>
+                                    <button onClick={() => setShowPolicyModal(true)} className="text-xs text-indigo-600 font-semibold hover:underline">Check Policy</button>
                                 </div>
                                 <div className="divide-y divide-slate-100">
                                     <div className="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors">
@@ -244,7 +333,7 @@ export default function ESSDashboard() {
                                             <p className="text-sm font-semibold text-slate-900">December 2025 Payslip Generated</p>
                                             <p className="text-[10px] text-slate-500">December 31, 2025</p>
                                         </div>
-                                        <button className="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
+                                        <button onClick={() => handleDownload('Payslip-Dec-2025.txt', 'Payslip Content for December 2025...')} className="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
                                             <Download className="w-4 h-4" />
                                         </button>
                                     </div>
@@ -295,7 +384,7 @@ export default function ESSDashboard() {
                                     </div>
                                     <div className="flex justify-between items-center text-xs">
                                         <span className="text-slate-500">PAN</span>
-                                        <span className="font-semibold text-slate-900 font-mono">XXXXX{employee?.salaryDetails?.panNumber?.slice(-4)}</span>
+                                        <span className="font-semibold text-slate-900 font-mono">XXXXX{String(employee?.salaryDetails?.panNumber || '').slice(-4)}</span>
                                     </div>
                                 </div>
                                 <div className="mt-6 pt-6 border-t border-slate-100">
@@ -314,15 +403,23 @@ export default function ESSDashboard() {
                         <div className="flex justify-between items-center">
                             <h2 className="text-xl font-bold text-slate-900">Historic Payslips</h2>
                             <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg p-1.5 shadow-sm">
-                                <select className="text-xs bg-transparent border-none focus:ring-0 pr-8">
-                                    <option>2025-26</option>
-                                    <option>2024-25</option>
+                                <select
+                                    value={selectedFY}
+                                    onChange={(e) => setSelectedFY(e.target.value)}
+                                    className="text-xs bg-transparent border-none focus:ring-0 pr-8"
+                                >
+                                    <option value="2025-26">2025-26</option>
+                                    <option value="2024-25">2024-25</option>
                                 </select>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {payslips.map((slip, idx) => (
+                            {payslips.filter(slip => {
+                                const fyStart = slip.month >= 4 ? slip.year : slip.year - 1;
+                                const fyString = `${fyStart}-${(fyStart + 1).toString().slice(-2)}`;
+                                return fyString === selectedFY;
+                            }).map((slip, idx) => (
                                 <Card key={slip._id} className="p-0 overflow-hidden group">
                                     <div className={`h-2 ${idx === 0 ? 'bg-indigo-600' : 'bg-slate-200'} group-hover:h-3 transition-all duration-300`}></div>
                                     <div className="p-5">
@@ -341,16 +438,31 @@ export default function ESSDashboard() {
                                             <span className="text-slate-500">Tax Paid: ₹{slip.taxDeduction || 0}</span>
                                         </div>
                                         <div className="mt-5 flex gap-2">
-                                            <button className="flex-1 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">
+                                            <button
+                                                onClick={() => setPreviewSlip(slip)}
+                                                className="flex-1 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+                                            >
                                                 <Eye className="w-3 h-3" /> View
                                             </button>
-                                            <button className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
+                                            <button
+                                                onClick={() => handleDownloadPDF(slip)}
+                                                className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                                            >
                                                 <Download className="w-4 h-4" />
                                             </button>
                                         </div>
                                     </div>
                                 </Card>
                             ))}
+                            {payslips.filter(slip => {
+                                const fyStart = slip.month >= 4 ? slip.year : slip.year - 1;
+                                const fyString = `${fyStart}-${(fyStart + 1).toString().slice(-2)}`;
+                                return fyString === selectedFY;
+                            }).length === 0 && (
+                                    <div className="col-span-full p-12 text-center text-slate-400">
+                                        <p>No payslips found for {selectedFY}</p>
+                                    </div>
+                                )}
                         </div>
                     </div>
                 )}
@@ -511,10 +623,110 @@ export default function ESSDashboard() {
                     <ESSTalentDashboard employeeId={user?.id} />
                 )}
             </div>
+
+            {/* Policy Modal */}
+            {showPolicyModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+                    <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden scale-in duration-300">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-900">Payroll Policy 2025-26</h3>
+                                <p className="text-xs text-slate-500">Effective from April 1st, 2025</p>
+                            </div>
+                            <button onClick={() => setShowPolicyModal(false)} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
+                                <X className="w-5 h-5 text-slate-500" />
+                            </button>
+                        </div>
+                        <div className="p-6 max-h-[60vh] overflow-y-auto space-y-4 text-sm text-slate-600 leading-relaxed">
+                            <p><strong className="text-slate-900">1. Payment Cycle:</strong> Salaries are processed on the last working day of every month. Pay slips are available for download by the 1st of the following month.</p>
+                            <p><strong className="text-slate-900">2. Tax Deductions (TDS):</strong> TDS is deducted based on the investment declaration submitted by the employee. You can switch between Old and New Tax Regimes at the start of the financial year.</p>
+                            <p><strong className="text-slate-900">3. Reimbursements:</strong> All expense claims must be submitted by the 20th of the month to be included in that month's payout. Late submissions will be processed in the subsequent cycle.</p>
+                            <p><strong className="text-slate-900">4. Leaves & LOP:</strong> Unpaid leaves (Loss of Pay) will be deducted from the gross salary on a pro-rata basis. Leave balances are updated daily.</p>
+                            <p><strong className="text-slate-900">5. Variable Pay:</strong> Performance bonuses and incentives are disbursed quarterly based on the company's performance appraisal policy.</p>
+                        </div>
+                        <div className="p-6 border-t border-slate-100 bg-slate-50 text-right">
+                            <button
+                                onClick={() => handleDownload('Payroll_Policy_2025.txt', 'Full Payroll Policy Content...')}
+                                className="px-5 py-2.5 bg-indigo-600 text-white font-bold rounded-xl text-xs hover:bg-indigo-700 transition-colors"
+                            >
+                                Download Policy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Payslip Preview Modal */}
+            {previewSlip && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+                    <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden scale-in duration-300">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-900">Payslip Preview</h3>
+                                <p className="text-xs text-slate-500">{getMonthName(previewSlip.month)} {previewSlip.year}</p>
+                            </div>
+                            <button onClick={() => setPreviewSlip(null)} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
+                                <X className="w-5 h-5 text-slate-500" />
+                            </button>
+                        </div>
+                        <div className="p-6 space-y-6">
+                            <div className="text-center p-6 bg-indigo-50 rounded-2xl border border-indigo-100">
+                                <p className="text-xs font-bold text-indigo-500 uppercase tracking-widest mb-1">Net Pay</p>
+                                <h2 className="text-3xl font-black text-indigo-900">₹{previewSlip.netSalary?.toLocaleString()}</h2>
+                                <p className="text-[10px] text-slate-400 mt-2 font-mono">ID: {previewSlip.payslipId}</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="flex justify-between text-sm p-3 bg-slate-50 rounded-lg">
+                                    <span className="text-slate-600">Basic Salary</span>
+                                    <span className="font-bold text-slate-900">₹{previewSlip.basicSalary?.toLocaleString()}</span>
+                                </div>
+                                <div className="flex justify-between text-sm p-3 bg-slate-50 rounded-lg">
+                                    <span className="text-slate-600">Tax Deducted (TDS)</span>
+                                    <span className="font-bold text-rose-600">- ₹{previewSlip.taxDeduction?.toLocaleString() || 0}</span>
+                                </div>
+                                <div className="flex justify-between text-sm p-3 bg-slate-50 rounded-lg border-t-2 border-slate-200">
+                                    <span className="font-bold text-slate-900">Gross Earnings</span>
+                                    <span className="font-bold text-slate-900">₹{((previewSlip.basicSalary || 0)).toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="p-6 border-t border-slate-100 bg-slate-50 flex gap-3">
+                            <button
+                                onClick={() => setPreviewSlip(null)}
+                                className="flex-1 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl text-xs hover:bg-slate-50 transition-colors"
+                            >
+                                Close
+                            </button>
+                            <button
+                                onClick={() => handleDownloadPDF(previewSlip)}
+                                className="flex-1 py-2.5 bg-indigo-600 text-white font-bold rounded-xl text-xs hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <Download className="w-4 h-4" /> Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
 
+import { X } from "lucide-react"; // Late import for usage in Modal
+
+function safeFormatDate(y, m) {
+    if (!y || !m || isNaN(m)) return 'N/A';
+    try {
+        return format(new Date(y, m - 1, 1), 'MMMM yyyy');
+    } catch (e) {
+        return 'N/A';
+    }
+}
+
 function getMonthName(m) {
-    return format(new Date(2000, m - 1, 1), "MMMM");
+    if (!m || isNaN(m)) return '';
+    try {
+        return format(new Date(2000, m - 1, 1), "MMMM");
+    } catch {
+        return '';
+    }
 }
